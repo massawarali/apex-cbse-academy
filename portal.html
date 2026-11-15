@@ -17,7 +17,6 @@
         .login-bg {
             background: radial-gradient(circle at top left, #1e3a8a, #0f172a 55%, #020617);
         }
-        /* Running & Floating Animations */
         @keyframes floatSlow {
             0%, 100% { transform: translateY(0px); }
             50% { transform: translateY(-14px); }
@@ -72,13 +71,13 @@
         </div>
     </header>
 
-    <!-- ================= 1. ANIMATED LOGIN SCREEN ================= -->
+    <!-- ================= 1. ANIMATED LOGIN & SIGNUP SCREEN ================= -->
     <main id="loginSection" class="flex-grow login-bg relative overflow-hidden flex flex-col justify-between">
         
         <!-- Floating Background Education Icons -->
         <i class="fas fa-atom text-white/5 text-8xl absolute top-12 left-10 animate-float pointer-events-none"></i>
         <i class="fas fa-graduation-cap text-white/5 text-9xl absolute bottom-16 left-1/3 animate-float-delayed pointer-events-none"></i>
-        <i class="fas fa-Microscope text-white/5 text-8xl absolute top-20 right-12 animate-float pointer-events-none"></i>
+        <i class="fas fa-microscope text-white/5 text-8xl absolute top-20 right-12 animate-float pointer-events-none"></i>
 
         <!-- Glowing Light Blobs -->
         <div class="w-96 h-96 bg-blue-500/20 rounded-full blur-3xl absolute -top-20 -left-20 pointer-events-none"></div>
@@ -98,7 +97,7 @@
                         Track Every Test, <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-300 to-amber-500">Master Every Concept.</span>
                     </h1>
                     <p class="text-blue-100 text-sm sm:text-base mb-8 max-w-xl">
-                        Welcome to Apex CBSE Academy's live Student & Parent ERP. View Saturday OMR test scores, upcoming board exam schedules, attendance, and mentor remarks in real time.
+                        Welcome to Apex CBSE Academy's live Student & Parent ERP. Create your account or sign in to view Saturday OMR test scores, upcoming board exam schedules, attendance, and mentor remarks.
                     </p>
 
                     <!-- Interactive Orbital Animation + Lottie Graphic Centerpiece -->
@@ -160,7 +159,7 @@
                     </div>
                 </div>
 
-                <!-- RIGHT SIDE: Interactive Login Card (5 Cols) -->
+                <!-- RIGHT SIDE: Interactive Login & Create Account Card (5 Cols) -->
                 <div class="lg:col-span-5">
                     <div class="max-w-md mx-auto bg-white rounded-3xl shadow-2xl overflow-hidden border border-white/20">
                         <!-- Role Selector Tabs -->
@@ -177,13 +176,25 @@
                         </div>
 
                         <div class="p-6 sm:p-8">
-                            <div class="text-center mb-6">
+                            <!-- Header -->
+                            <div class="text-center mb-5">
                                 <span id="roleBadge" class="bg-blue-100 text-blue-800 text-xs font-extrabold px-3 py-1 rounded-full uppercase tracking-wider">Administration Login</span>
                                 <h2 id="roleTitle" class="text-2xl font-extrabold text-slate-900 mt-2">Welcome Back, Admin</h2>
                                 <p id="roleSub" class="text-xs text-slate-500 mt-1">Sign in using your registered Gmail or Mobile Number</p>
                             </div>
 
-                            <form onsubmit="handleLogin(event)" class="space-y-4">
+                            <!-- Login / Create Account Mode Switcher (Only for Candidate & Parents) -->
+                            <div id="authModeToggle" class="hidden grid grid-cols-2 bg-slate-100 p-1 rounded-xl mb-5 text-xs font-bold">
+                                <button type="button" id="modeLoginBtn" onclick="switchAuthMode('login')" class="py-2 rounded-lg bg-white text-blue-700 shadow-sm transition">
+                                    <i class="fas fa-sign-in-alt mr-1"></i> Existing User Login
+                                </button>
+                                <button type="button" id="modeSignupBtn" onclick="switchAuthMode('signup')" class="py-2 rounded-lg text-slate-600 hover:text-slate-900 transition">
+                                    <i class="fas fa-user-plus mr-1"></i> Create Account
+                                </button>
+                            </div>
+
+                            <!-- 1A. LOGIN FORM -->
+                            <form id="loginForm" onsubmit="handleLogin(event)" class="space-y-4">
                                 <div>
                                     <label id="idLabel" class="block text-xs font-bold uppercase text-slate-600 mb-1">Registered Gmail or Mobile No. *</label>
                                     <div class="relative">
@@ -208,24 +219,92 @@
                                 <button type="submit" class="w-full bg-blue-700 hover:bg-blue-800 text-white font-bold py-3.5 rounded-xl shadow-lg shadow-blue-700/25 transition transform hover:scale-[1.01] flex items-center justify-center gap-2">
                                     <i class="fas fa-sign-in-alt"></i> Login to Dashboard
                                 </button>
+
+                                <!-- Quick Prompt Link to Create Account for Candidate/Parent -->
+                                <p id="bottomSignupHint" class="hidden text-center text-xs text-slate-500 pt-2">
+                                    Don't have an account yet? 
+                                    <button type="button" onclick="switchAuthMode('signup')" class="text-blue-700 font-bold hover:underline">Create New Account</button>
+                                </p>
                             </form>
 
-                            <!-- Divider -->
-                            <div class="relative flex py-5 items-center">
-                                <div class="flex-grow border-t border-slate-200"></div>
-                                <span class="flex-shrink mx-3 text-slate-400 text-xs font-semibold uppercase">Or Quick Sign In With</span>
-                                <div class="flex-grow border-t border-slate-200"></div>
+                            <!-- 1B. CREATE ACCOUNT (SIGN UP) FORM FOR CANDIDATE & PARENTS -->
+                            <form id="signupForm" onsubmit="handleSelfSignup(event)" class="hidden space-y-3.5">
+                                <div>
+                                    <label class="block text-xs font-bold uppercase text-slate-600 mb-1">Student's Full Name *</label>
+                                    <div class="relative">
+                                        <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400">
+                                            <i class="fas fa-user-graduate"></i>
+                                        </span>
+                                        <input type="text" id="selfName" required placeholder="Enter student full name" class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-600 text-sm">
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <label class="block text-xs font-bold uppercase text-slate-600 mb-1">Gmail ID (For Login & Reports) *</label>
+                                    <div class="relative">
+                                        <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400">
+                                            <i class="fas fa-envelope"></i>
+                                        </span>
+                                        <input type="email" id="selfEmail" required placeholder="student.or.parent@gmail.com" class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-600 text-sm">
+                                    </div>
+                                </div>
+
+                                <div class="grid grid-cols-2 gap-3">
+                                    <div>
+                                        <label class="block text-xs font-bold uppercase text-slate-600 mb-1">Mobile Number *</label>
+                                        <input type="tel" id="selfPhone" required pattern="[0-9]{10}" placeholder="10-digit Mobile" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-600 text-sm">
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-bold uppercase text-slate-600 mb-1">Select Class *</label>
+                                        <select id="selfBatch" required class="w-full px-3 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-600 text-sm bg-white">
+                                            <option value="Class 6 & 7 (Shift 1: 3:30 - 5:30 PM)">Class 6 / 7</option>
+                                            <option value="Class 8 (Shift 1: 3:30 - 5:30 PM)">Class 8</option>
+                                            <option value="Class 9 (Shift 2: 5:30 - 7:30 PM)">Class 9</option>
+                                            <option value="Class 10 (Shift 2: 5:30 - 7:30 PM)">Class 10</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <label class="block text-xs font-bold uppercase text-slate-600 mb-1">Create Secret Login PIN / Password *</label>
+                                    <div class="relative">
+                                        <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400">
+                                            <i class="fas fa-key"></i>
+                                        </span>
+                                        <input type="password" id="selfPin" required minlength="4" placeholder="Set a 4+ digit PIN (e.g. 1234)" class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-600 text-sm">
+                                    </div>
+                                </div>
+
+                                <div id="signupNotice" class="hidden p-3 rounded-xl text-xs font-semibold text-center"></div>
+
+                                <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3.5 rounded-xl shadow-lg shadow-emerald-600/25 transition transform hover:scale-[1.01] flex items-center justify-center gap-2">
+                                    <i class="fas fa-user-check"></i> Register & Sync with Admin DB
+                                </button>
+
+                                <p class="text-center text-xs text-slate-500 pt-1">
+                                    Already registered? 
+                                    <button type="button" onclick="switchAuthMode('login')" class="text-blue-700 font-bold hover:underline">Back to Login</button>
+                                </p>
+                            </form>
+
+                            <!-- Quick Sign-In Method Buttons (Visible in Login Mode) -->
+                            <div id="quickMethodSection">
+                                <div class="relative flex py-5 items-center">
+                                    <div class="flex-grow border-t border-slate-200"></div>
+                                    <span class="flex-shrink mx-3 text-slate-400 text-xs font-semibold uppercase">Or Quick Sign In With</span>
+                                    <div class="flex-grow border-t border-slate-200"></div>
+                                </div>
+
+                                <div class="grid grid-cols-2 gap-3">
+                                    <button type="button" onclick="quickMethodPrompt('gmail')" class="flex items-center justify-center gap-2 py-2.5 px-4 border border-slate-300 rounded-xl hover:bg-slate-50 transition text-xs font-bold text-slate-700 shadow-sm">
+                                        <i class="fab fa-google text-red-500 text-base"></i> Gmail Login
+                                    </button>
+                                    <button type="button" onclick="quickMethodPrompt('mobile')" class="flex items-center justify-center gap-2 py-2.5 px-4 border border-slate-300 rounded-xl hover:bg-slate-50 transition text-xs font-bold text-slate-700 shadow-sm">
+                                        <i class="fas fa-mobile-alt text-blue-600 text-base"></i> Mobile Login
+                                    </button>
+                                </div>
                             </div>
 
-                            <!-- Gmail & Mobile Quick Login Buttons -->
-                            <div class="grid grid-cols-2 gap-3">
-                                <button type="button" onclick="quickMethodPrompt('gmail')" class="flex items-center justify-center gap-2 py-2.5 px-4 border border-slate-300 rounded-xl hover:bg-slate-50 transition text-xs font-bold text-slate-700 shadow-sm">
-                                    <i class="fab fa-google text-red-500 text-base"></i> Gmail Login
-                                </button>
-                                <button type="button" onclick="quickMethodPrompt('mobile')" class="flex items-center justify-center gap-2 py-2.5 px-4 border border-slate-300 rounded-xl hover:bg-slate-50 transition text-xs font-bold text-slate-700 shadow-sm">
-                                    <i class="fas fa-mobile-alt text-blue-600 text-base"></i> Mobile Login
-                                </button>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -240,7 +319,6 @@
                 <span class="flex items-center gap-2"><i class="fas fa-calendar-check text-blue-400"></i> Live CBSE Exam Timetable & Syllabus Tracker</span>
                 <span class="flex items-center gap-2"><i class="fas fa-user-shield text-emerald-400"></i> Direct Founder Mentorship by Massawar Ali Khan</span>
                 <span class="flex items-center gap-2"><i class="fas fa-bell text-purple-400"></i> Instant Holiday & PTM Notifications</span>
-                <!-- Duplicate for seamless loop -->
                 <span class="flex items-center gap-2"><i class="fas fa-bolt text-amber-400"></i> Real-Time Saturday Test Scorecards</span>
                 <span class="flex items-center gap-2"><i class="fas fa-calendar-check text-blue-400"></i> Live CBSE Exam Timetable & Syllabus Tracker</span>
                 <span class="flex items-center gap-2"><i class="fas fa-user-shield text-emerald-400"></i> Direct Founder Mentorship by Massawar Ali Khan</span>
@@ -255,7 +333,7 @@
             <div>
                 <span class="bg-amber-400 text-slate-950 text-xs font-extrabold px-3 py-1 rounded-full uppercase">Full Admin Control</span>
                 <h1 class="text-2xl sm:text-3xl font-extrabold mt-2">Founder & Admin Panel — Massawar Ali Khan</h1>
-                <p class="text-blue-200 text-xs sm:text-sm">Register students with Gmail/Mobile, upload Saturday test marks, exam schedules, and holidays.</p>
+                <p class="text-blue-200 text-xs sm:text-sm">All self-registered Candidate & Parent accounts automatically sync into the directory below.</p>
             </div>
             <button onclick="resetDefaultData()" class="bg-white/10 hover:bg-white/20 border border-white/20 text-xs font-semibold px-4 py-2.5 rounded-xl">
                 <i class="fas fa-sync-alt mr-1"></i> Reset System Data
@@ -266,12 +344,12 @@
         <div class="grid lg:grid-cols-2 gap-8 mb-8">
             <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
                 <h3 class="font-extrabold text-lg text-slate-900 mb-4 flex items-center gap-2">
-                    <i class="fas fa-user-plus text-emerald-600"></i> Register New Student (Gmail & Mobile Login)
+                    <i class="fas fa-user-plus text-emerald-600"></i> Manual Student Registration (Admin Desk)
                 </h3>
                 <form onsubmit="registerNewStudent(event)" class="space-y-3 text-sm">
                     <div class="grid grid-cols-2 gap-3">
                         <input type="text" id="regName" required placeholder="Student Full Name" class="w-full px-3.5 py-2.5 rounded-lg border border-slate-300">
-                        <input type="text" id="regRoll" required placeholder="Roll ID (e.g. APEX103)" class="w-full px-3.5 py-2.5 rounded-lg border border-slate-300">
+                        <input type="text" id="regRoll" required placeholder="Roll ID (e.g. APEX105)" class="w-full px-3.5 py-2.5 rounded-lg border border-slate-300">
                     </div>
                     <div class="grid grid-cols-2 gap-3">
                         <input type="email" id="regEmail" required placeholder="Student/Parent Gmail ID" class="w-full px-3.5 py-2.5 rounded-lg border border-slate-300">
@@ -286,7 +364,7 @@
                         </select>
                         <input type="text" id="regPin" required placeholder="Set Login PIN (e.g. 1234)" class="w-full px-3.5 py-2.5 rounded-lg border border-slate-300">
                     </div>
-                    <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 rounded-xl">Create Student & Parent Login</button>
+                    <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 rounded-xl">Add Student to Database</button>
                 </form>
             </div>
 
@@ -368,8 +446,8 @@
         <!-- Admin Student Overview Table -->
         <div class="mt-8 bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
             <div class="px-6 py-4 bg-slate-900 text-white flex justify-between items-center">
-                <h3 class="font-bold">Enrolled Candidates (Gmail & Mobile Directory)</h3>
-                <span class="text-xs text-amber-400">Live Sync Enabled</span>
+                <h3 class="font-bold">Registered Candidates & Parents Database (Gmail & Mobile Directory)</h3>
+                <span id="totalStudentCount" class="text-xs bg-amber-400 text-slate-950 font-extrabold px-3 py-1 rounded-full"></span>
             </div>
             <div class="overflow-x-auto">
                 <table class="w-full text-left border-collapse text-sm">
@@ -377,10 +455,11 @@
                         <tr class="bg-slate-100 text-slate-700 border-b">
                             <th class="py-3 px-4">Roll ID</th>
                             <th class="py-3 px-4">Student Name</th>
-                            <th class="py-3 px-4">Gmail ID</th>
+                            <th class="py-3 px-4">Batch</th>
+                            <th class="py-3 px-4">Registered Gmail ID</th>
                             <th class="py-3 px-4">Mobile No.</th>
                             <th class="py-3 px-4">PIN</th>
-                            <th class="py-3 px-4">Attendance</th>
+                            <th class="py-3 px-4">Source</th>
                             <th class="py-3 px-4">Fee</th>
                         </tr>
                     </thead>
@@ -400,11 +479,11 @@
             </div>
             <div class="flex gap-4">
                 <div class="bg-white/10 px-4 py-2.5 rounded-xl text-center">
-                    <div id="userAttStat" class="text-2xl font-extrabold text-amber-400">92%</div>
+                    <div id="userAttStat" class="text-2xl font-extrabold text-amber-400">100%</div>
                     <div class="text-[11px] text-blue-100">Attendance</div>
                 </div>
                 <div class="bg-white/10 px-4 py-2.5 rounded-xl text-center">
-                    <div id="userAvgStat" class="text-2xl font-extrabold text-emerald-400">88%</div>
+                    <div id="userAvgStat" class="text-2xl font-extrabold text-emerald-400">0%</div>
                     <div class="text-[11px] text-blue-100">Avg. Test Score</div>
                 </div>
             </div>
@@ -471,6 +550,7 @@
                     classBatch: "Class 10 (Shift 2: 5:30 - 7:30 PM)",
                     attendance: 94,
                     feeStatus: "Paid",
+                    source: "Admin",
                     remark: "Strong in Maths & IT concepts. Needs slight speed improvement in Physics numericals.",
                     marks: [
                         { subject: "Mathematics", topic: "Trigonometry & Real Numbers", score: 46, total: 50, date: "2026-11-07" },
@@ -487,6 +567,7 @@
                     classBatch: "Class 8 (Shift 1: 3:30 - 5:30 PM)",
                     attendance: 89,
                     feeStatus: "Pending",
+                    source: "Admin",
                     remark: "Very regular with NCERT homework. Scored highest in Friday Mental Maths quiz.",
                     marks: [
                         { subject: "Mathematics", topic: "Linear Equations in One Variable", score: 45, total: 50, date: "2026-11-07" },
@@ -506,18 +587,49 @@
             ]
         };
 
-        let erpData = JSON.parse(localStorage.getItem('apexERP_v2')) || defaultERPData;
+        let erpData = JSON.parse(localStorage.getItem('apexERP_v3')) || defaultERPData;
         let currentRole = 'admin';
+        let currentAuthMode = 'login';
 
         function saveERP() {
-            localStorage.setItem('apexERP_v2', JSON.stringify(erpData));
+            localStorage.setItem('apexERP_v3', JSON.stringify(erpData));
         }
 
         function resetDefaultData() {
-            localStorage.removeItem('apexERP_v2');
+            localStorage.removeItem('apexERP_v3');
             erpData = JSON.parse(JSON.stringify(defaultERPData));
             renderAdminDashboard();
             alert("System data reset!");
+        }
+
+        function switchAuthMode(mode) {
+            currentAuthMode = mode;
+            const loginForm = document.getElementById('loginForm');
+            const signupForm = document.getElementById('signupForm');
+            const loginBtn = document.getElementById('modeLoginBtn');
+            const signupBtn = document.getElementById('modeSignupBtn');
+            const quickSec = document.getElementById('quickMethodSection');
+            const roleTitle = document.getElementById('roleTitle');
+            const roleSub = document.getElementById('roleSub');
+
+            document.getElementById('loginError').classList.add('hidden');
+            document.getElementById('signupNotice').classList.add('hidden');
+
+            if (mode === 'signup' && currentRole !== 'admin') {
+                loginForm.classList.add('hidden');
+                signupForm.classList.remove('hidden');
+                quickSec.classList.add('hidden');
+                signupBtn.className = "py-2 rounded-lg bg-emerald-600 text-white shadow-sm transition";
+                loginBtn.className = "py-2 rounded-lg text-slate-600 hover:text-slate-900 transition";
+                roleTitle.innerText = currentRole === 'parent' ? "Create Parent Account" : "Create Candidate Account";
+                roleSub.innerText = "Register your Gmail & Mobile No. with Apex Admin Database";
+            } else {
+                signupForm.classList.add('hidden');
+                loginForm.classList.remove('hidden');
+                quickSec.classList.remove('hidden');
+                loginBtn.className = "py-2 rounded-lg bg-white text-blue-700 shadow-sm transition";
+                signupBtn.className = "py-2 rounded-lg text-slate-600 hover:text-slate-900 transition";
+            }
         }
 
         function selectRole(role) {
@@ -535,8 +647,14 @@
             const idLbl = document.getElementById('idLabel');
             const passLbl = document.getElementById('passLabel');
             const idInput = document.getElementById('loginId');
+            const authToggle = document.getElementById('authModeToggle');
+            const bottomHint = document.getElementById('bottomSignupHint');
+
+            switchAuthMode('login');
 
             if (role === 'admin') {
+                authToggle.classList.add('hidden');
+                bottomHint.classList.add('hidden');
                 badge.innerText = "Administration Login";
                 title.innerText = "Welcome Back, Admin";
                 sub.innerText = "Sign in with Admin Gmail, Mobile No. or Username";
@@ -544,6 +662,8 @@
                 passLbl.innerText = "Admin Password *";
                 idInput.placeholder = "Enter Admin Gmail or Mobile No.";
             } else if (role === 'candidate') {
+                authToggle.classList.remove('hidden');
+                bottomHint.classList.remove('hidden');
                 badge.innerText = "Candidate Portal";
                 title.innerText = "Student Learning Desk";
                 sub.innerText = "Login with your registered Gmail ID, Mobile No. or Roll ID";
@@ -551,6 +671,8 @@
                 passLbl.innerText = "Student Login PIN *";
                 idInput.placeholder = "e.g. yourname@gmail.com or 10-digit Mobile";
             } else {
+                authToggle.classList.remove('hidden');
+                bottomHint.classList.remove('hidden');
                 badge.innerText = "Parent Monitoring Portal";
                 title.innerText = "Child Progress Tracker";
                 sub.innerText = "Login using Registered Parent Mobile Number or Gmail ID";
@@ -558,10 +680,59 @@
                 passLbl.innerText = "Login PIN or Registered Mobile No. *";
                 idInput.placeholder = "Enter Parent Gmail or 10-digit Mobile No.";
             }
-            document.getElementById('loginError').classList.add('hidden');
+        }
+
+        // Self-Registration by Candidate or Parent -> Saves directly to Admin Database
+        function handleSelfSignup(event) {
+            event.preventDefault();
+            const name = document.getElementById('selfName').value.trim();
+            const email = document.getElementById('selfEmail').value.trim().toLowerCase();
+            const phone = document.getElementById('selfPhone').value.trim();
+            const batch = document.getElementById('selfBatch').value;
+            const pin = document.getElementById('selfPin').value.trim();
+            const notice = document.getElementById('signupNotice');
+
+            // Check if Email or Phone already exists
+            const existing = erpData.students.find(s => s.email.toLowerCase() === email || s.parentPhone === phone);
+            if (existing) {
+                notice.className = "block p-3 rounded-xl text-xs font-semibold text-center bg-red-50 text-red-700 border border-red-200";
+                notice.innerHTML = `⚠️ This Gmail or Mobile is already registered (Roll ID: <strong>${existing.roll}</strong>). Please switch to Login.`;
+                return;
+            }
+
+            // Generate next Roll ID automatically (e.g. APEX103, APEX104...)
+            const nextNumber = 101 + erpData.students.length;
+            const generatedRoll = "APEX" + nextNumber;
+
+            const newAccount = {
+                roll: generatedRoll,
+                name: name,
+                email: email,
+                parentPhone: phone,
+                classBatch: batch,
+                pass: pin,
+                attendance: 100,
+                feeStatus: "Pending",
+                source: currentRole === 'parent' ? "Parent Sign-Up" : "Candidate Sign-Up",
+                remark: "Welcome to Apex CBSE Academy! Account created via Online ERP Portal.",
+                marks: []
+            };
+
+            erpData.students.push(newAccount);
+            saveERP();
+            event.target.reset();
+
+            // Auto-login to their new dashboard after 1.2 seconds
+            notice.className = "block p-3 rounded-xl text-xs font-semibold text-center bg-emerald-50 text-emerald-800 border border-emerald-300";
+            notice.innerHTML = `✅ Account Created! Your Roll ID is <strong>${generatedRoll}</strong>. Redirecting to Dashboard...`;
+
+            setTimeout(() => {
+                showDashboard(currentRole, newAccount);
+            }, 1200);
         }
 
         function quickMethodPrompt(method) {
+            switchAuthMode('login');
             const idInput = document.getElementById('loginId');
             idInput.focus();
             idInput.placeholder = method === 'gmail'
@@ -590,7 +761,7 @@
                 if (student) {
                     showDashboard('candidate', student);
                 } else {
-                    errBox.innerText = "Invalid Student Gmail/Mobile or PIN! Please contact Admin.";
+                    errBox.innerText = "Account not found or wrong PIN! Click 'Create Account' above to register.";
                     errBox.classList.remove('hidden');
                 }
             } else if (currentRole === 'parent') {
@@ -601,7 +772,7 @@
                 if (student) {
                     showDashboard('parent', student);
                 } else {
-                    errBox.innerText = "Invalid Parent Gmail/Mobile or PIN! Please verify with Coaching Admin.";
+                    errBox.innerText = "Account not found! Click 'Create Account' above to register your Gmail & Mobile.";
                     errBox.classList.remove('hidden');
                 }
             }
@@ -626,24 +797,29 @@
             document.getElementById('logoutBtn').classList.add('hidden');
             document.getElementById('loginSection').classList.remove('hidden');
             document.getElementById('loginPass').value = '';
+            switchAuthMode('login');
         }
 
         function renderAdminDashboard() {
             const rollOptions = erpData.students.map(s => `<option value="${s.roll}">${s.roll} - ${s.name} (${s.parentPhone})</option>`).join('');
             document.getElementById('markRoll').innerHTML = rollOptions;
             document.getElementById('metaRoll').innerHTML = rollOptions;
+            document.getElementById('totalStudentCount').innerText = `Total Registered: ${erpData.students.length}`;
 
             const tbody = document.getElementById('adminStudentTable');
             tbody.innerHTML = erpData.students.map(s => `
                 <tr>
                     <td class="py-3 px-4 font-bold text-blue-700">${s.roll}</td>
                     <td class="py-3 px-4 font-semibold text-slate-900">${s.name}</td>
-                    <td class="py-3 px-4 text-slate-600">${s.email}</td>
-                    <td class="py-3 px-4 text-slate-600">${s.parentPhone}</td>
+                    <td class="py-3 px-4 text-xs text-slate-600">${s.classBatch.split('(')[0]}</td>
+                    <td class="py-3 px-4 text-slate-700 font-medium">${s.email}</td>
+                    <td class="py-3 px-4 text-slate-700 font-medium">${s.parentPhone}</td>
                     <td class="py-3 px-4 font-mono text-xs text-slate-500">${s.pass}</td>
-                    <td class="py-3 px-4 font-bold text-slate-800">${s.attendance}%</td>
                     <td class="py-3 px-4">
-                        <span class="px-2.5 py-1 rounded-full text-xs font-bold ${s.feeStatus === 'Paid' ? 'bg-emerald-100 text-emerald-800' : 'bg-red-100 text-red-800'}">${s.feeStatus}</span>
+                        <span class="px-2 py-0.5 rounded text-[11px] font-semibold bg-blue-50 text-blue-700">${s.source || 'Admin'}</span>
+                    </td>
+                    <td class="py-3 px-4">
+                        <span class="px-2.5 py-1 rounded-full text-xs font-bold ${s.feeStatus === 'Paid' ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'}">${s.feeStatus}</span>
                     </td>
                 </tr>
             `).join('');
@@ -660,6 +836,7 @@
                 pass: document.getElementById('regPin').value.trim(),
                 attendance: 100,
                 feeStatus: "Paid",
+                source: "Admin Desk",
                 remark: "Newly enrolled student at Apex CBSE Academy.",
                 marks: []
             };
@@ -667,7 +844,7 @@
             saveERP();
             renderAdminDashboard();
             e.target.reset();
-            alert(`Student ${newStudent.name} registered! Login enabled via Gmail (${newStudent.email}) or Mobile (${newStudent.parentPhone}).`);
+            alert(`Student ${newStudent.name} added to Admin Database!`);
         }
 
         function addTestMark(e) {
@@ -733,7 +910,7 @@
                 ? "Parent Portal • Full Progress Access"
                 : "Candidate Portal • Student View";
             document.getElementById('userNameHeading').innerText = student.name;
-            document.getElementById('userBatchSub').innerText = `Roll ID: ${student.roll} • ${student.email} • Mob: ${student.parentPhone}`;
+            document.getElementById('userBatchSub').innerText = `Roll ID: ${student.roll} • ${student.classBatch} • Gmail: ${student.email} • Mob: ${student.parentPhone}`;
             document.getElementById('userAttStat').innerText = `${student.attendance}%`;
 
             const totalPct = student.marks.reduce((acc, m) => acc + ((m.score / m.total) * 100), 0);
@@ -747,7 +924,7 @@
                 feeEl.innerText = student.feeStatus;
                 feeEl.className = student.feeStatus === 'Paid'
                     ? "text-lg font-extrabold text-emerald-600 mt-1"
-                    : "text-lg font-extrabold text-red-600 mt-1";
+                    : "text-lg font-extrabold text-amber-600 mt-1";
                 document.getElementById('parentRemarkText').innerText = `"${student.remark}"`;
             } else {
                 parentBox.classList.add('hidden');
@@ -773,7 +950,7 @@
                         </div>
                     </div>
                 `;
-            }).join('') : `<p class="text-sm text-slate-500">No weekly test records uploaded yet.</p>`;
+            }).join('') : `<p class="text-sm text-slate-500">Your account is active! Weekly Saturday test scores will appear here once uploaded by Admin.</p>`;
             document.getElementById('studentMarksList').innerHTML = marksHTML;
 
             document.getElementById('studentExamList').innerHTML = erpData.exams.map(ex => `
