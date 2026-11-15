@@ -816,4 +816,1621 @@
                                 </div>
 
                                 <div class="grid grid-cols-2 gap-3">
-                                    <button type="button" onclick="quickMethodPrompt('gmail')" class="flex items-center justify-center gap-2 py-2.
+                                    <button type="button" onclick="quickMethodPrompt('gmail')" class="flex items-center justify-center gap-2 py-2.5 px-4 border border-slate-300 rounded-xl hover:bg-slate-50 transition text-xs font-bold text-slate-700 shadow-sm">
+                                        <i class="fab fa-google text-red-500 text-base"></i> Gmail Login
+                                    </button>
+                                    <button type="button" onclick="quickMethodPrompt('mobile')" class="flex items-center justify-center gap-2 py-2.5 px-4 border border-slate-300 rounded-xl hover:bg-slate-50 transition text-xs font-bold text-slate-700 shadow-sm">
+                                        <i class="fas fa-mobile-alt text-blue-600 text-base"></i> Mobile Login
+                                    </button>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="bg-slate-950/90 border-t border-white/10 py-3 overflow-hidden relative z-10">
+            <div class="marquee-track text-slate-300 text-xs font-semibold space-x-10 px-4">
+                <span class="flex items-center gap-2"><i class="fas fa-qrcode text-emerald-400"></i> Step 1: Pay Fee Online via UPI or Net Banking</span>
+                <span class="flex items-center gap-2"><i class="fas fa-receipt text-amber-400"></i> Step 2: Instant or Admin-Verified Receipt Generation</span>
+                <span class="flex items-center gap-2"><i class="fas fa-id-card text-blue-400"></i> Instant Printable Student ID Cards</span>
+                <span class="flex items-center gap-2"><i class="fas fa-file-pdf text-amber-300"></i> Official Printable Progress Report Cards</span>
+            </div>
+        </div>
+    </main>
+
+    <!-- ================= 2. ADMIN FULL ACCESS DASHBOARD ================= -->
+    <section id="adminDashboard" class="hidden flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 no-print">
+        <div class="bg-gradient-to-r from-slate-900 to-blue-900 text-white rounded-2xl p-6 mb-8 shadow-lg flex flex-wrap justify-between items-center gap-4">
+            <div>
+                <span class="bg-amber-400 text-slate-950 text-xs font-extrabold px-3 py-1 rounded-full uppercase">Full Admin Control</span>
+                <h1 class="text-2xl sm:text-3xl font-extrabold mt-2">Founder & Admin Panel — Massawar Ali Khan</h1>
+                <p class="text-blue-200 text-xs sm:text-sm">Approve pending payments, generate fallback fee receipts on Admin Portal, and manage student records.</p>
+            </div>
+            <button onclick="resetDefaultData()" class="bg-white/10 hover:bg-white/20 border border-white/20 text-xs font-semibold px-4 py-2.5 rounded-xl">
+                <i class="fas fa-sync-alt mr-1"></i> Reset System Data
+            </button>
+        </div>
+
+        <!-- NEW SECTION: ADMIN RECEIPT GENERATOR & PENDING PAYMENTQUEUE -->
+        <div class="grid lg:grid-cols-2 gap-8 mb-8">
+            <!-- Left: Pending Payments Waiting for Admin Receipt Generation -->
+            <div class="bg-amber-50 border-2 border-amber-300 rounded-2xl p-6 shadow-sm">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="font-extrabold text-base sm:text-lg text-amber-950 flex items-center gap-2">
+                        <i class="fas fa-clock text-amber-600"></i> Pending Fee Verification & Admin Receipt Generator
+                    </h3>
+                    <span id="pendingReceiptCount" class="bg-amber-500 text-slate-950 text-xs font-extrabold px-2.5 py-0.5 rounded-full">0 Pending</span>
+                </div>
+                <p class="text-xs text-amber-800 mb-3">
+                    If a candidate/parent paid via QR/NEFT or Cash and their receipt wasn't generated on their portal, click <strong>"Approve & Generate Receipt"</strong> below:
+                </p>
+                <div id="adminPendingQueueList" class="space-y-2.5 max-h-56 overflow-y-auto text-xs"></div>
+            </div>
+
+            <!-- Right: All Generated Receipts Log on Admin Portal -->
+            <div class="bg-emerald-50 border-2 border-emerald-300 rounded-2xl p-6 shadow-sm">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="font-extrabold text-base sm:text-lg text-emerald-950 flex items-center gap-2">
+                        <i class="fas fa-file-invoice-dollar text-emerald-600"></i> Generated Fee Receipts Log (Admin Portal Copy)
+                    </h3>
+                    <span id="generatedReceiptCount" class="bg-emerald-600 text-white text-xs font-extrabold px-2.5 py-0.5 rounded-full">0 Generated</span>
+                </div>
+                <p class="text-xs text-emerald-800 mb-3">
+                    Every receipt generated after payment (either on Candidate/Parent portal or by Admin) is archived here for instant printing:
+                </p>
+                <div id="adminGeneratedReceiptsLog" class="space-y-2.5 max-h-56 overflow-y-auto text-xs"></div>
+            </div>
+        </div>
+
+        <!-- Row 1: Register New Student + Upload & Manage Marks -->
+        <div class="grid lg:grid-cols-2 gap-8 mb-8">
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                <h3 class="font-extrabold text-lg text-slate-900 mb-4 flex items-center gap-2">
+                    <i class="fas fa-user-plus text-emerald-600"></i> Manual Student Registration (Admin Desk)
+                </h3>
+                <form onsubmit="registerNewStudent(event)" class="space-y-3 text-sm">
+                    <div class="grid grid-cols-2 gap-3">
+                        <input type="text" id="regName" required placeholder="Student Full Name" class="w-full px-3.5 py-2.5 rounded-lg border border-slate-300">
+                        <input type="text" id="regRoll" required placeholder="Roll ID (e.g. APEX105)" class="w-full px-3.5 py-2.5 rounded-lg border border-slate-300">
+                    </div>
+                    <div class="grid grid-cols-2 gap-3">
+                        <input type="email" id="regEmail" required placeholder="Student/Parent Gmail ID" class="w-full px-3.5 py-2.5 rounded-lg border border-slate-300">
+                        <input type="tel" id="regPhone" required placeholder="10-Digit Mobile No." class="w-full px-3.5 py-2.5 rounded-lg border border-slate-300">
+                    </div>
+                    <div class="grid grid-cols-3 gap-2">
+                        <select id="regBatch" required class="col-span-2 px-3 py-2.5 rounded-lg border border-slate-300 bg-white">
+                            <option value="Class 6 & 7 (Shift 1: 3:30 - 5:30 PM)">Class 6 & 7 (Shift 1)</option>
+                            <option value="Class 8 (Shift 1: 3:30 - 5:30 PM)">Class 8 (Shift 1)</option>
+                            <option value="Class 9 (Shift 2: 5:30 - 7:30 PM)">Class 9 (Shift 2)</option>
+                            <option value="Class 10 (Shift 2: 5:30 - 7:30 PM)">Class 10 (Shift 2)</option>
+                        </select>
+                        <input type="number" id="regFeeAmount" required placeholder="Fee ₹ (1200)" class="px-3 py-2.5 rounded-lg border border-slate-300">
+                    </div>
+                    <input type="text" id="regPin" required placeholder="Set Login PIN (e.g. 1234)" class="w-full px-3.5 py-2.5 rounded-lg border border-slate-300">
+                    <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 rounded-xl">Add Student (Fee Starts as Pending)</button>
+                </form>
+
+                <!-- Admin Payment Gateway Settings (UPI ID & Bank Account) -->
+                <div class="mt-5 pt-4 border-t border-slate-200">
+                    <h4 class="font-bold text-xs uppercase text-blue-700 mb-2"><i class="fas fa-qrcode mr-1"></i> Academy UPI & NetBanking Receiver Settings</h4>
+                    <form onsubmit="saveGatewaySettings(event)" class="grid grid-cols-3 gap-2 text-xs">
+                        <input type="text" id="adminUpiId" required placeholder="UPI ID (e.g. 9337042839@ybl)" class="px-2.5 py-2 rounded-lg border border-slate-300 font-mono">
+                        <input type="text" id="adminBankAcc" required placeholder="Bank Account No." class="px-2.5 py-2 rounded-lg border border-slate-300 font-mono">
+                        <button type="submit" class="bg-blue-700 hover:bg-blue-800 text-white font-bold rounded-lg px-3 py-2">Save UPI/Bank</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                <h3 class="font-extrabold text-lg text-slate-900 mb-4 flex items-center gap-2">
+                    <i class="fas fa-poll text-blue-600"></i> Upload & Manage Weekly Test Marks
+                </h3>
+                <form onsubmit="addTestMark(event)" class="space-y-3 text-sm">
+                    <select id="markRoll" onchange="renderAdminStudentMarksList()" required class="w-full px-3.5 py-2.5 rounded-lg border border-slate-300 bg-white font-semibold"></select>
+                    <div class="grid grid-cols-2 gap-3">
+                        <input type="text" id="markSubject" required placeholder="Subject (e.g. Maths)" class="w-full px-3.5 py-2.5 rounded-lg border border-slate-300">
+                        <input type="date" id="markDate" required class="w-full px-3.5 py-2.5 rounded-lg border border-slate-300">
+                    </div>
+                    <input type="text" id="markTopic" required placeholder="Chapter / Topic Name" class="w-full px-3.5 py-2.5 rounded-lg border border-slate-300">
+                    <div class="grid grid-cols-2 gap-3">
+                        <input type="number" id="markScore" required placeholder="Marks Obtained" class="w-full px-3.5 py-2.5 rounded-lg border border-slate-300">
+                        <input type="number" id="markTotal" required placeholder="Total Marks (e.g. 50)" class="w-full px-3.5 py-2.5 rounded-lg border border-slate-300">
+                    </div>
+                    <button type="submit" class="w-full bg-blue-700 hover:bg-blue-800 text-white font-bold py-2.5 rounded-xl">Publish Score</button>
+                </form>
+
+                <div class="mt-4 pt-3 border-t border-slate-200">
+                    <div class="text-xs font-extrabold uppercase text-slate-500 mb-2">Uploaded Scores for Selected Candidate (Edit / Delete):</div>
+                    <div id="adminStudentMarksManager" class="space-y-2 max-h-40 overflow-y-auto text-xs"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Row 2: Exam Schedule, Holidays & Attendance/Fee Manager -->
+        <div class="grid lg:grid-cols-2 gap-8">
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                <h3 class="font-extrabold text-lg text-slate-900 mb-4 flex items-center gap-2">
+                    <i class="fas fa-calendar-check text-amber-500"></i> Add & Manage Exam Schedule
+                </h3>
+                <form onsubmit="addExamSchedule(event)" class="space-y-3 text-sm">
+                    <select id="examClass" required class="w-full px-3.5 py-2.5 rounded-lg border border-slate-300 bg-white">
+                        <option value="All Classes">All Classes (6 to 10)</option>
+                        <option value="Class 6 & 7">Class 6 & 7 (Shift 1)</option>
+                        <option value="Class 8">Class 8 (Shift 1)</option>
+                        <option value="Class 9">Class 9 (Shift 2)</option>
+                        <option value="Class 10">Class 10 (Shift 2)</option>
+                    </select>
+                    <input type="text" id="examSubject" required placeholder="Subject & Syllabus Chapter" class="w-full px-3.5 py-2.5 rounded-lg border border-slate-300">
+                    <div class="grid grid-cols-2 gap-3">
+                        <input type="date" id="examDate" required class="w-full px-3.5 py-2.5 rounded-lg border border-slate-300">
+                        <input type="text" id="examTime" required placeholder="Time (e.g. Sat 5:30 PM)" class="w-full px-3.5 py-2.5 rounded-lg border border-slate-300">
+                    </div>
+                    <button type="submit" class="w-full bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold py-2.5 rounded-xl">Add Exam to Calendar</button>
+                </form>
+                <div id="adminExamList" class="mt-4 pt-3 border-t border-slate-100 space-y-2 max-h-40 overflow-y-auto text-xs"></div>
+            </div>
+
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 space-y-5">
+                <div>
+                    <h3 class="font-extrabold text-base text-slate-900 mb-2 flex items-center gap-2">
+                        <i class="fas fa-umbrella-beach text-emerald-600"></i> Announce Holiday / Notice
+                    </h3>
+                    <form onsubmit="addHoliday(event)" class="flex gap-2 text-sm">
+                        <input type="text" id="holTitle" required placeholder="Holiday Title" class="w-1/2 px-3 py-2 rounded-lg border border-slate-300">
+                        <input type="text" id="holDate" required placeholder="Date" class="w-1/3 px-3 py-2 rounded-lg border border-slate-300">
+                        <button type="submit" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-4 py-2 rounded-lg">Add</button>
+                    </form>
+                    <div id="adminHolidayList" class="mt-3 space-y-1.5 max-h-28 overflow-y-auto text-xs"></div>
+                </div>
+
+                <div class="pt-3 border-t border-slate-200">
+                    <h4 class="font-bold text-sm text-slate-800 mb-2">Update Attendance, Monthly Fee & Parent Remark</h4>
+                    <form onsubmit="updateStudentMeta(event)" class="space-y-2.5 text-sm">
+                        <div class="grid grid-cols-3 gap-2">
+                            <select id="metaRoll" required class="col-span-2 px-3 py-2 rounded-lg border border-slate-300 bg-white"></select>
+                            <input type="number" id="metaAtt" required min="1" max="100" placeholder="Att. %" class="px-3 py-2 rounded-lg border border-slate-300">
+                        </div>
+                        <div class="grid grid-cols-3 gap-2">
+                            <input type="number" id="metaFeeAmount" placeholder="Fee ₹ (e.g. 1200)" class="px-3 py-2 rounded-lg border border-slate-300">
+                            <select id="metaFee" class="px-3 py-2 rounded-lg border border-slate-300 bg-white">
+                                <option value="Paid">Paid (Generate Receipt)</option>
+                                <option value="Pending">Pending (Lock Receipt)</option>
+                            </select>
+                            <select id="metaPayMode" class="px-3 py-2 rounded-lg border border-slate-300 bg-white">
+                                <option value="Cash Desk">Cash Desk</option>
+                                <option value="UPI / Online">UPI / Online</option>
+                                <option value="Net Banking">Net Banking</option>
+                            </select>
+                        </div>
+                        <input type="text" id="metaRemark" placeholder="Teacher's Remark for Parent" class="w-full px-3 py-2 rounded-lg border border-slate-300">
+                        <button type="submit" class="w-full bg-slate-800 hover:bg-slate-900 text-white font-semibold py-2 rounded-xl">Save Status & Update Receipt</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Admin Student Overview Table -->
+        <div class="mt-8 bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+            <div class="px-6 py-4 bg-slate-900 text-white flex justify-between items-center">
+                <h3 class="font-bold">Registered Candidates & Parents Database (Payment & Receipt Control)</h3>
+                <span id="totalStudentCount" class="text-xs bg-amber-400 text-slate-950 font-extrabold px-3 py-1 rounded-full"></span>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse text-sm">
+                    <thead>
+                        <tr class="bg-slate-100 text-slate-700 border-b">
+                            <th class="py-3 px-4">Roll ID</th>
+                            <th class="py-3 px-4">Student Name</th>
+                            <th class="py-3 px-4">Batch</th>
+                            <th class="py-3 px-4">Gmail & Mobile</th>
+                            <th class="py-3 px-4">PIN</th>
+                            <th class="py-3 px-4">Fee & Receipt Status</th>
+                            <th class="py-3 px-4 text-center">Actions (ID / Receipt / Report / Delete)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="adminStudentTable" class="divide-y divide-slate-200"></tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================= 3. CANDIDATE & PARENT DASHBOARD ================= -->
+    <section id="userDashboard" class="hidden flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 no-print">
+        <div class="bg-gradient-to-r from-blue-800 to-indigo-900 text-white rounded-2xl p-6 mb-6 shadow-lg flex flex-wrap justify-between items-center gap-4">
+            <div>
+                <span id="userRolePill" class="bg-amber-400 text-slate-950 text-xs font-extrabold px-3 py-1 rounded-full uppercase">Candidate View</span>
+                <h1 id="userNameHeading" class="text-2xl sm:text-3xl font-extrabold mt-2">Student Name</h1>
+                <p id="userBatchSub" class="text-blue-200 text-xs sm:text-sm"></p>
+            </div>
+            <div class="flex flex-wrap items-center gap-2 sm:gap-2.5">
+                <div class="bg-white/10 px-3.5 py-2 rounded-xl text-center">
+                    <div id="userAttStat" class="text-xl font-extrabold text-amber-400">100%</div>
+                    <div class="text-[10px] text-blue-100">Attendance</div>
+                </div>
+                <div class="bg-white/10 px-3.5 py-2 rounded-xl text-center">
+                    <div id="userAvgStat" class="text-xl font-extrabold text-emerald-400">0%</div>
+                    <div class="text-[10px] text-blue-100">Avg. Score</div>
+                </div>
+                <button onclick="openOnlinePaymentGateway()" class="bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-extrabold text-xs px-4 py-3 rounded-xl shadow-lg transition flex items-center gap-1.5">
+                    <i class="fas fa-credit-card"></i>
+                    <span>Pay Fee (UPI / Bank)</span>
+                </button>
+                <button onclick="openIdCardForActiveUser()" class="bg-white hover:bg-blue-50 text-blue-900 font-extrabold text-xs px-3.5 py-3 rounded-xl shadow-lg transition flex items-center gap-1.5">
+                    <i class="fas fa-id-badge text-blue-700"></i>
+                    <span>ID Card</span>
+                </button>
+                <button id="topHeaderReceiptBtn" onclick="openFeeReceiptForActiveUser()" class="bg-blue-600 hover:bg-blue-500 text-white font-extrabold text-xs px-3.5 py-3 rounded-xl shadow-lg transition flex items-center gap-1.5">
+                    <i class="fas fa-receipt"></i>
+                    <span>Receipt</span>
+                </button>
+                <button onclick="openReportCardForActiveUser()" class="bg-amber-400 hover:bg-amber-300 text-slate-950 font-extrabold text-xs px-3.5 py-3 rounded-xl shadow-lg transition flex items-center gap-1.5">
+                    <i class="fas fa-print"></i>
+                    <span>Report Card</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- ONLINE FEE PAYMENT & RECEIPT STATUS BANNER -->
+        <div class="mb-8 bg-white border-2 border-blue-600/20 rounded-2xl p-5 shadow-sm flex flex-wrap justify-between items-center gap-4">
+            <div class="flex items-center gap-4">
+                <div id="feeBannerIcon" class="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center text-2xl shrink-0">
+                    <i class="fas fa-rupee-sign"></i>
+                </div>
+                <div>
+                    <div class="flex items-center gap-2">
+                        <span class="text-xs font-extrabold uppercase tracking-wider text-slate-400">Monthly Tuition Fee</span>
+                        <span id="dashboardFeePill" class="px-2.5 py-0.5 rounded-full text-[11px] font-extrabold bg-emerald-100 text-emerald-800">PAID</span>
+                    </div>
+                    <div class="text-lg sm:text-xl font-extrabold text-slate-900 mt-0.5">
+                        <span id="dashboardFeeAmount">₹1,200 / month</span>
+                        <span id="dashboardLastTxn" class="text-xs font-medium text-slate-500 ml-2"></span>
+                    </div>
+                    <p id="receiptAvailabilityNote" class="text-xs text-slate-500 mt-0.5"></p>
+                </div>
+            </div>
+            <div class="flex items-center gap-2.5">
+                <button onclick="openOnlinePaymentGateway()" id="mainPayActionBtn" class="bg-blue-700 hover:bg-blue-800 text-white font-extrabold text-xs sm:text-sm px-5 py-3 rounded-xl shadow-md transition flex items-center gap-2">
+                    <i class="fas fa-qrcode"></i> Pay Online via UPI / Net Banking
+                </button>
+                <button id="bannerReceiptBtn" onclick="openFeeReceiptForActiveUser()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs sm:text-sm px-4 py-3 rounded-xl shadow transition flex items-center gap-1.5">
+                    <i class="fas fa-file-invoice-dollar"></i> View / Print Receipt
+                </button>
+            </div>
+        </div>
+
+        <!-- PARENT-ONLY EXCLUSIVE REPORT SECTION -->
+        <div id="parentExclusiveBox" class="hidden mb-8 bg-amber-50 border-2 border-amber-300 rounded-2xl p-6 shadow-sm">
+            <h3 class="text-lg font-extrabold text-amber-950 mb-4 flex items-center gap-2">
+                <i class="fas fa-user-check text-amber-600"></i> Complete Parent Monitoring Report (Full Progress Access)
+            </h3>
+            <div class="grid md:grid-cols-3 gap-4 text-sm">
+                <div class="bg-white p-4 rounded-xl border border-amber-200 flex flex-col justify-between">
+                    <div>
+                        <span class="text-xs font-bold uppercase text-slate-400">Monthly Fee & Receipt Status</span>
+                        <div class="flex items-baseline gap-2 mt-1">
+                            <span id="parentFeeBadge" class="text-lg font-extrabold text-emerald-600">Paid</span>
+                            <span id="parentFeeAmountText" class="text-sm font-bold text-slate-700">(₹1,200/mo)</span>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2 mt-3">
+                        <button onclick="openOnlinePaymentGateway()" class="bg-blue-700 hover:bg-blue-800 text-white text-xs font-bold py-2 px-2.5 rounded-lg transition flex items-center justify-center gap-1">
+                            <i class="fas fa-bolt"></i> Pay Fee
+                        </button>
+                        <button id="parentBoxReceiptBtn" onclick="openFeeReceiptForActiveUser()" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold py-2 px-2.5 rounded-lg transition flex items-center justify-center gap-1">
+                            <i class="fas fa-receipt"></i> Receipt
+                        </button>
+                    </div>
+                </div>
+                <div class="bg-white p-4 rounded-xl border border-amber-200 md:col-span-2">
+                    <span class="text-xs font-bold uppercase text-slate-400">Founder / Mentor's Remark (Massawar Sir)</span>
+                    <div id="parentRemarkText" class="text-sm font-semibold text-slate-800 mt-1"></div>
+                    <p class="text-xs text-slate-500 mt-2">Direct Helpline: +91 9337042839</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Progress Grid -->
+        <div class="grid lg:grid-cols-3 gap-8">
+            <div class="lg:col-span-2 bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+                <div class="px-6 py-4 bg-slate-900 text-white flex flex-wrap justify-between items-center gap-2">
+                    <h3 class="font-bold"><i class="fas fa-chart-bar text-amber-400 mr-2"></i>Saturday Weekly Test Results & Progress</h3>
+                    <div class="flex gap-1.5">
+                        <button onclick="openIdCardForActiveUser()" class="text-xs bg-blue-600 text-white font-bold px-2.5 py-1 rounded-full hover:bg-blue-500 transition">
+                            <i class="fas fa-id-card mr-1"></i> ID
+                        </button>
+                        <button onclick="openReportCardForActiveUser()" class="text-xs bg-amber-400 text-slate-950 font-bold px-2.5 py-1 rounded-full hover:bg-amber-300 transition">
+                            <i class="fas fa-file-download mr-1"></i> Report PDF
+                        </button>
+                    </div>
+                </div>
+                <div class="p-6">
+                    <div id="studentMarksList" class="space-y-4"></div>
+                </div>
+            </div>
+
+            <div class="space-y-8">
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+                    <div class="px-5 py-3.5 bg-blue-900 text-white font-bold text-sm flex items-center gap-2">
+                        <i class="fas fa-calendar-alt text-amber-400"></i> Upcoming Exam Schedule
+                    </div>
+                    <div id="studentExamList" class="p-5 space-y-3 text-sm divide-y divide-slate-100"></div>
+                </div>
+
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+                    <div class="px-5 py-3.5 bg-emerald-800 text-white font-bold text-sm flex items-center gap-2">
+                        <i class="fas fa-bullhorn text-amber-300"></i> Holidays & Center Notices
+                    </div>
+                    <div id="studentHolidayList" class="p-5 space-y-3 text-sm divide-y divide-slate-100"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        let sessionDurationMinutes = Number(localStorage.getItem('apexSessionMinutes')) || 5;
+        let SESSION_DURATION_MS = sessionDurationMinutes * 60 * 1000;
+        const REMINDER_THRESHOLD_MS = 30 * 1000;
+        const SESSION_STORAGE_KEY = 'apexActiveSession_v1';
+        let lastActivityResetTime = 0;
+
+        const defaultERPData = {
+            gatewayConfig: {
+                upiId: "9337042839@ybl",
+                bankAccount: "309876543210",
+                bankIfsc: "SBIN0004567"
+            },
+            generatedReceipts: [
+                {
+                    receiptNo: "APEX-RCP-1001",
+                    roll: "APEX101",
+                    studentName: "Aarav Sharma",
+                    classBatch: "Class 10 (Shift 2)",
+                    amount: 1200,
+                    payMode: "UPI Instant Checkout",
+                    txnRef: "UTR4329812094",
+                    date: "07/11/2026",
+                    generatedBy: "Candidate/Parent Portal"
+                }
+            ],
+            students: [
+                {
+                    roll: "APEX101",
+                    email: "aarav@gmail.com",
+                    parentPhone: "9876543210",
+                    pass: "1234",
+                    name: "Aarav Sharma",
+                    classBatch: "Class 10 (Shift 2: 5:30 - 7:30 PM)",
+                    attendance: 94,
+                    feeAmount: 1200,
+                    feeStatus: "Paid",
+                    receiptGenerated: true,
+                    receiptNo: "APEX-RCP-1001",
+                    receiptDate: "07/11/2026",
+                    generatedBy: "Candidate/Parent Portal",
+                    payMode: "UPI Instant Checkout",
+                    lastTxnId: "UTR4329812094",
+                    source: "Admin",
+                    remark: "Strong in Maths & IT concepts. Needs slight speed improvement in Physics numericals.",
+                    marks: [
+                        { subject: "Mathematics", topic: "Trigonometry & Real Numbers", score: 46, total: 50, date: "2026-11-07" },
+                        { subject: "Science (Phy/Chem)", topic: "Light Reflection & Chemical Reactions", score: 42, total: 50, date: "2026-10-31" },
+                        { subject: "Biology / IT", topic: "Life Processes & Cyber Ethics", score: 48, total: 50, date: "2026-10-24" }
+                    ]
+                },
+                {
+                    roll: "APEX102",
+                    email: "zoya@gmail.com",
+                    parentPhone: "9123456789",
+                    pass: "1234",
+                    name: "Zoya Khan",
+                    classBatch: "Class 8 (Shift 1: 3:30 - 5:30 PM)",
+                    attendance: 89,
+                    feeAmount: 1000,
+                    feeStatus: "Pending",
+                    receiptGenerated: false,
+                    receiptNo: "",
+                    receiptDate: "",
+                    generatedBy: "",
+                    payMode: "Pending",
+                    lastTxnId: "",
+                    source: "Admin",
+                    remark: "Very regular with NCERT homework. Scored highest in Friday Mental Maths quiz.",
+                    marks: [
+                        { subject: "Mathematics", topic: "Linear Equations in One Variable", score: 45, total: 50, date: "2026-11-07" },
+                        { subject: "Science", topic: "Microorganisms & Force", score: 44, total: 50, date: "2026-10-31" }
+                    ]
+                }
+            ],
+            exams: [
+                { targetClass: "Class 10", subject: "Maths (NCERT Exemplar Full Test)", date: "2026-11-21", time: "Saturday, 5:30 PM – 6:45 PM" },
+                { targetClass: "Class 8", subject: "Science (Force, Pressure & Friction)", date: "2026-11-21", time: "Saturday, 3:30 PM – 4:30 PM" },
+                { targetClass: "All Classes", subject: "Monthly Cumulative OMR Assessment", date: "2026-11-28", time: "Regular Batch Timings" }
+            ],
+            holidays: [
+                { title: "Guru Nanak Jayanti / Kartik Purnima Holiday", date: "24 Nov 2026 (Classes Closed)" },
+                { title: "Monthly Parent-Teacher Meeting (PTM)", date: "First Sunday of Next Month (10:00 AM – 12:30 PM)" },
+                { title: "Winter Vacation Study Camp Notice", date: "25 Dec – 31 Dec 2026 (Special Board Revision)" }
+            ]
+        };
+
+        let erpData = JSON.parse(localStorage.getItem('apexERP_v4')) || defaultERPData;
+        if (!erpData.gatewayConfig) erpData.gatewayConfig = defaultERPData.gatewayConfig;
+        if (!erpData.generatedReceipts) erpData.generatedReceipts = defaultERPData.generatedReceipts;
+
+        let currentRole = 'admin';
+        let currentAuthMode = 'login';
+        let activeLoggedInStudent = null;
+        let pendingDeleteAction = null;
+        let editingMarkRef = { roll: null, index: null };
+        let sessionIntervalId = null;
+
+        function saveERP() {
+            localStorage.setItem('apexERP_v4', JSON.stringify(erpData));
+        }
+
+        // ================= PAYMENT-FIRST & ADMIN FALLBACK RECEIPT ENGINE =================
+        function issueOfficialReceipt(student, payMethodLabel, txnRef, generatedByPortalName) {
+            const feeVal = student.feeAmount || (student.classBatch.includes('Class 6') ? 800 : student.classBatch.includes('Class 8') ? 1000 : 1200);
+            const dateStr = new Date().toLocaleDateString('en-IN');
+            const recNo = `APEX-RCP-${1001 + erpData.generatedReceipts.length}`;
+
+            student.feeStatus = "Paid";
+            student.receiptGenerated = true;
+            student.receiptNo = recNo;
+            student.receiptDate = dateStr;
+            student.generatedBy = generatedByPortalName;
+            student.payMode = payMethodLabel;
+            student.lastTxnId = txnRef;
+
+            // Log receipt into Admin Portal's Master Receipt Archive
+            erpData.generatedReceipts.unshift({
+                receiptNo: recNo,
+                roll: student.roll,
+                studentName: student.name,
+                classBatch: student.classBatch.split('(')[0].trim(),
+                amount: feeVal,
+                payMode: payMethodLabel,
+                txnRef: txnRef,
+                date: dateStr,
+                generatedBy: generatedByPortalName
+            });
+
+            saveERP();
+        }
+
+        function openOnlinePaymentGateway() {
+            if (!activeLoggedInStudent) return;
+            const student = activeLoggedInStudent;
+            const feeVal = student.feeAmount || (student.classBatch.includes('Class 6') ? 800 : student.classBatch.includes('Class 8') ? 1000 : 1200);
+            const upiId = erpData.gatewayConfig.upiId || "9337042839@ybl";
+            const bankAcc = erpData.gatewayConfig.bankAccount || "309876543210";
+
+            document.getElementById('payGatewayStudentName').innerText = `${student.name} (${student.roll})`;
+            document.getElementById('payGatewayAmount').innerText = `₹${Number(feeVal).toLocaleString('en-IN')}`;
+            document.getElementById('displayMerchantUpi').innerText = upiId;
+            document.getElementById('displayBankAcc').innerText = bankAcc;
+
+            const upiString = `upi://pay?pa=${encodeURIComponent(upiId)}&pn=${encodeURIComponent('Apex CBSE Academy')}&am=${feeVal}&cu=INR&tn=${encodeURIComponent('Fee ' + student.roll)}`;
+            document.getElementById('upiIntentLink').href = upiString;
+            document.getElementById('dynamicUpiQr').src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(upiString)}`;
+
+            switchPaymentTab('upi');
+            document.getElementById('paymentProcessingBox').classList.add('hidden');
+            document.getElementById('paymentGatewayModal').classList.remove('hidden');
+        }
+
+        function closePaymentGateway() {
+            document.getElementById('paymentGatewayModal').classList.add('hidden');
+        }
+
+        function switchPaymentTab(tab) {
+            const upiView = document.getElementById('upiPaymentView');
+            const bankView = document.getElementById('netbankingPaymentView');
+            const tabUpi = document.getElementById('payTabUpi');
+            const tabBank = document.getElementById('payTabBank');
+
+            if (tab === 'upi') {
+                upiView.classList.remove('hidden');
+                bankView.classList.add('hidden');
+                tabUpi.className = "py-2.5 rounded-xl bg-white text-blue-700 shadow-sm transition flex items-center justify-center gap-1.5";
+                tabBank.className = "py-2.5 rounded-xl text-slate-600 hover:text-slate-900 transition flex items-center justify-center gap-1.5";
+            } else {
+                upiView.classList.add('hidden');
+                bankView.classList.remove('hidden');
+                tabBank.className = "py-2.5 rounded-xl bg-white text-blue-700 shadow-sm transition flex items-center justify-center gap-1.5";
+                tabUpi.className = "py-2.5 rounded-xl text-slate-600 hover:text-slate-900 transition flex items-center justify-center gap-1.5";
+            }
+        }
+
+        function selectQuickBank(bankName) {
+            document.getElementById('bankSelector').value = bankName;
+        }
+
+        // Case 1: Instant Gateway Payment -> Generates Receipt Immediately on Student/Parent Portal AND Admin Log
+        function simulateInstantGateway(methodType) {
+            const generatedRef = (methodType.includes('UPI') ? 'UPI' : 'NBK') + Math.floor(1000000000 + Math.random() * 9000000000);
+            const label = methodType.includes('UPI')
+                ? 'UPI Instant Checkout'
+                : `NetBanking (${document.getElementById('bankSelector').value.split(' ')[0]})`;
+
+            document.getElementById('upiPaymentView').classList.add('hidden');
+            document.getElementById('netbankingPaymentView').classList.add('hidden');
+            document.getElementById('processingStatusTitle').innerText = "Payment Verified! Generating Official Receipt...";
+            document.getElementById('paymentProcessingBox').classList.remove('hidden');
+
+            setTimeout(() => {
+                if (activeLoggedInStudent) {
+                    const target = erpData.students.find(s => s.roll === activeLoggedInStudent.roll);
+                    if (target) {
+                        issueOfficialReceipt(target, label, generatedRef, currentRole === 'parent' ? "Parent Portal" : "Candidate Portal");
+                        activeLoggedInStudent = target;
+                        renderUserDashboard(currentRole, target);
+                    }
+                }
+                closePaymentGateway();
+                openFeeReceiptForActiveUser();
+            }, 1200);
+        }
+
+        // Case 2: Candidate/Parent Submits UTR (Receipt NOT generated on user portal yet -> Routed to Admin Portal to Generate)
+        function submitPaymentForAdminReceipt(event, methodLabel) {
+            event.preventDefault();
+            const utr = methodLabel.includes('UPI')
+                ? document.getElementById('upiUtrInput').value.trim().toUpperCase()
+                : document.getElementById('bankRefInput').value.trim().toUpperCase();
+
+            document.getElementById('upiPaymentView').classList.add('hidden');
+            document.getElementById('netbankingPaymentView').classList.add('hidden');
+            document.getElementById('processingStatusTitle').innerText = "Submitting Payment Details to Admin Portal for Receipt Generation...";
+            document.getElementById('paymentProcessingBox').classList.remove('hidden');
+
+            setTimeout(() => {
+                if (activeLoggedInStudent) {
+                    const target = erpData.students.find(s => s.roll === activeLoggedInStudent.roll);
+                    if (target) {
+                        target.feeStatus = "Verification Pending";
+                        target.receiptGenerated = false;
+                        target.payMode = methodLabel;
+                        target.lastTxnId = utr;
+                        activeLoggedInStudent = target;
+                        saveERP();
+                        renderUserDashboard(currentRole, target);
+                    }
+                }
+                closePaymentGateway();
+                alert("✅ Payment Reference (" + utr + ") submitted! Since instant receipt was not generated here, your receipt has been queued on the Admin Portal for generation.");
+            }, 1000);
+        }
+
+        // Admin Fallback Action: Approve Pending Payment & Generate Receipt on Admin Portal
+        function adminApproveAndGenerateReceipt(rollId) {
+            const student = erpData.students.find(s => s.roll === rollId);
+            if (!student) return;
+
+            const mode = (student.payMode && student.payMode !== 'Pending') ? student.payMode : 'Admin Verified (UPI/Cash)';
+            const ref = student.lastTxnId || ('ADM' + Math.floor(10000000 + Math.random() * 90000000));
+
+            issueOfficialReceipt(student, mode, ref, "Admin Portal");
+            renderAdminDashboard();
+            populateAndShowFeeReceipt(student);
+        }
+
+        function saveGatewaySettings(e) {
+            e.preventDefault();
+            erpData.gatewayConfig = {
+                upiId: document.getElementById('adminUpiId').value.trim(),
+                bankAccount: document.getElementById('adminBankAcc').value.trim(),
+                bankIfsc: "SBIN0004567"
+            };
+            saveERP();
+            alert("UPI ID & Bank Account updated!");
+        }
+
+        // ================= FEE RECEIPT MODAL (GUARDED BY PAYMENT CHECK) =================
+        function openFeeReceiptByRoll(rollId) {
+            const student = erpData.students.find(s => s.roll === rollId);
+            if (!student) return;
+
+            // If not paid/generated yet, Admin can generate it right now
+            if (student.feeStatus !== 'Paid' || !student.receiptGenerated) {
+                if (confirm(`Receipt is not generated for ${student.name} yet (Status: ${student.feeStatus}). Do you want to mark fee as PAID and generate the receipt on Admin Portal now?`)) {
+                    adminApproveAndGenerateReceipt(rollId);
+                }
+                return;
+            }
+            populateAndShowFeeReceipt(student);
+        }
+
+        function openFeeReceiptForActiveUser() {
+            if (!activeLoggedInStudent) return;
+            const student = erpData.students.find(s => s.roll === activeLoggedInStudent.roll) || activeLoggedInStudent;
+
+            if (student.feeStatus !== 'Paid' || !student.receiptGenerated) {
+                if (student.feeStatus === 'Verification Pending') {
+                    alert("⏳ Your payment (Ref: " + student.lastTxnId + ") is submitted. Your receipt will be generated on the Admin Portal shortly!");
+                } else {
+                    alert("🔒 Receipt Locked! Please complete your fee payment first to generate the official receipt.");
+                    openOnlinePaymentGateway();
+                }
+                return;
+            }
+            populateAndShowFeeReceipt(student);
+        }
+
+        function populateAndShowFeeReceipt(student) {
+            const feeVal = student.feeAmount || (student.classBatch.includes('Class 6') ? 800 : student.classBatch.includes('Class 8') ? 1000 : 1200);
+            const modeVal = student.payMode || "UPI / Online";
+            const txnRef = student.lastTxnId ? ` • Ref: ${student.lastTxnId}` : "";
+            const dateStr = student.receiptDate || new Date().toLocaleDateString('en-IN');
+            const recNo = student.receiptNo || `APEX-RCP-${student.roll.replace('APEX', '')}`;
+
+            document.getElementById('recNumber').innerText = `Receipt #: ${recNo}`;
+            document.getElementById('recDate').innerText = `Date: ${dateStr}`;
+            document.getElementById('recStudentName').innerText = student.name;
+            document.getElementById('recStudentRoll').innerText = student.roll;
+            document.getElementById('recStudentBatch').innerText = student.classBatch.split('(')[0].trim();
+            document.getElementById('recStudentPhoneMode').innerText = `${modeVal}${txnRef}`;
+            document.getElementById('recGeneratedByPortal').innerText = student.generatedBy || "Admin Portal";
+            document.getElementById('recBaseAmount').innerText = `₹${Number(feeVal).toLocaleString('en-IN')}`;
+            document.getElementById('recTotalAmount').innerText = `₹${Number(feeVal).toLocaleString('en-IN')}`;
+
+            const qrText = encodeURIComponent(`APEX VERIFIED RECEIPT | No: ${recNo} | Roll: ${student.roll} | Name: ${student.name} | Paid: Rs.${feeVal} | Ref: ${student.lastTxnId || 'NA'} | Portal: ${student.generatedBy || 'Admin'}`);
+            document.getElementById('recQrImg').src = `https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=${qrText}`;
+
+            document.getElementById('feeReceiptModal').classList.remove('hidden');
+        }
+
+        function closeFeeReceiptModal() {
+            document.getElementById('feeReceiptModal').classList.add('hidden');
+        }
+
+        // ================= CONFIGURABLE SESSION + MOUSE/ACTIVITY AUTO-EXTEND ENGINE =================
+        function changeSessionDuration(mins) {
+            sessionDurationMinutes = Number(mins);
+            SESSION_DURATION_MS = sessionDurationMinutes * 60 * 1000;
+            localStorage.setItem('apexSessionMinutes', sessionDurationMinutes);
+            extendSession(true);
+        }
+
+        function createOrUpdateSession(role, studentRoll) {
+            const sessionObj = {
+                role: role,
+                roll: studentRoll || null,
+                expiresAt: Date.now() + SESSION_DURATION_MS
+            };
+            localStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(sessionObj));
+            startSessionCountdown();
+        }
+
+        function extendSession(manualClick) {
+            const raw = localStorage.getItem(SESSION_STORAGE_KEY);
+            if (!raw) return;
+            const sessionObj = JSON.parse(raw);
+            sessionObj.expiresAt = Date.now() + SESSION_DURATION_MS;
+            localStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(sessionObj));
+
+            const dot = document.getElementById('activityDot');
+            if (dot) {
+                dot.className = "w-2 h-2 rounded-full bg-emerald-400 animate-ping";
+                setTimeout(() => { dot.className = "w-2 h-2 rounded-full bg-emerald-400"; }, 600);
+            }
+
+            if (manualClick) {
+                document.getElementById('sessionWarningToast').classList.add('hidden');
+                updateTimerUI(SESSION_DURATION_MS);
+            }
+        }
+
+        function handleUserActivity() {
+            const now = Date.now();
+            if (now - lastActivityResetTime < 4000) return;
+            const raw = localStorage.getItem(SESSION_STORAGE_KEY);
+            if (!raw) return;
+            lastActivityResetTime = now;
+            extendSession(false);
+        }
+
+        ['mousemove', 'mousedown', 'keydown', 'scroll', 'touchstart'].forEach(evt => {
+            window.addEventListener(evt, handleUserActivity, { passive: true });
+        });
+
+        function startSessionCountdown() {
+            if (sessionIntervalId) clearInterval(sessionIntervalId);
+            const pill = document.getElementById('sessionTimerPill');
+            pill.classList.remove('hidden');
+            pill.classList.add('flex');
+            document.getElementById('sessionDurationSelect').value = String(sessionDurationMinutes);
+
+            tickSessionCheck();
+            sessionIntervalId = setInterval(tickSessionCheck, 1000);
+        }
+
+        function tickSessionCheck() {
+            const raw = localStorage.getItem(SESSION_STORAGE_KEY);
+            if (!raw) {
+                logout(true);
+                return;
+            }
+            const sessionObj = JSON.parse(raw);
+            const remainingMs = sessionObj.expiresAt - Date.now();
+
+            if (remainingMs <= 0) {
+                clearInterval(sessionIntervalId);
+                logout(true);
+                alert("⏰ Your login session expired due to inactivity. Please log in again.");
+                return;
+            }
+
+            updateTimerUI(remainingMs);
+
+            const toast = document.getElementById('sessionWarningToast');
+            if (remainingMs <= REMINDER_THRESHOLD_MS) {
+                const secsLeft = Math.ceil(remainingMs / 1000);
+                toast.classList.remove('hidden');
+                document.getElementById('toastCountdown').innerText = `${secsLeft}s`;
+                document.getElementById('toastSecText').innerText = secsLeft;
+            } else {
+                toast.classList.add('hidden');
+            }
+        }
+
+        function updateTimerUI(remainingMs) {
+            const totalSec = Math.max(0, Math.ceil(remainingMs / 1000));
+            const mins = String(Math.floor(totalSec / 60)).padStart(2, '0');
+            const secs = String(totalSec % 60).padStart(2, '0');
+            const display = document.getElementById('navbarTimerDisplay');
+            display.innerText = `${mins}:${secs}`;
+            display.className = totalSec <= 30
+                ? "font-mono font-bold text-red-400 animate-pulse text-xs sm:text-sm"
+                : "font-mono font-bold text-amber-400 text-xs sm:text-sm";
+        }
+
+        window.addEventListener('DOMContentLoaded', function () {
+            document.getElementById('sessionDurationSelect').value = String(sessionDurationMinutes);
+            const raw = localStorage.getItem(SESSION_STORAGE_KEY);
+            if (!raw) return;
+
+            try {
+                const sessionObj = JSON.parse(raw);
+                if (sessionObj.expiresAt > Date.now()) {
+                    if (sessionObj.role === 'admin') {
+                        currentRole = 'admin';
+                        showDashboard('admin', null, true);
+                    } else {
+                        const student = erpData.students.find(s => s.roll === sessionObj.roll);
+                        if (student) {
+                            currentRole = sessionObj.role;
+                            showDashboard(sessionObj.role, student, true);
+                        } else {
+                            localStorage.removeItem(SESSION_STORAGE_KEY);
+                        }
+                    }
+                } else {
+                    localStorage.removeItem(SESSION_STORAGE_KEY);
+                }
+            } catch (e) {
+                localStorage.removeItem(SESSION_STORAGE_KEY);
+            }
+        });
+
+        function printDocument(type) {
+            document.body.classList.remove('printing-report', 'printing-idcard', 'printing-receipt');
+            if (type === 'idcard') {
+                document.body.classList.add('printing-idcard');
+            } else if (type === 'receipt') {
+                document.body.classList.add('printing-receipt');
+            } else {
+                document.body.classList.add('printing-report');
+            }
+            window.print();
+        }
+
+        // ================= STUDENT ID CARD GENERATOR FUNCTIONS =================
+        function openIdCardByRoll(rollId) {
+            const student = erpData.students.find(s => s.roll === rollId);
+            if (student) populateAndShowIdCard(student);
+        }
+
+        function openIdCardForActiveUser() {
+            if (activeLoggedInStudent) populateAndShowIdCard(activeLoggedInStudent);
+        }
+
+        function populateAndShowIdCard(student) {
+            const initials = student.name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
+            document.getElementById('idCardInitials').innerText = initials;
+            document.getElementById('idCardName').innerText = student.name;
+            document.getElementById('idCardRollBadge').innerText = `Roll ID: ${student.roll}`;
+
+            const parts = student.classBatch.split('(');
+            document.getElementById('idCardBatch').innerText = parts[0].trim();
+            document.getElementById('idCardTiming').innerText = parts[1] ? parts[1].replace(')', '').trim() : "3:30 PM – 7:30 PM";
+            document.getElementById('idCardPhone').innerText = `+91 ${student.parentPhone}`;
+            document.getElementById('idCardEmail').innerText = student.email;
+
+            const qrData = encodeURIComponent(`APEX CBSE ACADEMY | Roll: ${student.roll} | Name: ${student.name} | Batch: ${student.classBatch} | Verified by Massawar Ali Khan`);
+            document.getElementById('idCardQrImg').src = `https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=${qrData}`;
+
+            document.getElementById('idCardModal').classList.remove('hidden');
+        }
+
+        function closeIdCardModal() {
+            document.getElementById('idCardModal').classList.add('hidden');
+        }
+
+        function openConfirmModal(title, description, onConfirmCallback) {
+            document.getElementById('confirmModalTitle').innerText = title;
+            document.getElementById('confirmModalDesc').innerText = description;
+            pendingDeleteAction = onConfirmCallback;
+            document.getElementById('confirmModal').classList.remove('hidden');
+        }
+
+        function closeConfirmModal() {
+            document.getElementById('confirmModal').classList.add('hidden');
+            pendingDeleteAction = null;
+        }
+
+        document.getElementById('confirmDeleteBtn').addEventListener('click', function () {
+            if (typeof pendingDeleteAction === 'function') {
+                pendingDeleteAction();
+            }
+            closeConfirmModal();
+        });
+
+        function resetDefaultData() {
+            openConfirmModal(
+                "Reset Entire Database?",
+                "Are you sure you want to reset all students, exams, and receipts back to default demo settings?",
+                function () {
+                    localStorage.removeItem('apexERP_v4');
+                    erpData = JSON.parse(JSON.stringify(defaultERPData));
+                    renderAdminDashboard();
+                }
+            );
+        }
+
+        function switchAuthMode(mode) {
+            currentAuthMode = mode;
+            const loginForm = document.getElementById('loginForm');
+            const signupForm = document.getElementById('signupForm');
+            const loginBtn = document.getElementById('modeLoginBtn');
+            const signupBtn = document.getElementById('modeSignupBtn');
+            const quickSec = document.getElementById('quickMethodSection');
+            const roleTitle = document.getElementById('roleTitle');
+            const roleSub = document.getElementById('roleSub');
+
+            document.getElementById('loginError').classList.add('hidden');
+            document.getElementById('signupNotice').classList.add('hidden');
+
+            if (mode === 'signup' && currentRole !== 'admin') {
+                loginForm.classList.add('hidden');
+                signupForm.classList.remove('hidden');
+                quickSec.classList.add('hidden');
+                signupBtn.className = "py-2 rounded-lg bg-emerald-600 text-white shadow-sm transition";
+                loginBtn.className = "py-2 rounded-lg text-slate-600 hover:text-slate-900 transition";
+                roleTitle.innerText = currentRole === 'parent' ? "Create Parent Account" : "Create Candidate Account";
+                roleSub.innerText = "Register your Gmail & Mobile No. with Apex Admin Database";
+            } else {
+                signupForm.classList.add('hidden');
+                loginForm.classList.remove('hidden');
+                quickSec.classList.remove('hidden');
+                loginBtn.className = "py-2 rounded-lg bg-white text-blue-700 shadow-sm transition";
+                signupBtn.className = "py-2 rounded-lg text-slate-600 hover:text-slate-900 transition";
+            }
+        }
+
+        function selectRole(role) {
+            currentRole = role;
+            ['admin', 'candidate', 'parent'].forEach(r => {
+                const btn = document.getElementById('tab-' + r);
+                btn.className = (r === role)
+                    ? "py-2.5 rounded-xl bg-blue-700 text-white shadow transition"
+                    : "py-2.5 rounded-xl text-slate-600 hover:text-slate-900 transition";
+            });
+
+            const badge = document.getElementById('roleBadge');
+            const title = document.getElementById('roleTitle');
+            const sub = document.getElementById('roleSub');
+            const idLbl = document.getElementById('idLabel');
+            const passLbl = document.getElementById('passLabel');
+            const idInput = document.getElementById('loginId');
+            const authToggle = document.getElementById('authModeToggle');
+            const bottomHint = document.getElementById('bottomSignupHint');
+
+            switchAuthMode('login');
+
+            if (role === 'admin') {
+                authToggle.classList.add('hidden');
+                bottomHint.classList.add('hidden');
+                badge.innerText = "Administration Login";
+                title.innerText = "Welcome Back, Admin";
+                sub.innerText = "Sign in with Admin Gmail, Mobile No. or Username";
+                idLbl.innerText = "Admin Gmail / Mobile Number *";
+                passLbl.innerText = "Admin Password *";
+                idInput.placeholder = "Enter Admin Gmail or Mobile No.";
+            } else if (role === 'candidate') {
+                authToggle.classList.remove('hidden');
+                bottomHint.classList.remove('hidden');
+                badge.innerText = "Candidate Portal";
+                title.innerText = "Student Learning Desk";
+                sub.innerText = "Login with your registered Gmail ID, Mobile No. or Roll ID";
+                idLbl.innerText = "Student Gmail / Mobile No. / Roll ID *";
+                passLbl.innerText = "Student Login PIN *";
+                idInput.placeholder = "e.g. yourname@gmail.com or 10-digit Mobile";
+            } else {
+                authToggle.classList.remove('hidden');
+                bottomHint.classList.remove('hidden');
+                badge.innerText = "Parent Monitoring Portal";
+                title.innerText = "Child Progress Tracker";
+                sub.innerText = "Login using Registered Parent Mobile Number or Gmail ID";
+                idLbl.innerText = "Parent Gmail ID or Registered Mobile No. *";
+                passLbl.innerText = "Login PIN or Registered Mobile No. *";
+                idInput.placeholder = "Enter Parent Gmail or 10-digit Mobile No.";
+            }
+        }
+
+        function handleSelfSignup(event) {
+            event.preventDefault();
+            const name = document.getElementById('selfName').value.trim();
+            const email = document.getElementById('selfEmail').value.trim().toLowerCase();
+            const phone = document.getElementById('selfPhone').value.trim();
+            const batch = document.getElementById('selfBatch').value;
+            const pin = document.getElementById('selfPin').value.trim();
+            const notice = document.getElementById('signupNotice');
+
+            const existing = erpData.students.find(s => s.email.toLowerCase() === email || s.parentPhone === phone);
+            if (existing) {
+                notice.className = "block p-3 rounded-xl text-xs font-semibold text-center bg-red-50 text-red-700 border border-red-200";
+                notice.innerHTML = `⚠️ This Gmail or Mobile is already registered (Roll ID: <strong>${existing.roll}</strong>). Please switch to Login.`;
+                return;
+            }
+
+            const nextNumber = 101 + erpData.students.length;
+            const generatedRoll = "APEX" + nextNumber;
+            const defaultFee = batch.includes('Class 6') ? 800 : batch.includes('Class 8') ? 1000 : 1200;
+
+            const newAccount = {
+                roll: generatedRoll,
+                name: name,
+                email: email,
+                parentPhone: phone,
+                classBatch: batch,
+                pass: pin,
+                attendance: 100,
+                feeAmount: defaultFee,
+                feeStatus: "Pending",
+                receiptGenerated: false,
+                receiptNo: "",
+                receiptDate: "",
+                generatedBy: "",
+                payMode: "Pending",
+                lastTxnId: "",
+                source: currentRole === 'parent' ? "Parent Sign-Up" : "Candidate Sign-Up",
+                remark: "Welcome to Apex CBSE Academy! Complete your fee payment to unlock your official receipt.",
+                marks: []
+            };
+
+            erpData.students.push(newAccount);
+            saveERP();
+            event.target.reset();
+
+            notice.className = "block p-3 rounded-xl text-xs font-semibold text-center bg-emerald-50 text-emerald-800 border border-emerald-300";
+            notice.innerHTML = `✅ Account Created! Your Roll ID is <strong>${generatedRoll}</strong>. Redirecting to Dashboard...`;
+
+            setTimeout(() => {
+                showDashboard(currentRole, newAccount, false);
+            }, 1200);
+        }
+
+        function quickMethodPrompt(method) {
+            switchAuthMode('login');
+            const idInput = document.getElementById('loginId');
+            idInput.focus();
+            idInput.placeholder = method === 'gmail'
+                ? "Type your @gmail.com address here..."
+                : "Type your 10-digit mobile number here...";
+        }
+
+        function handleLogin(event) {
+            event.preventDefault();
+            const id = document.getElementById('loginId').value.trim().toLowerCase();
+            const pass = document.getElementById('loginPass').value.trim();
+            const errBox = document.getElementById('loginError');
+
+            if (currentRole === 'admin') {
+                const isAdmin = (id === 'admin' || id === '9337042839' || id === 'massawarali@gmail.com') && pass === 'apex2026';
+                if (isAdmin) {
+                    showDashboard('admin', null, false);
+                } else {
+                    errBox.innerText = "Invalid Admin Gmail/Mobile or Password!";
+                    errBox.classList.remove('hidden');
+                }
+            } else if (currentRole === 'candidate') {
+                const student = erpData.students.find(s =>
+                    (s.email.toLowerCase() === id || s.parentPhone === id || s.roll.toLowerCase() === id) && s.pass === pass
+                );
+                if (student) {
+                    showDashboard('candidate', student, false);
+                } else {
+                    errBox.innerText = "Account not found or wrong PIN! Click 'Create Account' above to register.";
+                    errBox.classList.remove('hidden');
+                }
+            } else if (currentRole === 'parent') {
+                const student = erpData.students.find(s =>
+                    (s.email.toLowerCase() === id || s.parentPhone === id || s.roll.toLowerCase() === id) &&
+                    (s.pass === pass || s.parentPhone === pass)
+                );
+                if (student) {
+                    showDashboard('parent', student, false);
+                } else {
+                    errBox.innerText = "Account not found! Click 'Create Account' above to register your Gmail & Mobile.";
+                    errBox.classList.remove('hidden');
+                }
+            }
+        }
+
+        function showDashboard(role, studentObj, isRestoredFromRefresh) {
+            document.getElementById('loginSection').classList.add('hidden');
+            document.getElementById('logoutBtn').classList.remove('hidden');
+
+            if (!isRestoredFromRefresh) {
+                createOrUpdateSession(role, studentObj ? studentObj.roll : null);
+            } else {
+                startSessionCountdown();
+            }
+
+            if (role === 'admin') {
+                document.getElementById('userDashboard').classList.add('hidden');
+                document.getElementById('adminDashboard').classList.remove('hidden');
+                renderAdminDashboard();
+            } else {
+                activeLoggedInStudent = studentObj;
+                document.getElementById('adminDashboard').classList.add('hidden');
+                document.getElementById('userDashboard').classList.remove('hidden');
+                renderUserDashboard(role, studentObj);
+            }
+        }
+
+        function logout(skipStorageClear) {
+            if (sessionIntervalId) clearInterval(sessionIntervalId);
+            localStorage.removeItem(SESSION_STORAGE_KEY);
+
+            document.getElementById('adminDashboard').classList.add('hidden');
+            document.getElementById('userDashboard').classList.add('hidden');
+            document.getElementById('logoutBtn').classList.add('hidden');
+            document.getElementById('sessionTimerPill').classList.add('hidden');
+            document.getElementById('sessionTimerPill').classList.remove('flex');
+            document.getElementById('sessionWarningToast').classList.add('hidden');
+            document.getElementById('loginSection').classList.remove('hidden');
+            document.getElementById('loginPass').value = '';
+            activeLoggedInStudent = null;
+            switchAuthMode('login');
+        }
+
+        function renderAdminDashboard() {
+            const currentSelectedRoll = document.getElementById('markRoll').value;
+            const rollOptions = erpData.students.map(s => `<option value="${s.roll}">${s.roll} - ${s.name} (${s.parentPhone})</option>`).join('');
+            document.getElementById('markRoll').innerHTML = rollOptions;
+            document.getElementById('metaRoll').innerHTML = rollOptions;
+            if (currentSelectedRoll && erpData.students.some(s => s.roll === currentSelectedRoll)) {
+                document.getElementById('markRoll').value = currentSelectedRoll;
+            }
+
+            if (erpData.gatewayConfig) {
+                document.getElementById('adminUpiId').value = erpData.gatewayConfig.upiId || "9337042839@ybl";
+                document.getElementById('adminBankAcc').value = erpData.gatewayConfig.bankAccount || "309876543210";
+            }
+
+            // 1. Render Pending Payments / Un-generated Receipts Queue on Admin Portal
+            const pendingStudents = erpData.students.filter(s => s.feeStatus !== 'Paid' || !s.receiptGenerated);
+            document.getElementById('pendingReceiptCount').innerText = `${pendingStudents.length} Pending`;
+            const pendingContainer = document.getElementById('adminPendingQueueList');
+
+            if (!pendingStudents.length) {
+                pendingContainer.innerHTML = `<div class="bg-white/80 p-3 rounded-xl text-emerald-800 font-semibold text-center">🎉 All students have paid and their receipts are generated!</div>`;
+            } else {
+                pendingContainer.innerHTML = pendingStudents.map(s => {
+                    const feeVal = s.feeAmount || 1200;
+                    const isSubmittedUtr = s.feeStatus === 'Verification Pending';
+                    return `
+                        <div class="bg-white p-3 rounded-xl border ${isSubmittedUtr ? 'border-blue-400 shadow-sm' : 'border-amber-200'} flex flex-wrap justify-between items-center gap-2">
+                            <div>
+                                <div class="font-extrabold text-slate-900">${s.name} <span class="text-blue-700">(${s.roll})</span> — ₹${feeVal}</div>
+                                <div class="text-[11px] ${isSubmittedUtr ? 'text-blue-700 font-bold' : 'text-slate-500'}">
+                                    ${isSubmittedUtr ? `🔔 UTR Submitted: ${s.lastTxnId} (${s.payMode})` : `Status: Payment Due / Not Generated on User Portal`}
+                                </div>
+                            </div>
+                            <button onclick="adminApproveAndGenerateReceipt('${s.roll}')" class="bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold px-3 py-1.5 rounded-lg shadow transition flex items-center gap-1">
+                                <i class="fas fa-file-signature"></i> Approve & Generate Receipt
+                            </button>
+                        </div>
+                    `;
+                }).join('');
+            }
+
+            // 2. Render Generated Receipts Log on Admin Portal
+            document.getElementById('generatedReceiptCount').innerText = `${erpData.generatedReceipts.length} Generated`;
+            const logContainer = document.getElementById('adminGeneratedReceiptsLog');
+            if (!erpData.generatedReceipts.length) {
+                logContainer.innerHTML = `<div class="text-slate-400 italic p-2">No receipts generated yet.</div>`;
+            } else {
+                logContainer.innerHTML = erpData.generatedReceipts.map(r => `
+                    <div class="bg-white p-3 rounded-xl border border-emerald-200 flex flex-wrap justify-between items-center gap-2">
+                        <div>
+                            <span class="font-mono font-bold text-emerald-700">${r.receiptNo}</span> • 
+                            <strong class="text-slate-900">${r.studentName} (${r.roll})</strong> — <strong>₹${r.amount}</strong>
+                            <div class="text-[10px] text-slate-500">Mode: ${r.payMode} (${r.txnRef}) | Generated on: <strong>${r.generatedBy}</strong> (${r.date})</div>
+                        </div>
+                        <button onclick="openFeeReceiptByRoll('${r.roll}')" class="bg-slate-900 hover:bg-blue-700 text-amber-400 hover:text-white font-bold px-3 py-1.5 rounded-lg transition">
+                            <i class="fas fa-print mr-1"></i> View / Print
+                        </button>
+                    </div>
+                `).join('');
+            }
+
+            document.getElementById('totalStudentCount').innerText = `Total Registered: ${erpData.students.length}`;
+
+            const tbody = document.getElementById('adminStudentTable');
+            tbody.innerHTML = erpData.students.map(s => {
+                const feeVal = s.feeAmount || 1200;
+                const isPaidAndGen = s.feeStatus === 'Paid' && s.receiptGenerated;
+                return `
+                <tr class="hover:bg-slate-50 transition">
+                    <td class="py-3 px-4 font-bold text-blue-700">${s.roll}</td>
+                    <td class="py-3 px-4 font-semibold text-slate-900">${s.name}</td>
+                    <td class="py-3 px-4 text-xs text-slate-600">${s.classBatch.split('(')[0]}</td>
+                    <td class="py-3 px-4 text-xs text-slate-700">
+                        <div class="font-medium">${s.email}</div>
+                        <div class="text-slate-500">${s.parentPhone}</div>
+                    </td>
+                    <td class="py-3 px-4 font-mono text-xs text-slate-500">${s.pass}</td>
+                    <td class="py-3 px-4">
+                        <span class="px-2.5 py-1 rounded-full text-xs font-bold ${isPaidAndGen ? 'bg-emerald-100 text-emerald-800' : s.feeStatus === 'Verification Pending' ? 'bg-blue-100 text-blue-800' : 'bg-amber-100 text-amber-800'}">
+                            ${isPaidAndGen ? `Paid • ${s.receiptNo}` : s.feeStatus} (₹${feeVal})
+                        </span>
+                        <div class="text-[10px] text-slate-400 font-mono mt-0.5">${s.payMode || ''} ${s.lastTxnId ? '• ' + s.lastTxnId : ''}</div>
+                    </td>
+                    <td class="py-3 px-4 text-center space-x-1 whitespace-nowrap">
+                        <button onclick="openIdCardByRoll('${s.roll}')" title="Student ID Card" class="bg-indigo-50 hover:bg-indigo-700 text-indigo-700 hover:text-white px-2.5 py-1.5 rounded-lg text-xs font-bold transition shadow-sm">
+                            <i class="fas fa-id-badge"></i> ID
+                        </button>
+                        ${isPaidAndGen ? `
+                            <button onclick="openFeeReceiptByRoll('${s.roll}')" title="Print Generated Receipt" class="bg-emerald-50 hover:bg-emerald-600 text-emerald-700 hover:text-white px-2.5 py-1.5 rounded-lg text-xs font-bold transition shadow-sm">
+                                <i class="fas fa-receipt"></i> Receipt
+                            </button>
+                        ` : `
+                            <button onclick="adminApproveAndGenerateReceipt('${s.roll}')" title="Generate Receipt on Admin Portal" class="bg-amber-100 hover:bg-emerald-600 text-amber-900 hover:text-white px-2.5 py-1.5 rounded-lg text-xs font-bold transition shadow-sm">
+                                <i class="fas fa-check-double"></i> Gen. Receipt
+                            </button>
+                        `}
+                        <button onclick="openReportCardByRoll('${s.roll}')" title="Print Report Card" class="bg-blue-50 hover:bg-blue-700 text-blue-700 hover:text-white px-2.5 py-1.5 rounded-lg text-xs font-bold transition shadow-sm">
+                            <i class="fas fa-print"></i> Report
+                        </button>
+                        <button onclick="deleteStudent('${s.roll}')" title="Delete Candidate" class="bg-red-50 hover:bg-red-600 text-red-600 hover:text-white px-2.5 py-1.5 rounded-lg text-xs font-bold transition shadow-sm">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+                    </td>
+                </tr>
+            `}).join('');
+
+            renderAdminStudentMarksList();
+
+            document.getElementById('adminExamList').innerHTML = erpData.exams.map((ex, idx) => `
+                <div class="flex justify-between items-center bg-slate-50 px-3 py-2 rounded-lg border border-slate-200">
+                    <div>
+                        <span class="font-bold text-blue-700">[${ex.targetClass}]</span>
+                        <span class="font-semibold text-slate-800 ml-1">${ex.subject}</span>
+                        <span class="text-slate-400 ml-1">(${ex.date})</span>
+                    </div>
+                    <button onclick="deleteExam(${idx})" class="text-red-500 hover:text-red-700 font-bold px-2">
+                        <i class="fas fa-trash-alt"></i>
+                    </button>
+                </div>
+            `).join('');
+
+            document.getElementById('adminHolidayList').innerHTML = erpData.holidays.map((h, idx) => `
+                <div class="flex justify-between items-center bg-slate-50 px-3 py-1.5 rounded-lg border border-slate-200">
+                    <div>
+                        <span class="font-semibold text-slate-800">${h.title}</span>
+                        <span class="text-emerald-700 ml-1">(${h.date})</span>
+                    </div>
+                    <button onclick="deleteHoliday(${idx})" class="text-red-500 hover:text-red-700 font-bold px-2">
+                        <i class="fas fa-trash-alt"></i>
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        function renderAdminStudentMarksList() {
+            const roll = document.getElementById('markRoll').value;
+            const student = erpData.students.find(s => s.roll === roll);
+            const container = document.getElementById('adminStudentMarksManager');
+            if (!student || !student.marks.length) {
+                container.innerHTML = `<div class="text-slate-400 italic py-2">No test scores uploaded for this candidate yet.</div>`;
+                return;
+            }
+            container.innerHTML = student.marks.map((m, idx) => `
+                <div class="flex justify-between items-center bg-slate-50 px-3 py-2 rounded-lg border border-slate-200">
+                    <div>
+                        <span class="font-bold text-blue-700">${m.subject}:</span>
+                        <span class="text-slate-800 font-medium">${m.topic}</span>
+                        <span class="font-extrabold text-emerald-700 ml-1">(${m.score}/${m.total})</span>
+                        <span class="text-[10px] text-slate-400 ml-1">${m.date}</span>
+                    </div>
+                    <div class="flex items-center gap-1.5 shrink-0">
+                        <button type="button" onclick="openEditMarkModal('${student.roll}', ${idx})" class="bg-blue-100 hover:bg-blue-700 text-blue-700 hover:text-white px-2 py-1 rounded text-[11px] font-bold transition">
+                            <i class="fas fa-edit"></i> Edit
+                        </button>
+                        <button type="button" onclick="deleteTestMark('${student.roll}', ${idx})" class="bg-red-100 hover:bg-red-600 text-red-600 hover:text-white px-2 py-1 rounded text-[11px] font-bold transition">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function openEditMarkModal(roll, index) {
+            const student = erpData.students.find(s => s.roll === roll);
+            if (!student || !student.marks[index]) return;
+            const mark = student.marks[index];
+            editingMarkRef = { roll, index };
+
+            document.getElementById('editMarkSubject').value = mark.subject;
+            document.getElementById('editMarkTopic').value = mark.topic;
+            document.getElementById('editMarkScore').value = mark.score;
+            document.getElementById('editMarkTotal').value = mark.total;
+            document.getElementById('editMarkDate').value = mark.date;
+            document.getElementById('editMarkModal').classList.remove('hidden');
+        }
+
+        function closeEditMarkModal() {
+            document.getElementById('editMarkModal').classList.add('hidden');
+            editingMarkRef = { roll: null, index: null };
+        }
+
+        function saveEditedMark(e) {
+            e.preventDefault();
+            const { roll, index } = editingMarkRef;
+            const student = erpData.students.find(s => s.roll === roll);
+            if (student && student.marks[index]) {
+                student.marks[index] = {
+                    subject: document.getElementById('editMarkSubject').value.trim(),
+                    topic: document.getElementById('editMarkTopic').value.trim(),
+                    score: Number(document.getElementById('editMarkScore').value),
+                    total: Number(document.getElementById('editMarkTotal').value),
+                    date: document.getElementById('editMarkDate').value
+                };
+                saveERP();
+                renderAdminDashboard();
+                closeEditMarkModal();
+            }
+        }
+
+        function deleteTestMark(roll, index) {
+            const student = erpData.students.find(s => s.roll === roll);
+            if (!student || !student.marks[index]) return;
+            const mark = student.marks[index];
+
+            openConfirmModal(
+                "Delete Test Score?",
+                `Are you sure you want to delete ${student.name}'s ${mark.subject} score (${mark.score}/${mark.total})?`,
+                function () {
+                    student.marks.splice(index, 1);
+                    saveERP();
+                    renderAdminDashboard();
+                }
+            );
+        }
+
+        function openReportCardByRoll(rollId) {
+            const student = erpData.students.find(s => s.roll === rollId);
+            if (student) populateAndShowReportCard(student);
+        }
+
+        function openReportCardForActiveUser() {
+            if (activeLoggedInStudent) populateAndShowReportCard(activeLoggedInStudent);
+        }
+
+        function populateAndShowReportCard(student) {
+            document.getElementById('rcDateIssued').innerText = "Generated: " + new Date().toLocaleDateString('en-IN');
+            document.getElementById('rcName').innerText = student.name;
+            document.getElementById('rcRoll').innerText = student.roll;
+            document.getElementById('rcBatch').innerText = student.classBatch.split('(')[0];
+            document.getElementById('rcAttFee').innerText = `${student.attendance}% | Fee: ${student.feeStatus}`;
+            document.getElementById('rcRemark').innerText = `"${student.remark}"`;
+
+            let totalScored = 0;
+            let totalMax = 0;
+
+            const rowsHTML = student.marks.length ? student.marks.map(m => {
+                totalScored += Number(m.score);
+                totalMax += Number(m.total);
+                const pct = Math.round((m.score / m.total) * 100);
+                const grade = pct >= 90 ? 'A1' : pct >= 80 ? 'A2' : pct >= 70 ? 'B1' : pct >= 60 ? 'B2' : 'C';
+                return `
+                    <tr>
+                        <td class="py-2 px-3 text-slate-600">${m.date}</td>
+                        <td class="py-2 px-3 font-bold text-slate-900">${m.subject}</td>
+                        <td class="py-2 px-3 text-slate-700">${m.topic}</td>
+                        <td class="py-2 px-3 text-center font-bold text-slate-900">${m.score} / ${m.total}</td>
+                        <td class="py-2 px-3 text-center font-extrabold text-blue-700">${pct}% (${grade})</td>
+                    </tr>
+                `;
+            }).join('') : `<tr><td colspan="5" class="py-4 text-center text-slate-400">No weekly test records available yet.</td></tr>`;
+
+            document.getElementById('rcMarksTableBody').innerHTML = rowsHTML;
+            const overallPct = totalMax > 0 ? Math.round((totalScored / totalMax) * 100) : 0;
+            document.getElementById('rcOverallAggregate').innerText = `${totalScored}/${totalMax} (${overallPct}%)`;
+
+            document.getElementById('reportCardModal').classList.remove('hidden');
+        }
+
+        function closeReportCardModal() {
+            document.getElementById('reportCardModal').classList.add('hidden');
+        }
+
+        function deleteStudent(rollId) {
+            const student = erpData.students.find(s => s.roll === rollId);
+            if (!student) return;
+
+            openConfirmModal(
+                "Delete Candidate?",
+                `Are you sure you want to permanently delete "${student.name}" (Roll ID: ${rollId}) from the Admin Database?`,
+                function () {
+                    erpData.students = erpData.students.filter(s => s.roll !== rollId);
+                    saveERP();
+                    renderAdminDashboard();
+                }
+            );
+        }
+
+        function deleteExam(index) {
+            const exam = erpData.exams[index];
+            if (!exam) return;
+
+            openConfirmModal(
+                "Delete Exam Schedule?",
+                `Are you sure you want to remove "${exam.subject}" (${exam.targetClass}) from the schedule?`,
+                function () {
+                    erpData.exams.splice(index, 1);
+                    saveERP();
+                    renderAdminDashboard();
+                }
+            );
+        }
+
+        function deleteHoliday(index) {
+            const hol = erpData.holidays[index];
+            if (!hol) return;
+
+            openConfirmModal(
+                "Remove Holiday Notice?",
+                `Are you sure you want to delete "${hol.title}"?`,
+                function () {
+                    erpData.holidays.splice(index, 1);
+                    saveERP();
+                    renderAdminDashboard();
+                }
+            );
+        }
+
+        function registerNewStudent(e) {
+            e.preventDefault();
+            const newStudent = {
+                roll: document.getElementById('regRoll').value.trim().toUpperCase(),
+                name: document.getElementById('regName').value.trim(),
+                email: document.getElementById('regEmail').value.trim().toLowerCase(),
+                parentPhone: document.getElementById('regPhone').value.trim(),
+                classBatch: document.getElementById('regBatch').value,
+                feeAmount: Number(document.getElementById('regFeeAmount').value) || 1200,
+                pass: document.getElementById('regPin').value.trim(),
+                attendance: 100,
+                feeStatus: "Pending",
+                receiptGenerated: false,
+                receiptNo: "",
+                receiptDate: "",
+                generatedBy: "",
+                payMode: "Pending",
+                lastTxnId: "",
+                source: "Admin Desk",
+                remark: "Newly enrolled student at Apex CBSE Academy.",
+                marks: []
+            };
+            erpData.students.push(newStudent);
+            saveERP();
+            renderAdminDashboard();
+            e.target.reset();
+            alert(`Student ${newStudent.name} added! Fee status is Pending — receipt will generate once payment is completed.`);
+        }
+
+        function addTestMark(e) {
+            e.preventDefault();
+            const roll = document.getElementById('markRoll').value;
+            const student = erpData.students.find(s => s.roll === roll);
+            if (student) {
+                student.marks.unshift({
+                    subject: document.getElementById('markSubject').value,
+                    topic: document.getElementById('markTopic').value,
+                    score: Number(document.getElementById('markScore').value),
+                    total: Number(document.getElementById('markTotal').value),
+                    date: document.getElementById('markDate').value
+                });
+                saveERP();
+                renderAdminDashboard();
+                document.getElementById('markSubject').value = '';
+                document.getElementById('markTopic').value = '';
+                document.getElementById('markScore').value = '';
+                document.getElementById('markTotal').value = '';
+            }
+        }
+
+        function addExamSchedule(e) {
+            e.preventDefault();
+            erpData.exams.unshift({
+                targetClass: document.getElementById('examClass').value,
+                subject: document.getElementById('examSubject').value,
+                date: document.getElementById('examDate').value,
+                time: document.getElementById('examTime').value
+            });
+            saveERP();
+            renderAdminDashboard();
+            e.target.reset();
+        }
+
+        function addHoliday(e) {
+            e.preventDefault();
+            erpData.holidays.unshift({
+                title: document.getElementById('holTitle').value,
+                date: document.getElementById('holDate').value
+            });
+            saveERP();
+            renderAdminDashboard();
+            e.target.reset();
+        }
+
+        function updateStudentMeta(e) {
+            e.preventDefault();
+            const roll = document.getElementById('metaRoll').value;
+            const student = erpData.students.find(s => s.roll === roll);
+            if (student) {
+                student.attendance = Number(document.getElementById('metaAtt').value);
+                const feeAmt = document.getElementById('metaFeeAmount').value;
+                if (feeAmt) student.feeAmount = Number(feeAmt);
+                const newFeeStatus = document.getElementById('metaFee').value;
+                const mode = document.getElementById('metaPayMode').value;
+                const rem = document.getElementById('metaRemark').value.trim();
+                if (rem) student.remark = rem;
+
+                if (newFeeStatus === 'Paid') {
+                    issueOfficialReceipt(student, mode, 'ADM' + Math.floor(10000000 + Math.random() * 90000000), "Admin Portal");
+                } else {
+                    student.feeStatus = "Pending";
+                    student.receiptGenerated = false;
+                    saveERP();
+                }
+                renderAdminDashboard();
+                e.target.reset();
+                alert(`Updated status for ${student.name}!`);
+            }
+        }
+
+        function renderUserDashboard(role, student) {
+            document.getElementById('userRolePill').innerText = role === 'parent'
+                ? "Parent Portal • Full Progress & Fee Access"
+                : "Candidate Portal • Student View";
+            document.getElementById('userNameHeading').innerText = student.name;
+            document.getElementById('userBatchSub').innerText = `Roll ID: ${student.roll} • ${student.classBatch} • Gmail: ${student.email} • Mob: ${student.parentPhone}`;
+            document.getElementById('userAttStat').innerText = `${student.attendance}%`;
+
+            const totalPct = student.marks.reduce((acc, m) => acc + ((m.score / m.total) * 100), 0);
+            const avg = student.marks.length ? Math.round(totalPct / student.marks.length) : 0;
+            document.getElementById('userAvgStat').innerText = `${avg}%`;
+
+            const feeVal = student.feeAmount || (student.classBatch.includes('Class 6') ? 800 : student.classBatch.includes('Class 8') ? 1000 : 1200);
+            document.getElementById('dashboardFeeAmount').innerText = `₹${Number(feeVal).toLocaleString('en-IN')} / month`;
+            document.getElementById('dashboardLastTxn').innerText = student.lastTxnId ? `(Ref: ${student.lastTxnId})` : "";
+
+            const feePill = document.getElementById('dashboardFeePill');
+            const payBtn = document.getElementById('mainPayActionBtn');
+            const bannerRecBtn = document.getElementById('bannerReceiptBtn');
+            const topRecBtn = document.getElementById('topHeaderReceiptBtn');
+            const parentRecBtn = document.getElementById('parentBoxReceiptBtn');
+            const noteEl = document.getElementById('receiptAvailabilityNote');
+
+            const isReceiptReady = student.feeStatus === 'Paid' && student.receiptGenerated;
+
+            if (isReceiptReady) {
+                feePill.innerText = `PAID • ${student.receiptNo}`;
+                feePill.className = "px-2.5 py-0.5 rounded-full text-[11px] font-extrabold bg-emerald-100 text-emerald-800";
+                payBtn.innerHTML = `<i class="fas fa-check-circle"></i> Pay Next Installment`;
+                bannerRecBtn.className = "bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs sm:text-sm px-4 py-3 rounded-xl shadow transition flex items-center gap-1.5";
+                bannerRecBtn.innerHTML = `<i class="fas fa-file-invoice-dollar"></i> Download Receipt (${student.receiptNo})`;
+                topRecBtn.className = "bg-blue-600 hover:bg-blue-500 text-white font-extrabold text-xs px-3.5 py-3 rounded-xl shadow-lg transition flex items-center gap-1.5";
+                topRecBtn.innerHTML = `<i class="fas fa-receipt"></i> <span>Receipt</span>`;
+                if (parentRecBtn) {
+                    parentRecBtn.className = "bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold py-2 px-2.5 rounded-lg transition flex items-center justify-center gap-1";
+                    parentRecBtn.innerHTML = `<i class="fas fa-receipt"></i> Receipt`;
+                }
+                noteEl.innerText = `✅ Official Receipt generated via ${student.generatedBy || 'Portal'} on ${student.receiptDate || 'Today'}.`;
+            } else if (student.feeStatus === 'Verification Pending') {
+                feePill.innerText = "VERIFYING AT ADMIN PORTAL";
+                feePill.className = "px-2.5 py-0.5 rounded-full text-[11px] font-extrabold bg-blue-100 text-blue-800 animate-pulse";
+                payBtn.innerHTML = `<i class="fas fa-clock"></i> Payment Submitted`;
+                bannerRecBtn.className = "bg-slate-200 text-slate-500 font-bold text-xs sm:text-sm px-4 py-3 rounded-xl cursor-not-allowed flex items-center gap-1.5";
+                bannerRecBtn.innerHTML = `<i class="fas fa-hourglass-half"></i> Generating at Admin Portal...`;
+                topRecBtn.className = "bg-slate-700 text-slate-300 font-extrabold text-xs px-3.5 py-3 rounded-xl flex items-center gap-1.5";
+                topRecBtn.innerHTML = `<i class="fas fa-lock"></i> <span>Pending Admin</span>`;
+                noteEl.innerText = `⏳ UTR (${student.lastTxnId}) submitted! Admin Portal will generate & unlock your receipt.`;
+            } else {
+                feePill.innerText = "PAYMENT DUE (RECEIPT LOCKED)";
+                feePill.className = "px-2.5 py-0.5 rounded-full text-[11px] font-extrabold bg-amber-100 text-amber-800 animate-pulse";
+                payBtn.innerHTML = `<i class="fas fa-qrcode"></i> Step 1: Pay Now ₹${feeVal} (UPI / Bank)`;
+                bannerRecBtn.className = "bg-slate-200 text-slate-500 font-bold text-xs sm:text-sm px-4 py-3 rounded-xl flex items-center gap-1.5";
+                bannerRecBtn.innerHTML = `<i class="fas fa-lock"></i> Step 2: Receipt (Pay First)`;
+                topRecBtn.className = "bg-slate-700 text-slate-300 font-extrabold text-xs px-3.5 py-3 rounded-xl flex items-center gap-1.5";
+                topRecBtn.innerHTML = `<i class="fas fa-lock"></i> <span>Receipt Locked</span>`;
+                if (parentRecBtn) {
+                    parentRecBtn.className = "bg-slate-300 text-slate-600 text-xs font-bold py-2 px-2.5 rounded-lg flex items-center justify-center gap-1";
+                    parentRecBtn.innerHTML = `<i class="fas fa-lock"></i> Locked`;
+                }
+                noteEl.innerText = `🔒 Receipt will automatically generate after completing UPI / NetBanking payment.`;
+            }
+
+            const parentBox = document.getElementById('parentExclusiveBox');
+            if (role === 'parent') {
+                parentBox.classList.remove('hidden');
+                const feeEl = document.getElementById('parentFeeBadge');
+                feeEl.innerText = student.feeStatus;
+                feeEl.className = student.feeStatus === 'Paid'
+                    ? "text-lg font-extrabold text-emerald-600"
+                    : "text-lg font-extrabold text-amber-600";
+                document.getElementById('parentFeeAmountText').innerText = `(₹${feeVal}/mo • ${student.payMode || 'Pending'})`;
+                document.getElementById('parentRemarkText').innerText = `"${student.remark}"`;
+            } else {
+                parentBox.classList.add('hidden');
+            }
+
+            const marksHTML = student.marks.length ? student.marks.map(m => {
+                const pct = Math.round((m.score / m.total) * 100);
+                return `
+                    <div class="p-4 rounded-xl bg-slate-50 border border-slate-200">
+                        <div class="flex justify-between items-start mb-2">
+                            <div>
+                                <span class="text-xs font-bold uppercase text-blue-700">${m.subject}</span>
+                                <h4 class="font-bold text-slate-900 text-sm sm:text-base">${m.topic}</h4>
+                                <span class="text-xs text-slate-400"><i class="far fa-calendar mr-1"></i>Test Date: ${m.date}</span>
+                            </div>
+                            <div class="text-right">
+                                <span class="text-lg font-extrabold text-slate-900">${m.score}/${m.total}</span>
+                                <span class="block text-xs font-bold ${pct >= 80 ? 'text-emerald-600' : 'text-amber-600'}">${pct}%</span>
+                            </div>
+                        </div>
+                        <div class="w-full bg-slate-200 h-2.5 rounded-full overflow-hidden">
+                            <div class="bg-blue-600 h-full rounded-full" style="width: ${pct}%"></div>
+                        </div>
+                    </div>
+                `;
+            }).join('') : `<p class="text-sm text-slate-500">Your account is active! Weekly Saturday test scores will appear here once uploaded by Admin.</p>`;
+            document.getElementById('studentMarksList').innerHTML = marksHTML;
+
+            document.getElementById('studentExamList').innerHTML = erpData.exams.map(ex => `
+                <div class="pt-3 first:pt-0">
+                    <span class="bg-blue-100 text-blue-800 text-[11px] font-bold px-2.5 py-0.5 rounded-full">${ex.targetClass}</span>
+                    <div class="font-bold text-slate-900 mt-1">${ex.subject}</div>
+                    <div class="text-xs text-slate-500 mt-0.5"><i class="far fa-clock mr-1"></i>${ex.date} | ${ex.time}</div>
+                </div>
+            `).join('');
+
+            document.getElementById('studentHolidayList').innerHTML = erpData.holidays.map(h => `
+                <div class="pt-3 first:pt-0">
+                    <div class="font-bold text-slate-900">${h.title}</div>
+                    <div class="text-xs text-emerald-700 font-medium mt-0.5"><i class="fas fa-calendar-day mr-1"></i>${h.date}</div>
+                </div>
+            `).join('');
+        }
+    </script>
+</body>
+</html>
