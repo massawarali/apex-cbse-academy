@@ -267,11 +267,21 @@
                 <div class="grid grid-cols-2 gap-2.5">
                     <div>
                         <label class="block text-[11px] font-bold uppercase text-slate-600 mb-1">New Password / PIN *</label>
-                        <input type="text" id="newSelfResetPass" required minlength="4" placeholder="New PIN (4+ chars)" class="w-full px-3 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-600 text-sm font-mono font-bold">
+                        <div class="relative">
+                            <input type="password" id="newSelfResetPass" required minlength="4" placeholder="New PIN (4+ chars)" class="w-full pl-3 pr-8 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-600 text-sm font-mono font-bold">
+                            <button type="button" onclick="togglePassVisibility('newSelfResetPass', 'eyeOtpNewPass')" class="absolute inset-y-0 right-0 pr-2.5 flex items-center text-slate-400 hover:text-slate-700">
+                                <i id="eyeOtpNewPass" class="fas fa-eye text-xs"></i>
+                            </button>
+                        </div>
                     </div>
                     <div>
                         <label class="block text-[11px] font-bold uppercase text-slate-600 mb-1">Confirm PIN *</label>
-                        <input type="text" id="confirmSelfResetPass" required minlength="4" placeholder="Re-enter PIN" class="w-full px-3 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-600 text-sm font-mono font-bold">
+                        <div class="relative">
+                            <input type="password" id="confirmSelfResetPass" required minlength="4" placeholder="Re-enter PIN" class="w-full pl-3 pr-8 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-600 text-sm font-mono font-bold">
+                            <button type="button" onclick="togglePassVisibility('confirmSelfResetPass', 'eyeOtpConfirmPass')" class="absolute inset-y-0 right-0 pr-2.5 flex items-center text-slate-400 hover:text-slate-700">
+                                <i id="eyeOtpConfirmPass" class="fas fa-eye text-xs"></i>
+                            </button>
+                        </div>
                     </div>
                 </div>
 
@@ -1026,7 +1036,6 @@
                                 <div>
                                     <div class="flex justify-between items-center mb-1">
                                         <label id="passLabel" class="block text-xs font-bold uppercase text-slate-600">Password / PIN *</label>
-                                        <!-- Self Password Reset Link via Mobile OTP (Works for Admin, Candidate & Parent) -->
                                         <button type="button" id="forgotPinLinkBtn" onclick="openSelfOtpResetModal()" class="text-[11px] font-extrabold text-blue-700 hover:text-amber-600 hover:underline transition">
                                             <i class="fas fa-key mr-0.5"></i> Forgot Password/PIN? Reset via OTP
                                         </button>
@@ -1035,7 +1044,10 @@
                                         <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400">
                                             <i class="fas fa-lock"></i>
                                         </span>
-                                        <input type="password" id="loginPass" required placeholder="Enter Password or PIN" class="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-600 text-sm">
+                                        <input type="password" id="loginPass" required placeholder="Enter Password or PIN" class="w-full pl-10 pr-10 py-3 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-600 text-sm font-mono font-bold">
+                                        <button type="button" onclick="togglePassVisibility('loginPass', 'eyeLoginPass')" class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-slate-700">
+                                            <i id="eyeLoginPass" class="fas fa-eye text-xs"></i>
+                                        </button>
                                     </div>
                                 </div>
 
@@ -1058,8 +1070,8 @@
                                 </div>
                             </form>
 
-                            <!-- 1B. MOBILE-ONLY CREATE ACCOUNT (SIGN UP) FORM -->
-                            <form id="signupForm" onsubmit="handleSelfSignup(event)" class="hidden space-y-3.5">
+                            <!-- 1B. MOBILE-ONLY CREATE ACCOUNT (SIGN UP) FORM (WITH HIDDEN PASSWORD & CONFIRM PASSWORD) -->
+                            <form id="signupForm" onsubmit="handleSelfSignup(event)" class="hidden space-y-3">
                                 <div>
                                     <label class="block text-xs font-bold uppercase text-slate-600 mb-1">Student's Full Name *</label>
                                     <div class="relative">
@@ -1098,15 +1110,36 @@
                                     </div>
                                 </div>
 
-                                <div>
-                                    <label class="block text-xs font-bold uppercase text-slate-600 mb-1">Create Login PIN / Password *</label>
-                                    <div class="relative">
-                                        <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400">
-                                            <i class="fas fa-key"></i>
-                                        </span>
-                                        <input type="text" id="selfPin" required minlength="4" placeholder="Set a 4+ digit PIN (e.g. 1234)" class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-600 text-sm font-mono font-bold">
+                                <!-- Hidden Password + Confirm Your Password with Show/Hide Eye & Live Match Indicator -->
+                                <div class="space-y-3">
+                                    <div>
+                                        <label class="block text-xs font-bold uppercase text-slate-600 mb-1">Create Login PIN / Password *</label>
+                                        <div class="relative">
+                                            <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400">
+                                                <i class="fas fa-key"></i>
+                                            </span>
+                                            <input type="password" id="selfPin" required minlength="4" oninput="checkLivePasswordMatch()" placeholder="Set a 4+ digit PIN / Password" class="w-full pl-10 pr-10 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-600 text-sm font-mono font-bold">
+                                            <button type="button" onclick="togglePassVisibility('selfPin', 'eyeSelfPin')" class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-slate-700">
+                                                <i id="eyeSelfPin" class="fas fa-eye text-xs"></i>
+                                            </button>
+                                        </div>
                                     </div>
-                                    <p class="text-[10px] text-emerald-700 font-semibold mt-1">
+
+                                    <div>
+                                        <label class="block text-xs font-bold uppercase text-slate-600 mb-1">Confirm Your Password / PIN *</label>
+                                        <div class="relative">
+                                            <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400">
+                                                <i class="fas fa-check-double"></i>
+                                            </span>
+                                            <input type="password" id="selfConfirmPin" required minlength="4" oninput="checkLivePasswordMatch()" placeholder="Re-enter same PIN / Password" class="w-full pl-10 pr-10 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-600 text-sm font-mono font-bold">
+                                            <button type="button" onclick="togglePassVisibility('selfConfirmPin', 'eyeSelfConfirmPin')" class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-slate-700">
+                                                <i id="eyeSelfConfirmPin" class="fas fa-eye text-xs"></i>
+                                            </button>
+                                        </div>
+                                        <p id="livePinMatchHint" class="hidden text-[11px] font-bold mt-1"></p>
+                                    </div>
+
+                                    <p class="text-[10px] text-emerald-700 font-semibold">
                                         <i class="fas fa-sync-alt mr-1"></i> Your Mobile No. & Password will instantly appear in MAKDEMY Admin Database.
                                     </p>
                                 </div>
@@ -1753,7 +1786,6 @@
             localStorage.setItem('makdemyERP_v1', JSON.stringify(erpData));
         }
 
-        // Always read freshest data from localStorage so self-created accounts immediately show in Admin Table
         function reloadLatestERPData() {
             const raw = localStorage.getItem('makdemyERP_v1');
             if (raw) {
@@ -1761,6 +1793,38 @@
                     erpData = JSON.parse(raw);
                     if (!erpData.adminAuth) erpData.adminAuth = { phone: "9337042839", pass: "apex2026" };
                 } catch (e) {}
+            }
+        }
+
+        // ================= SHOW/HIDE PASSWORD EYE TOGGLE & LIVE PASSWORD MATCH CHECK =================
+        function togglePassVisibility(inputId, iconId) {
+            const inp = document.getElementById(inputId);
+            const icon = document.getElementById(iconId);
+            if (!inp || !icon) return;
+            if (inp.type === 'password') {
+                inp.type = 'text';
+                icon.className = 'fas fa-eye-slash text-xs text-blue-600';
+            } else {
+                inp.type = 'password';
+                icon.className = 'fas fa-eye text-xs';
+            }
+        }
+
+        function checkLivePasswordMatch() {
+            const pin = document.getElementById('selfPin').value;
+            const confirmPin = document.getElementById('selfConfirmPin').value;
+            const hint = document.getElementById('livePinMatchHint');
+            if (!confirmPin) {
+                hint.classList.add('hidden');
+                return;
+            }
+            hint.classList.remove('hidden');
+            if (pin === confirmPin) {
+                hint.className = "text-[11px] font-extrabold text-emerald-600 mt-1";
+                hint.innerHTML = `<i class="fas fa-check-circle mr-1"></i> Passwords Match!`;
+            } else {
+                hint.className = "text-[11px] font-extrabold text-red-600 mt-1";
+                hint.innerHTML = `<i class="fas fa-times-circle mr-1"></i> Passwords do not match yet!`;
             }
         }
 
@@ -2768,7 +2832,15 @@
             const phone = document.getElementById('selfPhone').value.trim();
             const batch = document.getElementById('selfBatch').value;
             const pin = document.getElementById('selfPin').value.trim();
+            const confirmPin = document.getElementById('selfConfirmPin').value.trim();
             const notice = document.getElementById('signupNotice');
+
+            // Ensure both passwords match before creating account
+            if (pin !== confirmPin) {
+                notice.className = "block p-3 rounded-xl text-xs font-semibold text-center bg-red-50 text-red-700 border border-red-200";
+                notice.innerHTML = `❌ Password and Confirm Password do not match! Please enter the exact same PIN in both boxes.`;
+                return;
+            }
 
             const existing = erpData.students.find(s => s.parentPhone === phone);
             if (existing) {
@@ -2803,14 +2875,14 @@
                 marks: []
             };
 
-            // Unshift to top of students array so Admin sees newly created accounts at the very top of the database table
             erpData.students.unshift(newAccount);
             saveERP();
             event.target.reset();
+            document.getElementById('livePinMatchHint').classList.add('hidden');
             clearUploadedPhoto('self');
 
             notice.className = "block p-3 rounded-xl text-xs font-semibold text-center bg-emerald-50 text-emerald-800 border border-emerald-300";
-            notice.innerHTML = `✅ Account Created! Roll ID: <strong>${generatedRoll}</strong> | Mobile: <strong>${phone}</strong> | PIN: <strong>${pin}</strong> synced to Admin Database!`;
+            notice.innerHTML = `✅ Account Created! Roll ID: <strong>${generatedRoll}</strong> | Mobile: <strong>${phone}</strong> synced to Admin Database!`;
 
             setTimeout(() => {
                 showDashboard(currentRole, newAccount, false);
