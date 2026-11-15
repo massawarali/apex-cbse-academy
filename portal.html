@@ -182,7 +182,6 @@
     <!-- ================= PRINTABLE CHAPTER NOTES & WORKSHEET PDF MODAL ================= -->
     <div id="studySheetModal" class="hidden fixed inset-0 z-50 bg-slate-950/75 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
         <div class="bg-white rounded-3xl max-w-2xl w-full p-6 sm:p-8 shadow-2xl border-2 border-slate-900 my-8 modal-animate" id="printableStudySheet">
-            <!-- Header -->
             <div class="border-b-2 border-slate-900 pb-4 mb-5 flex justify-between items-start">
                 <div class="flex items-center gap-3">
                     <div class="w-12 h-12 rounded-xl bg-blue-700 text-white flex items-center justify-center font-extrabold text-2xl shadow">A</div>
@@ -200,17 +199,14 @@
                 </div>
             </div>
 
-            <!-- Title & Subject -->
             <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 mb-5">
                 <div class="text-xs font-extrabold uppercase text-blue-700" id="sheetSubjectName">MATHEMATICS</div>
                 <h3 class="text-lg sm:text-xl font-extrabold text-slate-900 mt-0.5" id="sheetChapterTitle">Chapter Title</h3>
             </div>
 
-            <!-- Structured Notes / Worksheet Body -->
             <div class="p-5 rounded-2xl border border-slate-300 bg-white min-h-[220px] text-xs sm:text-sm text-slate-800 leading-relaxed whitespace-pre-line font-medium" id="sheetContentBody">
             </div>
 
-            <!-- Footer -->
             <div class="flex justify-between items-center pt-5 mt-6 border-t border-slate-200 text-xs text-slate-500">
                 <div>
                     <strong class="text-slate-800">Apex Study Resource Hub</strong> • NCERT & Board Competency Focused
@@ -221,7 +217,6 @@
                 </div>
             </div>
 
-            <!-- Action Buttons -->
             <div class="flex justify-end gap-3 mt-6 pt-4 border-t border-slate-200 no-print">
                 <button type="button" onclick="closeStudySheetModal()" class="px-5 py-2.5 rounded-xl border border-slate-300 text-xs sm:text-sm font-bold text-slate-700 hover:bg-slate-100">
                     Close
@@ -353,7 +348,7 @@
         </div>
     </div>
 
-    <!-- ================= CUSTOM DELETE CONFIRMATION MODAL ================= -->
+    <!-- ================= CUSTOM DELETE / WARNING CONFIRMATION MODAL ================= -->
     <div id="confirmModal" class="hidden fixed inset-0 z-50 bg-slate-950/60 backdrop-blur-sm flex items-center justify-center p-4 no-print">
         <div class="bg-white rounded-3xl max-w-sm w-full p-6 shadow-2xl border border-slate-200 text-center modal-animate">
             <div class="w-16 h-16 rounded-full bg-red-100 text-red-600 flex items-center justify-center text-2xl mx-auto mb-4">
@@ -368,7 +363,7 @@
                     Cancel
                 </button>
                 <button type="button" id="confirmDeleteBtn" class="py-2.5 px-4 rounded-xl bg-red-600 hover:bg-red-700 font-bold text-xs sm:text-sm text-white shadow-lg shadow-red-600/25 transition">
-                    <i class="fas fa-trash-alt mr-1"></i> Yes, Delete
+                    <i class="fas fa-trash-alt mr-1"></i> Yes, Remove
                 </button>
             </div>
         </div>
@@ -913,7 +908,7 @@
             <div>
                 <span class="bg-amber-400 text-slate-950 text-xs font-extrabold px-3 py-1 rounded-full uppercase">Full Admin Control</span>
                 <h1 class="text-2xl sm:text-3xl font-extrabold mt-2">Founder & Admin Panel — Massawar Ali Khan</h1>
-                <p class="text-blue-200 text-xs sm:text-sm">Approve pending payments, upload Chapter Notes & Worksheet PDFs, and manage student records.</p>
+                <p class="text-blue-200 text-xs sm:text-sm">Approve pending payments, add/remove fee receipts, upload Chapter Notes & Worksheets, and manage students.</p>
             </div>
             <button onclick="resetDefaultData()" class="bg-white/10 hover:bg-white/20 border border-white/20 text-xs font-semibold px-4 py-2.5 rounded-xl">
                 <i class="fas fa-sync-alt mr-1"></i> Reset System Data
@@ -932,20 +927,31 @@
                 <p class="text-xs text-amber-800 mb-3">
                     If a candidate/parent paid via QR/NEFT or Cash and their receipt wasn't generated on their portal, click <strong>"Approve & Generate Receipt"</strong> below:
                 </p>
-                <div id="adminPendingQueueList" class="space-y-2.5 max-h-56 overflow-y-auto text-xs"></div>
+                <div id="adminPendingQueueList" class="space-y-2.5 max-h-64 overflow-y-auto text-xs"></div>
             </div>
 
+            <!-- Right: All Generated Receipts Log on Admin Portal (With Add & Remove Controls) -->
             <div class="bg-emerald-50 border-2 border-emerald-300 rounded-2xl p-6 shadow-sm">
-                <div class="flex justify-between items-center mb-4">
+                <div class="flex justify-between items-center mb-3">
                     <h3 class="font-extrabold text-base sm:text-lg text-emerald-950 flex items-center gap-2">
                         <i class="fas fa-file-invoice-dollar text-emerald-600"></i> Generated Fee Receipts Log (Admin Portal Copy)
                     </h3>
                     <span id="generatedReceiptCount" class="bg-emerald-600 text-white text-xs font-extrabold px-2.5 py-0.5 rounded-full">0 Generated</span>
                 </div>
                 <p class="text-xs text-emerald-800 mb-3">
-                    Every receipt generated after payment (either on Candidate/Parent portal or by Admin) is archived here for instant printing:
+                    Manually add a registered candidate's fee receipt to this log or remove/revoke an existing receipt (with warning confirmation):
                 </p>
-                <div id="adminGeneratedReceiptsLog" class="space-y-2.5 max-h-56 overflow-y-auto text-xs"></div>
+
+                <!-- Quick Add Candidate Receipt Form -->
+                <form onsubmit="manualAddReceiptToLog(event)" class="bg-white p-3 rounded-xl border border-emerald-200 mb-3 grid sm:grid-cols-4 gap-2 text-xs">
+                    <select id="quickReceiptStudentRoll" required class="sm:col-span-2 px-2.5 py-2 rounded-lg border border-slate-300 bg-white font-semibold"></select>
+                    <input type="number" id="quickReceiptAmount" required placeholder="Amount ₹ (e.g. 1400)" class="px-2.5 py-2 rounded-lg border border-slate-300">
+                    <button type="submit" class="bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold px-3 py-2 rounded-lg shadow transition flex items-center justify-center gap-1">
+                        <i class="fas fa-plus-circle"></i> Add Receipt
+                    </button>
+                </form>
+
+                <div id="adminGeneratedReceiptsLog" class="space-y-2.5 max-h-52 overflow-y-auto text-xs"></div>
             </div>
         </div>
 
@@ -977,7 +983,6 @@
                     <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 rounded-xl">Add Student (Fee Starts as Pending)</button>
                 </form>
 
-                <!-- Admin Payment Gateway Settings (UPI ID & Bank Account) -->
                 <div class="mt-5 pt-4 border-t border-slate-200">
                     <h4 class="font-bold text-xs uppercase text-blue-700 mb-2"><i class="fas fa-qrcode mr-1"></i> Academy UPI & NetBanking Receiver Settings</h4>
                     <form onsubmit="saveGatewaySettings(event)" class="grid grid-cols-3 gap-2 text-xs">
@@ -1013,7 +1018,7 @@
             </div>
         </div>
 
-        <!-- NEW ROW: UPLOAD CHAPTER-WISE NOTES & WORKSHEET PDF (ADMIN) -->
+        <!-- UPLOAD CHAPTER-WISE NOTES & WORKSHEET PDF (ADMIN) -->
         <div class="bg-white p-6 rounded-2xl shadow-sm border-2 border-indigo-200 mb-8">
             <div class="flex flex-wrap justify-between items-center gap-2 mb-4">
                 <h3 class="font-extrabold text-lg text-slate-900 flex items-center gap-2">
@@ -1243,7 +1248,7 @@
             </div>
         </div>
 
-        <!-- NEW SECTION: CHAPTER-WISE NOTES & WORKSHEET PDF DOWNLOAD HUB (FOR CANDIDATE & PARENTS) -->
+        <!-- CHAPTER-WISE NOTES & WORKSHEET PDF DOWNLOAD HUB -->
         <div class="mb-8 bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
             <div class="px-6 py-4 bg-gradient-to-r from-indigo-900 via-blue-900 to-slate-900 text-white flex flex-wrap justify-between items-center gap-3">
                 <div>
@@ -1252,7 +1257,6 @@
                     </h3>
                     <p class="text-[11px] text-blue-200">Official NCERT Revision Notes, Formula Sheets, and Practice Worksheets</p>
                 </div>
-                <!-- Subject Filter Pills -->
                 <div class="flex flex-wrap gap-1.5 text-xs font-bold">
                     <button type="button" onclick="filterStudyMaterials('ALL')" id="matFilter-ALL" class="px-3 py-1.5 rounded-lg bg-amber-400 text-slate-950 transition">All Subjects</button>
                     <button type="button" onclick="filterStudyMaterials('Mathematics')" id="matFilter-Mathematics" class="px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-white transition">Maths</button>
@@ -1570,7 +1574,7 @@
         function issueOfficialReceipt(student, payMethodLabel, txnRef, generatedByPortalName) {
             const feeVal = student.feeAmount || (student.classBatch.includes('Class 6') ? 800 : student.classBatch.includes('Class 8') ? 1000 : 1200);
             const dateStr = new Date().toLocaleDateString('en-IN');
-            const recNo = `APEX-RCP-${1001 + erpData.generatedReceipts.length}`;
+            const recNo = `APEX-RCP-${1001 + erpData.generatedReceipts.length + Math.floor(Math.random() * 90)}`;
 
             student.feeStatus = "Paid";
             student.receiptGenerated = true;
@@ -1593,6 +1597,51 @@
             });
 
             saveERP();
+        }
+
+        // Direct Add Receipt to Log from Admin Box
+        function manualAddReceiptToLog(e) {
+            e.preventDefault();
+            const roll = document.getElementById('quickReceiptStudentRoll').value;
+            const amount = Number(document.getElementById('quickReceiptAmount').value);
+            const student = erpData.students.find(s => s.roll === roll);
+            if (!student) return;
+
+            student.feeAmount = amount;
+            const ref = 'ADM' + Math.floor(10000000 + Math.random() * 90000000);
+            issueOfficialReceipt(student, 'Admin Verified (UPI/Cash)', ref, 'Admin Portal');
+            renderAdminDashboard();
+            e.target.reset();
+            alert(`✅ Receipt generated and added to log for ${student.name} (${student.roll}) — ₹${amount}!`);
+        }
+
+        // Remove Receipt from Log with Warning Confirmation Popup
+        function removeGeneratedReceipt(index) {
+            const rec = erpData.generatedReceipts[index];
+            if (!rec) return;
+
+            openConfirmModal(
+                "⚠️ Warning: Remove Fee Receipt?",
+                `Are you sure you want to remove Receipt "${rec.receiptNo}" of ${rec.studentName} (${rec.roll} — ₹${rec.amount})? This will also revert their fee status to Pending and lock their receipt.`,
+                function () {
+                    erpData.generatedReceipts.splice(index, 1);
+
+                    const student = erpData.students.find(s => s.roll === rec.roll);
+                    const otherReceipt = erpData.generatedReceipts.find(r => r.roll === rec.roll);
+                    if (student) {
+                        if (otherReceipt) {
+                            student.receiptNo = otherReceipt.receiptNo;
+                            student.receiptDate = otherReceipt.date;
+                        } else {
+                            student.feeStatus = "Pending";
+                            student.receiptGenerated = false;
+                            student.receiptNo = "";
+                        }
+                    }
+                    saveERP();
+                    renderAdminDashboard();
+                }
+            );
         }
 
         function openOnlinePaymentGateway() {
@@ -2210,6 +2259,12 @@
                 document.getElementById('markRoll').value = currentSelectedRoll;
             }
 
+            // Populate Quick Add Receipt Student Dropdown
+            const quickRecSelect = document.getElementById('quickReceiptStudentRoll');
+            if (quickRecSelect) {
+                quickRecSelect.innerHTML = erpData.students.map(s => `<option value="${s.roll}">${s.name} (${s.roll})</option>`).join('');
+            }
+
             if (erpData.gatewayConfig) {
                 document.getElementById('adminUpiId').value = erpData.gatewayConfig.upiId || "9337042839@ybl";
                 document.getElementById('adminBankAcc').value = erpData.gatewayConfig.bankAccount || "309876543210";
@@ -2242,22 +2297,27 @@
                 }).join('');
             }
 
-            // 2. Render Generated Receipts Log
+            // 2. Render Generated Receipts Log with View/Print AND Remove Button (with Warning Modal)
             document.getElementById('generatedReceiptCount').innerText = `${erpData.generatedReceipts.length} Generated`;
             const logContainer = document.getElementById('adminGeneratedReceiptsLog');
             if (!erpData.generatedReceipts.length) {
                 logContainer.innerHTML = `<div class="text-slate-400 italic p-2">No receipts generated yet.</div>`;
             } else {
-                logContainer.innerHTML = erpData.generatedReceipts.map(r => `
+                logContainer.innerHTML = erpData.generatedReceipts.map((r, idx) => `
                     <div class="bg-white p-3 rounded-xl border border-emerald-200 flex flex-wrap justify-between items-center gap-2">
                         <div>
                             <span class="font-mono font-bold text-emerald-700">${r.receiptNo}</span> • 
                             <strong class="text-slate-900">${r.studentName} (${r.roll})</strong> — <strong>₹${r.amount}</strong>
                             <div class="text-[10px] text-slate-500">Mode: ${r.payMode} (${r.txnRef}) | Generated on: <strong>${r.generatedBy}</strong> (${r.date})</div>
                         </div>
-                        <button onclick="openFeeReceiptByRoll('${r.roll}')" class="bg-slate-900 hover:bg-blue-700 text-amber-400 hover:text-white font-bold px-3 py-1.5 rounded-lg transition">
-                            <i class="fas fa-print mr-1"></i> View / Print
-                        </button>
+                        <div class="flex items-center gap-1.5">
+                            <button type="button" onclick="openFeeReceiptByRoll('${r.roll}')" class="bg-slate-900 hover:bg-blue-700 text-amber-400 hover:text-white font-bold px-3 py-1.5 rounded-lg transition">
+                                <i class="fas fa-print mr-1"></i> View / Print
+                            </button>
+                            <button type="button" onclick="removeGeneratedReceipt(${idx})" title="Remove & Revoke Receipt" class="bg-red-50 hover:bg-red-600 text-red-600 hover:text-white border border-red-200 font-bold px-2.5 py-1.5 rounded-lg transition">
+                                <i class="fas fa-trash-alt mr-1"></i> Remove
+                            </button>
+                        </div>
                     </div>
                 `).join('');
             }
@@ -2489,10 +2549,11 @@
             if (!student) return;
 
             openConfirmModal(
-                "Delete Candidate?",
-                `Are you sure you want to permanently delete "${student.name}" (Roll ID: ${rollId}) from the Admin Database?`,
+                "⚠️ Warning: Delete Candidate?",
+                `Are you sure you want to permanently delete "${student.name}" (Roll ID: ${rollId}) and all their associated receipts from the Admin Database?`,
                 function () {
                     erpData.students = erpData.students.filter(s => s.roll !== rollId);
+                    erpData.generatedReceipts = erpData.generatedReceipts.filter(r => r.roll !== rollId);
                     saveERP();
                     renderAdminDashboard();
                 }
@@ -2705,7 +2766,6 @@
                 parentBox.classList.add('hidden');
             }
 
-            // Render Study Materials & Worksheets Grid
             renderUserStudyMaterials(student);
 
             const marksHTML = student.marks.length ? student.marks.map(m => {
