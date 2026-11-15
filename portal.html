@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apex CBSE Academy | ERP Login & Student Portal</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { font-family: 'Poppins', sans-serif; }
+        .login-bg { background: radial-gradient(circle at top right, #1e40af, #0f172a 65%, #020617); }
+    </style>
+</head>
+<body class="bg-slate-100 text-slate-800 min-h-screen flex flex-col">
+
+    <!-- Top Navbar -->
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center h-16">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-blue-700 flex items-center justify-center text-white font-bold text-xl shadow">A</div>
+                <div>
+                    <span class="text-lg font-extrabold text-slate-900 block leading-none">APEX <span class="text-blue-700">ERP PORTAL</span></span>
+                    <span class="text-[10px] font-semibold text-slate-500 uppercase tracking-widest">Jainthgarh • CBSE Class 6–10</span>
+                </div>
+            </div>
+            <div class="flex items-center gap-3">
+                <a href="index.html" class="text-xs sm:text-sm font-semibold text-slate-600 hover:text-blue-700 transition">
+                    <i class="fas fa-home mr-1"></i> Main Website
+                </a>
+                <button id="logoutBtn" onclick="logout()" class="hidden bg-red-600 hover:bg-red-700 text-white text-xs sm:text-sm font-semibold px-4 py-2 rounded-lg shadow transition">
+                    <i class="fas fa-sign-out-alt mr-1"></i> Logout
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- ================= 1. LOGIN SCREEN ================= -->
+    <main id="loginSection" class="flex-grow login-bg flex items-center justify-center p-4 py-12">
+        <div class="max-w-md w-full bg-white rounded-3xl shadow-2xl overflow-hidden border border-slate-200">
+            <!-- Role Selector Tabs -->
+            <div class="grid grid-cols-3 bg-slate-100 p-1.5 border-b border-slate-200 text-xs sm:text-sm font-bold text-center">
+                <button onclick="selectRole('admin')" id="tab-admin" class="py-2.5 rounded-xl bg-blue-700 text-white shadow transition">
+                    <i class="fas fa-user-shield mr-1"></i> Admin
+                </button>
+                <button onclick="selectRole('candidate')" id="tab-candidate" class="py-2.5 rounded-xl text-slate-600 hover:text-slate-900 transition">
+                    <i class="fas fa-user-graduate mr-1"></i> Candidate
+                </button>
+                <button onclick="selectRole('parent')" id="tab-parent" class="py-2.5 rounded-xl text-slate-600 hover:text-slate-900 transition">
+                    <i class="fas fa-users mr-1"></i> Parents
+                </button>
+            </div>
+
+            <div class="p-6 sm:p-8">
+                <div class="text-center mb-6">
+                    <span id="roleBadge" class="bg-blue-100 text-blue-800 text-xs font-extrabold px-3 py-1 rounded-full uppercase tracking-wider">Administration Login</span>
+                    <h2 id="roleTitle" class="text-2xl font-extrabold text-slate-900 mt-2">Welcome Back, Admin</h2>
+                    <p id="roleSub" class="text-xs text-slate-500 mt-1">Full control over marks, schedules, tests & holidays</p>
+                </div>
+
+                <form onsubmit="handleLogin(event)" class="space-y-4">
+                    <div>
+                        <label id="idLabel" class="block text-xs font-bold uppercase text-slate-600 mb-1">Admin Username / ID *</label>
+                        <input type="text" id="loginId" required placeholder="Enter ID" class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-600 text-sm">
+                    </div>
+                    <div>
+                        <label id="passLabel" class="block text-xs font-bold uppercase text-slate-600 mb-1">Password / PIN *</label>
+                        <input type="password" id="loginPass" required placeholder="Enter Password" class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-600 text-sm">
+                    </div>
+
+                    <div id="loginError" class="hidden bg-red-50 border border-red-200 text-red-700 text-xs font-semibold p-3 rounded-xl text-center"></div>
+
+                    <button type="submit" class="w-full bg-blue-700 hover:bg-blue-800 text-white font-bold py-3.5 rounded-xl shadow-lg transition flex items-center justify-center gap-2">
+                        <i class="fas fa-lock-open"></i> Login to Dashboard
+                    </button>
+                </form>
+
+                <!-- Quick Demo Credentials Box -->
+                <div class="mt-6 pt-5 border-t border-slate-200 bg-slate-50 p-3.5 rounded-xl text-xs text-slate-600">
+                    <div class="font-bold text-slate-800 mb-1.5"><i class="fas fa-key text-amber-500 mr-1"></i> Demo Login Credentials (Click to auto-fill):</div>
+                    <div class="space-y-1">
+                        <button onclick="fillDemo('admin','admin','apex2026')" class="block w-full text-left hover:text-blue-700">• <strong>Admin:</strong> ID: <code>admin</code> | Pass: <code>apex2026</code></button>
+                        <button onclick="fillDemo('candidate','APEX101','1234')" class="block w-full text-left hover:text-blue-700">• <strong>Candidate:</strong> Roll: <code>APEX101</code> | Pass: <code>1234</code></button>
+                        <button onclick="fillDemo('parent','APEX101','9876543210')" class="block w-full text-left hover:text-blue-700">• <strong>Parent:</strong> Child Roll: <code>APEX101</code> | Mobile: <code>9876543210</code></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- ================= 2. ADMIN FULL ACCESS DASHBOARD ================= -->
+    <section id="adminDashboard" class="hidden flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="bg-gradient-to-r from-slate-900 to-blue-900 text-white rounded-2xl p-6 mb-8 shadow-lg flex flex-wrap justify-between items-center gap-4">
+            <div>
+                <span class="bg-amber-400 text-slate-950 text-xs font-extrabold px-3 py-1 rounded-full uppercase">Full Admin Control</span>
+                <h1 class="text-2xl sm:text-3xl font-extrabold mt-2">Founder & Admin Panel — Massawar Ali Khan</h1>
+                <p class="text-blue-200 text-xs sm:text-sm">Manage student records, Saturday test marks, exam schedules, and holiday notices.</p>
+            </div>
+            <button onclick="resetDefaultData()" class="bg-white/10 hover:bg-white/20 border border-white/20 text-xs font-semibold px-4 py-2.5 rounded-xl">
+                <i class="fas fa-sync-alt mr-1"></i> Reset Demo Data
+            </button>
+        </div>
+
+        <div class="grid lg:grid-cols-3 gap-8">
+            <!-- Form 1: Add Weekly Test Marks -->
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                <h3 class="font-extrabold text-lg text-slate-900 mb-4 flex items-center gap-2">
+                    <i class="fas fa-poll text-blue-600"></i> Upload Weekly Test Marks
+                </h3>
+                <form onsubmit="addTestMark(event)" class="space-y-3 text-sm">
+                    <select id="markRoll" required class="w-full px-3.5 py-2.5 rounded-lg border border-slate-300 bg-white"></select>
+                    <input type="text" id="markSubject" required placeholder="Subject (e.g., Mathematics / Science)" class="w-full px-3.5 py-2.5 rounded-lg border border-slate-300">
+                    <input type="text" id="markTopic" required placeholder="Topic (e.g., Quadratic Equations OMR)" class="w-full px-3.5 py-2.5 rounded-lg border border-slate-300">
+                    <div class="grid grid-cols-2 gap-3">
+                        <input type="number" id="markScore" required placeholder="Marks Obtained" class="w-full px-3.5 py-2.5 rounded-lg border border-slate-300">
+                        <input type="number" id="markTotal" required placeholder="Total Marks (e.g. 50)" class="w-full px-3.5 py-2.5 rounded-lg border border-slate-300">
+                    </div>
+                    <input type="date" id="markDate" required class="w-full px-3.5 py-2.5 rounded-lg border border-slate-300">
+                    <button type="submit" class="w-full bg-blue-700 hover:bg-blue-800 text-white font-bold py-2.5 rounded-xl">Publish Score</button>
+                </form>
+            </div>
+
+            <!-- Form 2: Add Upcoming Exam Schedule -->
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                <h3 class="font-extrabold text-lg text-slate-900 mb-4 flex items-center gap-2">
+                    <i class="fas fa-calendar-check text-amber-500"></i> Add Exam Schedule
+                </h3>
+                <form onsubmit="addExamSchedule(event)" class="space-y-3 text-sm">
+                    <select id="examClass" required class="w-full px-3.5 py-2.5 rounded-lg border border-slate-300 bg-white">
+                        <option value="All Classes">All Classes (6 to 10)</option>
+                        <option value="Class 6 & 7">Class 6 & 7 (Shift 1)</option>
+                        <option value="Class 8">Class 8 (Shift 1)</option>
+                        <option value="Class 9">Class 9 (Shift 2)</option>
+                        <option value="Class 10">Class 10 (Shift 2)</option>
+                    </select>
+                    <input type="text" id="examSubject" required placeholder="Subject & Syllabus Chapter" class="w-full px-3.5 py-2.5 rounded-lg border border-slate-300">
+                    <input type="date" id="examDate" required class="w-full px-3.5 py-2.5 rounded-lg border border-slate-300">
+                    <input type="text" id="examTime" required placeholder="Time (e.g., Saturday 5:30 PM - 6:45 PM)" class="w-full px-3.5 py-2.5 rounded-lg border border-slate-300">
+                    <button type="submit" class="w-full bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold py-2.5 rounded-xl">Add Exam to Calendar</button>
+                </form>
+            </div>
+
+            <!-- Form 3: Add Holiday / Notice & Attendance -->
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 space-y-6">
+                <div>
+                    <h3 class="font-extrabold text-lg text-slate-900 mb-3 flex items-center gap-2">
+                        <i class="fas fa-umbrella-beach text-emerald-600"></i> Announce Holiday / Notice
+                    </h3>
+                    <form onsubmit="addHoliday(event)" class="space-y-3 text-sm">
+                        <input type="text" id="holTitle" required placeholder="Holiday / Event Title" class="w-full px-3.5 py-2.5 rounded-lg border border-slate-300">
+                        <input type="text" id="holDate" required placeholder="Date (e.g., 25 Dec 2026 - Winter Break)" class="w-full px-3.5 py-2.5 rounded-lg border border-slate-300">
+                        <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 rounded-xl">Publish Notice</button>
+                    </form>
+                </div>
+
+                <div class="pt-4 border-t border-slate-200">
+                    <h4 class="font-bold text-sm text-slate-800 mb-2">Update Attendance & Fee Status</h4>
+                    <form onsubmit="updateStudentMeta(event)" class="space-y-2.5 text-sm">
+                        <select id="metaRoll" required class="w-full px-3 py-2 rounded-lg border border-slate-300 bg-white"></select>
+                        <div class="grid grid-cols-2 gap-2">
+                            <input type="number" id="metaAtt" required min="1" max="100" placeholder="Attendance %" class="w-full px-3 py-2 rounded-lg border border-slate-300">
+                            <select id="metaFee" class="w-full px-3 py-2 rounded-lg border border-slate-300 bg-white">
+                                <option value="Paid">Fee: Paid</option>
+                                <option value="Pending">Fee: Pending</option>
+                            </select>
+                        </div>
+                        <input type="text" id="metaRemark" placeholder="Teacher's Remark for Parent" class="w-full px-3 py-2 rounded-lg border border-slate-300">
+                        <button type="submit" class="w-full bg-slate-800 hover:bg-slate-900 text-white font-semibold py-2 rounded-xl">Save Student Status</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Admin Student Overview Table -->
+        <div class="mt-8 bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+            <div class="px-6 py-4 bg-slate-900 text-white flex justify-between items-center">
+                <h3 class="font-bold">Enrolled Candidates Directory</h3>
+                <span class="text-xs text-amber-400">Live Sync Enabled</span>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse text-sm">
+                    <thead>
+                        <tr class="bg-slate-100 text-slate-700 border-b">
+                            <th class="py-3 px-4">Roll No</th>
+                            <th class="py-3 px-4">Student Name</th>
+                            <th class="py-3 px-4">Class & Batch</th>
+                            <th class="py-3 px-4">Parent Mobile</th>
+                            <th class="py-3 px-4">Attendance</th>
+                            <th class="py-3 px-4">Fee Status</th>
+                            <th class="py-3 px-4">Latest Remark</th>
+                        </tr>
+                    </thead>
+                    <tbody id="adminStudentTable" class="divide-y divide-slate-200"></tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================= 3. CANDIDATE & PARENT DASHBOARD ================= -->
+    <section id="userDashboard" class="hidden flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Top Banner -->
+        <div id="userBanner" class="bg-gradient-to-r from-blue-800 to-indigo-900 text-white rounded-2xl p-6 mb-8 shadow-lg flex flex-wrap justify-between items-center gap-4">
+            <div>
+                <span id="userRolePill" class="bg-amber-400 text-slate-950 text-xs font-extrabold px-3 py-1 rounded-full uppercase">Candidate View</span>
+                <h1 id="userNameHeading" class="text-2xl sm:text-3xl font-extrabold mt-2">Student Name</h1>
+                <p id="userBatchSub" class="text-blue-200 text-xs sm:text-sm">Roll No: APEX101 • Class 10 Board Batch</p>
+            </div>
+            <div class="flex gap-4">
+                <div class="bg-white/10 px-4 py-2.5 rounded-xl text-center">
+                    <div id="userAttStat" class="text-2xl font-extrabold text-amber-400">92%</div>
+                    <div class="text-[11px] text-blue-100">Attendance</div>
+                </div>
+                <div class="bg-white/10 px-4 py-2.5 rounded-xl text-center">
+                    <div id="userAvgStat" class="text-2xl font-extrabold text-emerald-400">88%</div>
+                    <div class="text-[11px] text-blue-100">Avg. Test Score</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PARENT-ONLY EXCLUSIVE REPORT SECTION -->
+        <div id="parentExclusiveBox" class="hidden mb-8 bg-amber-50 border-2 border-amber-300 rounded-2xl p-6 shadow-sm">
+            <h3 class="text-lg font-extrabold text-amber-950 mb-4 flex items-center gap-2">
+                <i class="fas fa-user-check text-amber-600"></i> Complete Parent Monitoring Report (Full Progress Access)
+            </h3>
+            <div class="grid md:grid-cols-3 gap-4 text-sm">
+                <div class="bg-white p-4 rounded-xl border border-amber-200">
+                    <span class="text-xs font-bold uppercase text-slate-400">Fee & Dues Status</span>
+                    <div id="parentFeeBadge" class="text-lg font-extrabold text-emerald-600 mt-1">Paid</div>
+                    <p class="text-xs text-slate-500 mt-1">Session 2026–27 Installment</p>
+                </div>
+                <div class="bg-white p-4 rounded-xl border border-amber-200 md:col-span-2">
+                    <span class="text-xs font-bold uppercase text-slate-400">Founder / Mentor's Remark (Massawar Sir)</span>
+                    <div id="parentRemarkText" class="text-sm font-semibold text-slate-800 mt-1"></div>
+                    <p class="text-xs text-slate-500 mt-1">For direct PTM inquiry call: +91 9337042839</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Progress Grid: Weekly Tests, Exam Schedule & Holidays -->
+        <div class="grid lg:grid-cols-3 gap-8">
+            <!-- Weekly Test Scorecard (2 Cols) -->
+            <div class="lg:col-span-2 bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+                <div class="px-6 py-4 bg-slate-900 text-white flex justify-between items-center">
+                    <h3 class="font-bold"><i class="fas fa-chart-bar text-amber-400 mr-2"></i>Saturday Weekly Test Results & Progress</h3>
+                    <span class="text-xs bg-slate-800 px-2.5 py-1 rounded-full">OMR + Written</span>
+                </div>
+                <div class="p-6">
+                    <div id="studentMarksList" class="space-y-4"></div>
+                </div>
+            </div>
+
+            <!-- Right Column: Upcoming Exams & Holidays -->
+            <div class="space-y-8">
+                <!-- Upcoming Exam Schedule -->
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+                    <div class="px-5 py-3.5 bg-blue-900 text-white font-bold text-sm flex items-center gap-2">
+                        <i class="fas fa-calendar-alt text-amber-400"></i> Upcoming Exam Schedule
+                    </div>
+                    <div id="studentExamList" class="p-5 space-y-3 text-sm divide-y divide-slate-100"></div>
+                </div>
+
+                <!-- Holidays & Official Notices -->
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+                    <div class="px-5 py-3.5 bg-emerald-800 text-white font-bold text-sm flex items-center gap-2">
+                        <i class="fas fa-bullhorn text-amber-300"></i> Holidays & Center Notices
+                    </div>
+                    <div id="studentHolidayList" class="p-5 space-y-3 text-sm divide-y divide-slate-100"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Default ERP Database stored in Browser LocalStorage
+        const defaultERPData = {
+            students: [
+                {
+                    roll: "APEX101",
+                    pass: "1234",
+                    parentPhone: "9876543210",
+                    name: "Aarav Sharma",
+                    classBatch: "Class 10 (Shift 2: 5:30 - 7:30 PM)",
+                    attendance: 94,
+                    feeStatus: "Paid",
+                    remark: "Strong in Maths & IT concepts. Needs slight speed improvement in Physics numericals.",
+                    marks: [
+                        { subject: "Mathematics", topic: "Trigonometry & Real Numbers", score: 46, total: 50, date: "2026-11-07" },
+                        { subject: "Science (Phy/Chem)", topic: "Light Reflection & Chemical Reactions", score: 42, total: 50, date: "2026-10-31" },
+                        { subject: "Biology / IT", topic: "Life Processes & Cyber Ethics", score: 48, total: 50, date: "2026-10-24" }
+                    ]
+                },
+                {
+                    roll: "APEX102",
+                    pass: "1234",
+                    parentPhone: "9123456789",
+                    name: "Zoya Khan",
+                    classBatch: "Class 8 (Shift 1: 3:30 - 5:30 PM)",
+                    attendance: 89,
+                    feeStatus: "Pending",
+                    remark: "Very regular with NCERT homework. Scored highest in Friday Mental Maths quiz.",
+                    marks: [
+                        { subject: "Mathematics", topic: "Linear Equations in One Variable", score: 45, total: 50, date: "2026-11-07" },
+                        { subject: "Science", topic: "Microorganisms & Force", score: 44, total: 50, date: "2026-10-31" }
+                    ]
+                }
+            ],
+            exams: [
+                { targetClass: "Class 10", subject: "Maths (NCERT Exemplar Full Test)", date: "2026-11-21", time: "Saturday, 5:30 PM – 6:45 PM" },
+                { targetClass: "Class 8", subject: "Science (Force, Pressure & Friction)", date: "2026-11-21", time: "Saturday, 3:30 PM – 4:30 PM" },
+                { targetClass: "All Classes", subject: "Monthly Cumulative OMR Assessment", date: "2026-11-28", time: "Regular Batch Timings" }
+            ],
+            holidays: [
+                { title: "Guru Nanak Jayanti / Kartik Purnima Holiday", date: "24 Nov 2026 (Classes Closed)" },
+                { title: "Monthly Parent-Teacher Meeting (PTM)", date: "First Sunday of Next Month (10:00 AM – 12:30 PM)" },
+                { title: "Winter Vacation Study Camp Notice", date: "25 Dec – 31 Dec 2026 (Special Board Revision)" }
+            ]
+        };
+
+        let erpData = JSON.parse(localStorage.getItem('apexERP_v1')) || defaultERPData;
+        let currentRole = 'admin';
+
+        function saveERP() {
+            localStorage.setItem('apexERP_v1', JSON.stringify(erpData));
+        }
+
+        function resetDefaultData() {
+            localStorage.removeItem('apexERP_v1');
+            erpData = JSON.parse(JSON.stringify(defaultERPData));
+            renderAdminDashboard();
+            alert("Demo database reset to default values!");
+        }
+
+        // Switch Role Tabs on Login Screen
+        function selectRole(role) {
+            currentRole = role;
+            ['admin', 'candidate', 'parent'].forEach(r => {
+                const btn = document.getElementById('tab-' + r);
+                btn.className = (r === role)
+                    ? "py-2.5 rounded-xl bg-blue-700 text-white shadow transition"
+                    : "py-2.5 rounded-xl text-slate-600 hover:text-slate-900 transition";
+            });
+
+            const badge = document.getElementById('roleBadge');
+            const title = document.getElementById('roleTitle');
+            const sub = document.getElementById('roleSub');
+            const idLbl = document.getElementById('idLabel');
+            const passLbl = document.getElementById('passLabel');
+
+            if (role === 'admin') {
+                badge.innerText = "Administration Login";
+                title.innerText = "Welcome Back, Admin";
+                sub.innerText = "Full control over marks, schedules, tests & holidays";
+                idLbl.innerText = "Admin Username *";
+                passLbl.innerText = "Admin Password *";
+            } else if (role === 'candidate') {
+                badge.innerText = "Candidate Portal (Limited Access)";
+                title.innerText = "Student Learning Desk";
+                sub.innerText = "View your weekly test scores, exam dates & holidays";
+                idLbl.innerText = "Candidate Roll Number (e.g. APEX101) *";
+                passLbl.innerText = "Student PIN (e.g. 1234) *";
+            } else {
+                badge.innerText = "Parent Monitoring Portal";
+                title.innerText = "Complete Child Progress Tracker";
+                sub.innerText = "Track all test marks, attendance, fees, remarks & holidays";
+                idLbl.innerText = "Child's Roll Number (e.g. APEX101) *";
+                passLbl.innerText = "Registered Parent Mobile Number *";
+            }
+            document.getElementById('loginError').classList.add('hidden');
+        }
+
+        function fillDemo(role, id, pass) {
+            selectRole(role);
+            document.getElementById('loginId').value = id;
+            document.getElementById('loginPass').value = pass;
+        }
+
+        // Handle Login Verification
+        function handleLogin(event) {
+            event.preventDefault();
+            const id = document.getElementById('loginId').value.trim();
+            const pass = document.getElementById('loginPass').value.trim();
+            const errBox = document.getElementById('loginError');
+
+            if (currentRole === 'admin') {
+                if (id.toLowerCase() === 'admin' && pass === 'apex2026') {
+                    showDashboard('admin', null);
+                } else {
+                    errBox.innerText = "Invalid Admin Credentials! Use ID: admin | Pass: apex2026";
+                    errBox.classList.remove('hidden');
+                }
+            } else if (currentRole === 'candidate') {
+                const student = erpData.students.find(s => s.roll.toUpperCase() === id.toUpperCase() && s.pass === pass);
+                if (student) {
+                    showDashboard('candidate', student);
+                } else {
+                    errBox.innerText = "Invalid Roll No or PIN! Try APEX101 and PIN 1234.";
+                    errBox.classList.remove('hidden');
+                }
+            } else if (currentRole === 'parent') {
+                const student = erpData.students.find(s => s.roll.toUpperCase() === id.toUpperCase() && s.parentPhone === pass);
+                if (student) {
+                    showDashboard('parent', student);
+                } else {
+                    errBox.innerText = "Invalid Roll No or Parent Mobile! Try APEX101 and Mobile 9876543210.";
+                    errBox.classList.remove('hidden');
+                }
+            }
+        }
+
+        function showDashboard(role, studentObj) {
+            document.getElementById('loginSection').classList.add('hidden');
+            document.getElementById('logoutBtn').classList.remove('hidden');
+
+            if (role === 'admin') {
+                document.getElementById('adminDashboard').classList.remove('hidden');
+                renderAdminDashboard();
+            } else {
+                document.getElementById('userDashboard').classList.remove('hidden');
+                renderUserDashboard(role, studentObj);
+            }
+        }
+
+        function logout() {
+            document.getElementById('adminDashboard').classList.add('hidden');
+            document.getElementById('userDashboard').classList.add('hidden');
+            document.getElementById('logoutBtn').classList.add('hidden');
+            document.getElementById('loginSection').classList.remove('hidden');
+        }
+
+        // Render Admin Views
+        function renderAdminDashboard() {
+            const rollOptions = erpData.students.map(s => `<option value="${s.roll}">${s.roll} - ${s.name} (${s.classBatch.split('(')[0]})</option>`).join('');
+            document.getElementById('markRoll').innerHTML = rollOptions;
+            document.getElementById('metaRoll').innerHTML = rollOptions;
+
+            const tbody = document.getElementById('adminStudentTable');
+            tbody.innerHTML = erpData.students.map(s => `
+                <tr>
+                    <td class="py-3 px-4 font-bold text-blue-700">${s.roll}</td>
+                    <td class="py-3 px-4 font-semibold text-slate-900">${s.name}</td>
+                    <td class="py-3 px-4 text-slate-600">${s.classBatch}</td>
+                    <td class="py-3 px-4 text-slate-600">${s.parentPhone}</td>
+                    <td class="py-3 px-4 font-bold text-slate-800">${s.attendance}%</td>
+                    <td class="py-3 px-4">
+                        <span class="px-2.5 py-1 rounded-full text-xs font-bold ${s.feeStatus === 'Paid' ? 'bg-emerald-100 text-emerald-800' : 'bg-red-100 text-red-800'}">${s.feeStatus}</span>
+                    </td>
+                    <td class="py-3 px-4 text-xs text-slate-600 max-w-xs">${s.remark}</td>
+                </tr>
+            `).join('');
+        }
+
+        // Admin Actions
+        function addTestMark(e) {
+            e.preventDefault();
+            const roll = document.getElementById('markRoll').value;
+            const student = erpData.students.find(s => s.roll === roll);
+            if (student) {
+                student.marks.unshift({
+                    subject: document.getElementById('markSubject').value,
+                    topic: document.getElementById('markTopic').value,
+                    score: Number(document.getElementById('markScore').value),
+                    total: Number(document.getElementById('markTotal').value),
+                    date: document.getElementById('markDate').value
+                });
+                saveERP();
+                e.target.reset();
+                alert(`Test score published for ${student.name}!`);
+            }
+        }
+
+        function addExamSchedule(e) {
+            e.preventDefault();
+            erpData.exams.unshift({
+                targetClass: document.getElementById('examClass').value,
+                subject: document.getElementById('examSubject').value,
+                date: document.getElementById('examDate').value,
+                time: document.getElementById('examTime').value
+            });
+            saveERP();
+            e.target.reset();
+            alert("New exam schedule added!");
+        }
+
+        function addHoliday(e) {
+            e.preventDefault();
+            erpData.holidays.unshift({
+                title: document.getElementById('holTitle').value,
+                date: document.getElementById('holDate').value
+            });
+            saveERP();
+            e.target.reset();
+            alert("Holiday / Notice published!");
+        }
+
+        function updateStudentMeta(e) {
+            e.preventDefault();
+            const roll = document.getElementById('metaRoll').value;
+            const student = erpData.students.find(s => s.roll === roll);
+            if (student) {
+                student.attendance = Number(document.getElementById('metaAtt').value);
+                student.feeStatus = document.getElementById('metaFee').value;
+                const rem = document.getElementById('metaRemark').value.trim();
+                if (rem) student.remark = rem;
+                saveERP();
+                renderAdminDashboard();
+                e.target.reset();
+                alert(`Updated profile for ${student.name}!`);
+            }
+        }
+
+        // Render Candidate & Parent Views
+        function renderUserDashboard(role, student) {
+            document.getElementById('userRolePill').innerText = role === 'parent'
+                ? "Parent Portal • Full Progress Access"
+                : "Candidate Portal • Student View";
+            document.getElementById('userNameHeading').innerText = student.name;
+            document.getElementById('userBatchSub').innerText = `Roll No: ${student.roll} • ${student.classBatch}`;
+            document.getElementById('userAttStat').innerText = `${student.attendance}%`;
+
+            // Calculate Average Score
+            const totalPct = student.marks.reduce((acc, m) => acc + ((m.score / m.total) * 100), 0);
+            const avg = student.marks.length ? Math.round(totalPct / student.marks.length) : 0;
+            document.getElementById('userAvgStat').innerText = `${avg}%`;
+
+            // Show Parent-Exclusive Section only if role === 'parent'
+            const parentBox = document.getElementById('parentExclusiveBox');
+            if (role === 'parent') {
+                parentBox.classList.remove('hidden');
+                const feeEl = document.getElementById('parentFeeBadge');
+                feeEl.innerText = student.feeStatus;
+                feeEl.className = student.feeStatus === 'Paid'
+                    ? "text-lg font-extrabold text-emerald-600 mt-1"
+                    : "text-lg font-extrabold text-red-600 mt-1";
+                document.getElementById('parentRemarkText').innerText = `"${student.remark}"`;
+            } else {
+                parentBox.classList.add('hidden');
+            }
+
+            // Render Marks List with Progress Bars
+            const marksHTML = student.marks.map(m => {
+                const pct = Math.round((m.score / m.total) * 100);
+                return `
+                    <div class="p-4 rounded-xl bg-slate-50 border border-slate-200">
+                        <div class="flex justify-between items-start mb-2">
+                            <div>
+                                <span class="text-xs font-bold uppercase text-blue-700">${m.subject}</span>
+                                <h4 class="font-bold text-slate-900 text-sm sm:text-base">${m.topic}</h4>
+                                <span class="text-xs text-slate-400"><i class="far fa-calendar mr-1"></i>Test Date: ${m.date}</span>
+                            </div>
+                            <div class="text-right">
+                                <span class="text-lg font-extrabold text-slate-900">${m.score}/${m.total}</span>
+                                <span class="block text-xs font-bold ${pct >= 80 ? 'text-emerald-600' : 'text-amber-600'}">${pct}%</span>
+                            </div>
+                        </div>
+                        <div class="w-full bg-slate-200 h-2.5 rounded-full overflow-hidden">
+                            <div class="bg-blue-600 h-full rounded-full" style="width: ${pct}%"></div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            document.getElementById('studentMarksList').innerHTML = marksHTML;
+
+            // Render Exams
+            document.getElementById('studentExamList').innerHTML = erpData.exams.map(ex => `
+                <div class="pt-3 first:pt-0">
+                    <span class="bg-blue-100 text-blue-800 text-[11px] font-bold px-2.5 py-0.5 rounded-full">${ex.targetClass}</span>
+                    <div class="font-bold text-slate-900 mt-1">${ex.subject}</div>
+                    <div class="text-xs text-slate-500 mt-0.5"><i class="far fa-clock mr-1"></i>${ex.date} | ${ex.time}</div>
+                </div>
+            `).join('');
+
+            // Render Holidays
+            document.getElementById('studentHolidayList').innerHTML = erpData.holidays.map(h => `
+                <div class="pt-3 first:pt-0">
+                    <div class="font-bold text-slate-900">${h.title}</div>
+                    <div class="text-xs text-emerald-700 font-medium mt-0.5"><i class="fas fa-calendar-day mr-1"></i>${h.date}</div>
+                </div>
+            `).join('');
+        }
+    </script>
+</body>
+</html>
