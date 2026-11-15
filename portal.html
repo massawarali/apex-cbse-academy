@@ -10,26 +10,60 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Lottie Animated Graphics Player -->
+    <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
     <style>
-        body { font-family: 'Poppins', sans-serif; }
-        .login-bg { background: radial-gradient(circle at top right, #1e40af, #0f172a 65%, #020617); }
+        body { font-family: 'Poppins', sans-serif; overflow-x: hidden; }
+        .login-bg {
+            background: radial-gradient(circle at top left, #1e3a8a, #0f172a 55%, #020617);
+        }
+        /* Running & Floating Animations */
+        @keyframes floatSlow {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-14px); }
+        }
+        @keyframes floatReverse {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(12px) rotate(4deg); }
+        }
+        @keyframes spinOrbit {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        @keyframes spinOrbitReverse {
+            from { transform: rotate(360deg); }
+            to { transform: rotate(0deg); }
+        }
+        @keyframes marqueeSlide {
+            0% { transform: translateX(0%); }
+            100% { transform: translateX(-50%); }
+        }
+        .animate-float { animation: floatSlow 4s ease-in-out infinite; }
+        .animate-float-delayed { animation: floatReverse 5s ease-in-out infinite; }
+        .orbit-ring { animation: spinOrbit 24s linear infinite; }
+        .orbit-item { animation: spinOrbitReverse 24s linear infinite; }
+        .marquee-track {
+            display: flex;
+            width: max-content;
+            animation: marqueeSlide 22s linear infinite;
+        }
     </style>
 </head>
 <body class="bg-slate-100 text-slate-800 min-h-screen flex flex-col">
 
     <!-- Top Navbar -->
-    <header class="bg-white shadow-sm sticky top-0 z-50">
+    <header class="bg-white/95 backdrop-blur-md shadow-sm sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center h-16">
-            <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-xl bg-blue-700 flex items-center justify-center text-white font-bold text-xl shadow">A</div>
+            <a href="index.html" class="flex items-center gap-3 group">
+                <div class="w-10 h-10 rounded-xl bg-blue-700 group-hover:bg-amber-500 transition flex items-center justify-center text-white font-bold text-xl shadow">A</div>
                 <div>
                     <span class="text-lg font-extrabold text-slate-900 block leading-none">APEX <span class="text-blue-700">ERP PORTAL</span></span>
                     <span class="text-[10px] font-semibold text-slate-500 uppercase tracking-widest">Jainthgarh • CBSE Class 6–10</span>
                 </div>
-            </div>
+            </a>
             <div class="flex items-center gap-3">
-                <a href="index.html" class="text-xs sm:text-sm font-semibold text-slate-600 hover:text-blue-700 transition">
-                    <i class="fas fa-home mr-1"></i> Main Website
+                <a href="index.html" class="text-xs sm:text-sm font-semibold text-slate-600 hover:text-blue-700 transition flex items-center gap-1.5 bg-slate-100 px-3.5 py-2 rounded-lg">
+                    <i class="fas fa-arrow-left text-blue-600"></i> Back to Website
                 </a>
                 <button id="logoutBtn" onclick="logout()" class="hidden bg-red-600 hover:bg-red-700 text-white text-xs sm:text-sm font-semibold px-4 py-2 rounded-lg shadow transition">
                     <i class="fas fa-sign-out-alt mr-1"></i> Logout
@@ -38,55 +72,179 @@
         </div>
     </header>
 
-    <!-- ================= 1. LOGIN SCREEN ================= -->
-    <main id="loginSection" class="flex-grow login-bg flex items-center justify-center p-4 py-12">
-        <div class="max-w-md w-full bg-white rounded-3xl shadow-2xl overflow-hidden border border-slate-200">
-            <!-- Role Selector Tabs -->
-            <div class="grid grid-cols-3 bg-slate-100 p-1.5 border-b border-slate-200 text-xs sm:text-sm font-bold text-center">
-                <button onclick="selectRole('admin')" id="tab-admin" class="py-2.5 rounded-xl bg-blue-700 text-white shadow transition">
-                    <i class="fas fa-user-shield mr-1"></i> Admin
-                </button>
-                <button onclick="selectRole('candidate')" id="tab-candidate" class="py-2.5 rounded-xl text-slate-600 hover:text-slate-900 transition">
-                    <i class="fas fa-user-graduate mr-1"></i> Candidate
-                </button>
-                <button onclick="selectRole('parent')" id="tab-parent" class="py-2.5 rounded-xl text-slate-600 hover:text-slate-900 transition">
-                    <i class="fas fa-users mr-1"></i> Parents
-                </button>
+    <!-- ================= 1. ANIMATED LOGIN SCREEN ================= -->
+    <main id="loginSection" class="flex-grow login-bg relative overflow-hidden flex flex-col justify-between">
+        
+        <!-- Floating Background Education Icons -->
+        <i class="fas fa-atom text-white/5 text-8xl absolute top-12 left-10 animate-float pointer-events-none"></i>
+        <i class="fas fa-graduation-cap text-white/5 text-9xl absolute bottom-16 left-1/3 animate-float-delayed pointer-events-none"></i>
+        <i class="fas fa-Microscope text-white/5 text-8xl absolute top-20 right-12 animate-float pointer-events-none"></i>
+
+        <!-- Glowing Light Blobs -->
+        <div class="w-96 h-96 bg-blue-500/20 rounded-full blur-3xl absolute -top-20 -left-20 pointer-events-none"></div>
+        <div class="w-96 h-96 bg-amber-500/15 rounded-full blur-3xl absolute bottom-10 right-10 pointer-events-none"></div>
+
+        <div class="max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-10 lg:py-14 relative z-10 flex-grow flex items-center">
+            <div class="grid lg:grid-cols-12 gap-12 items-center w-full">
+
+                <!-- LEFT SIDE: Running Education Graphic Showcase (7 Cols) -->
+                <div class="lg:col-span-7 text-white flex flex-col items-center lg:items-start text-center lg:text-left">
+                    <div class="inline-flex items-center gap-2 bg-blue-900/80 border border-blue-400/30 rounded-full px-4 py-1.5 text-xs font-semibold text-amber-300 mb-5">
+                        <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping"></span>
+                        <span>Smart Digital Campus • Founded by Massawar Ali Khan</span>
+                    </div>
+
+                    <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold leading-tight mb-4">
+                        Track Every Test, <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-300 to-amber-500">Master Every Concept.</span>
+                    </h1>
+                    <p class="text-blue-100 text-sm sm:text-base mb-8 max-w-xl">
+                        Welcome to Apex CBSE Academy's live Student & Parent ERP. View Saturday OMR test scores, upcoming board exam schedules, attendance, and mentor remarks in real time.
+                    </p>
+
+                    <!-- Interactive Orbital Animation + Lottie Graphic Centerpiece -->
+                    <div class="relative flex items-center justify-center my-4 w-full max-w-md mx-auto lg:mx-0">
+                        
+                        <!-- 360° Rotating Subject Orbit Ring -->
+                        <div class="w-72 h-72 sm:w-80 sm:h-80 rounded-full border-2 border-dashed border-blue-400/30 absolute orbit-ring flex items-center justify-center pointer-events-none">
+                            <div class="w-11 h-11 rounded-2xl bg-blue-600 text-white shadow-lg flex items-center justify-center text-base absolute -top-5 orbit-item">
+                                <i class="fas fa-square-root-alt"></i>
+                            </div>
+                            <div class="w-11 h-11 rounded-2xl bg-amber-500 text-slate-950 shadow-lg flex items-center justify-center text-base absolute -bottom-5 orbit-item">
+                                <i class="fas fa-atom"></i>
+                            </div>
+                            <div class="w-11 h-11 rounded-2xl bg-emerald-500 text-white shadow-lg flex items-center justify-center text-base absolute -left-5 orbit-item">
+                                <i class="fas fa-dna"></i>
+                            </div>
+                            <div class="w-11 h-11 rounded-2xl bg-purple-600 text-white shadow-lg flex items-center justify-center text-base absolute -right-5 orbit-item">
+                                <i class="fas fa-laptop-code"></i>
+                            </div>
+                        </div>
+
+                        <!-- Floating Live Badge 1 -->
+                        <div class="hidden sm:flex items-center gap-2.5 bg-white text-slate-900 px-3.5 py-2 rounded-2xl shadow-xl absolute -top-4 -left-4 z-20 animate-float">
+                            <div class="w-8 h-8 rounded-lg bg-amber-100 text-amber-600 flex items-center justify-center font-bold">
+                                <i class="fas fa-trophy"></i>
+                            </div>
+                            <div class="text-left">
+                                <div class="text-[11px] font-extrabold leading-tight">Weekly Test Analytics</div>
+                                <div class="text-[10px] text-slate-500">Live Progress Graphs</div>
+                            </div>
+                        </div>
+
+                        <!-- Floating Live Badge 2 -->
+                        <div class="hidden sm:flex items-center gap-2.5 bg-emerald-500 text-white px-3.5 py-2 rounded-2xl shadow-xl absolute -bottom-4 -right-2 z-20 animate-float-delayed">
+                            <i class="fas fa-user-check text-lg"></i>
+                            <div class="text-left">
+                                <div class="text-[11px] font-extrabold leading-tight">Parent Transparency</div>
+                                <div class="text-[10px] text-emerald-100">Attendance & Remarks</div>
+                            </div>
+                        </div>
+
+                        <!-- Main Running Lottie Education Graphic Card -->
+                        <div class="bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl p-4 shadow-2xl relative z-10 w-64 sm:w-72 text-center animate-float">
+                            <div class="bg-slate-950/70 rounded-2xl p-2 border border-white/10">
+                                <lottie-player 
+                                    src="https://assets3.lottiefiles.com/packages/lf20_fcfjwiyb.json"  
+                                    background="transparent"  
+                                    speed="1"  
+                                    style="width: 100%; height: 185px;"  
+                                    loop  
+                                    autoplay>
+                                </lottie-player>
+                                <span class="inline-block bg-amber-400 text-slate-950 text-[10px] font-extrabold px-3 py-0.5 rounded-full uppercase tracking-wider mt-1">
+                                    Class 6 to 10 CBSE
+                                </span>
+                                <p class="text-xs text-blue-200 font-medium mt-1 pb-1">Maths • Science • Biology • IT</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- RIGHT SIDE: Interactive Login Card (5 Cols) -->
+                <div class="lg:col-span-5">
+                    <div class="max-w-md mx-auto bg-white rounded-3xl shadow-2xl overflow-hidden border border-white/20">
+                        <!-- Role Selector Tabs -->
+                        <div class="grid grid-cols-3 bg-slate-100 p-1.5 border-b border-slate-200 text-xs sm:text-sm font-bold text-center">
+                            <button onclick="selectRole('admin')" id="tab-admin" class="py-2.5 rounded-xl bg-blue-700 text-white shadow transition">
+                                <i class="fas fa-user-shield mr-1"></i> Admin
+                            </button>
+                            <button onclick="selectRole('candidate')" id="tab-candidate" class="py-2.5 rounded-xl text-slate-600 hover:text-slate-900 transition">
+                                <i class="fas fa-user-graduate mr-1"></i> Candidate
+                            </button>
+                            <button onclick="selectRole('parent')" id="tab-parent" class="py-2.5 rounded-xl text-slate-600 hover:text-slate-900 transition">
+                                <i class="fas fa-users mr-1"></i> Parents
+                            </button>
+                        </div>
+
+                        <div class="p-6 sm:p-8">
+                            <div class="text-center mb-6">
+                                <span id="roleBadge" class="bg-blue-100 text-blue-800 text-xs font-extrabold px-3 py-1 rounded-full uppercase tracking-wider">Administration Login</span>
+                                <h2 id="roleTitle" class="text-2xl font-extrabold text-slate-900 mt-2">Welcome Back, Admin</h2>
+                                <p id="roleSub" class="text-xs text-slate-500 mt-1">Sign in using your registered Gmail or Mobile Number</p>
+                            </div>
+
+                            <form onsubmit="handleLogin(event)" class="space-y-4">
+                                <div>
+                                    <label id="idLabel" class="block text-xs font-bold uppercase text-slate-600 mb-1">Registered Gmail or Mobile No. *</label>
+                                    <div class="relative">
+                                        <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400">
+                                            <i class="fas fa-envelope"></i>
+                                        </span>
+                                        <input type="text" id="loginId" required placeholder="Enter Gmail ID or 10-digit Mobile" class="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-600 text-sm">
+                                    </div>
+                                </div>
+                                <div>
+                                    <label id="passLabel" class="block text-xs font-bold uppercase text-slate-600 mb-1">Password / PIN *</label>
+                                    <div class="relative">
+                                        <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400">
+                                            <i class="fas fa-lock"></i>
+                                        </span>
+                                        <input type="password" id="loginPass" required placeholder="Enter Password or PIN" class="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-600 text-sm">
+                                    </div>
+                                </div>
+
+                                <div id="loginError" class="hidden bg-red-50 border border-red-200 text-red-700 text-xs font-semibold p-3 rounded-xl text-center"></div>
+
+                                <button type="submit" class="w-full bg-blue-700 hover:bg-blue-800 text-white font-bold py-3.5 rounded-xl shadow-lg shadow-blue-700/25 transition transform hover:scale-[1.01] flex items-center justify-center gap-2">
+                                    <i class="fas fa-sign-in-alt"></i> Login to Dashboard
+                                </button>
+                            </form>
+
+                            <!-- Divider -->
+                            <div class="relative flex py-5 items-center">
+                                <div class="flex-grow border-t border-slate-200"></div>
+                                <span class="flex-shrink mx-3 text-slate-400 text-xs font-semibold uppercase">Or Quick Sign In With</span>
+                                <div class="flex-grow border-t border-slate-200"></div>
+                            </div>
+
+                            <!-- Gmail & Mobile Quick Login Buttons -->
+                            <div class="grid grid-cols-2 gap-3">
+                                <button type="button" onclick="quickMethodPrompt('gmail')" class="flex items-center justify-center gap-2 py-2.5 px-4 border border-slate-300 rounded-xl hover:bg-slate-50 transition text-xs font-bold text-slate-700 shadow-sm">
+                                    <i class="fab fa-google text-red-500 text-base"></i> Gmail Login
+                                </button>
+                                <button type="button" onclick="quickMethodPrompt('mobile')" class="flex items-center justify-center gap-2 py-2.5 px-4 border border-slate-300 rounded-xl hover:bg-slate-50 transition text-xs font-bold text-slate-700 shadow-sm">
+                                    <i class="fas fa-mobile-alt text-blue-600 text-base"></i> Mobile Login
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
+        </div>
 
-            <div class="p-6 sm:p-8">
-                <div class="text-center mb-6">
-                    <span id="roleBadge" class="bg-blue-100 text-blue-800 text-xs font-extrabold px-3 py-1 rounded-full uppercase tracking-wider">Administration Login</span>
-                    <h2 id="roleTitle" class="text-2xl font-extrabold text-slate-900 mt-2">Welcome Back, Admin</h2>
-                    <p id="roleSub" class="text-xs text-slate-500 mt-1">Full control over marks, schedules, tests & holidays</p>
-                </div>
-
-                <form onsubmit="handleLogin(event)" class="space-y-4">
-                    <div>
-                        <label id="idLabel" class="block text-xs font-bold uppercase text-slate-600 mb-1">Admin Username / ID *</label>
-                        <input type="text" id="loginId" required placeholder="Enter ID" class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-600 text-sm">
-                    </div>
-                    <div>
-                        <label id="passLabel" class="block text-xs font-bold uppercase text-slate-600 mb-1">Password / PIN *</label>
-                        <input type="password" id="loginPass" required placeholder="Enter Password" class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-600 text-sm">
-                    </div>
-
-                    <div id="loginError" class="hidden bg-red-50 border border-red-200 text-red-700 text-xs font-semibold p-3 rounded-xl text-center"></div>
-
-                    <button type="submit" class="w-full bg-blue-700 hover:bg-blue-800 text-white font-bold py-3.5 rounded-xl shadow-lg transition flex items-center justify-center gap-2">
-                        <i class="fas fa-lock-open"></i> Login to Dashboard
-                    </button>
-                </form>
-
-                <!-- Quick Demo Credentials Box -->
-                <div class="mt-6 pt-5 border-t border-slate-200 bg-slate-50 p-3.5 rounded-xl text-xs text-slate-600">
-                    <div class="font-bold text-slate-800 mb-1.5"><i class="fas fa-key text-amber-500 mr-1"></i> Demo Login Credentials (Click to auto-fill):</div>
-                    <div class="space-y-1">
-                        <button onclick="fillDemo('admin','admin','apex2026')" class="block w-full text-left hover:text-blue-700">• <strong>Admin:</strong> ID: <code>admin</code> | Pass: <code>apex2026</code></button>
-                        <button onclick="fillDemo('candidate','APEX101','1234')" class="block w-full text-left hover:text-blue-700">• <strong>Candidate:</strong> Roll: <code>APEX101</code> | Pass: <code>1234</code></button>
-                        <button onclick="fillDemo('parent','APEX101','9876543210')" class="block w-full text-left hover:text-blue-700">• <strong>Parent:</strong> Child Roll: <code>APEX101</code> | Mobile: <code>9876543210</code></button>
-                    </div>
-                </div>
+        <!-- Bottom Running Education Marquee Strip -->
+        <div class="bg-slate-950/90 border-t border-white/10 py-3 overflow-hidden relative z-10">
+            <div class="marquee-track text-slate-300 text-xs font-semibold space-x-10 px-4">
+                <span class="flex items-center gap-2"><i class="fas fa-bolt text-amber-400"></i> Real-Time Saturday Test Scorecards</span>
+                <span class="flex items-center gap-2"><i class="fas fa-calendar-check text-blue-400"></i> Live CBSE Exam Timetable & Syllabus Tracker</span>
+                <span class="flex items-center gap-2"><i class="fas fa-user-shield text-emerald-400"></i> Direct Founder Mentorship by Massawar Ali Khan</span>
+                <span class="flex items-center gap-2"><i class="fas fa-bell text-purple-400"></i> Instant Holiday & PTM Notifications</span>
+                <!-- Duplicate for seamless loop -->
+                <span class="flex items-center gap-2"><i class="fas fa-bolt text-amber-400"></i> Real-Time Saturday Test Scorecards</span>
+                <span class="flex items-center gap-2"><i class="fas fa-calendar-check text-blue-400"></i> Live CBSE Exam Timetable & Syllabus Tracker</span>
+                <span class="flex items-center gap-2"><i class="fas fa-user-shield text-emerald-400"></i> Direct Founder Mentorship by Massawar Ali Khan</span>
+                <span class="flex items-center gap-2"><i class="fas fa-bell text-purple-400"></i> Instant Holiday & PTM Notifications</span>
             </div>
         </div>
     </main>
@@ -97,33 +255,63 @@
             <div>
                 <span class="bg-amber-400 text-slate-950 text-xs font-extrabold px-3 py-1 rounded-full uppercase">Full Admin Control</span>
                 <h1 class="text-2xl sm:text-3xl font-extrabold mt-2">Founder & Admin Panel — Massawar Ali Khan</h1>
-                <p class="text-blue-200 text-xs sm:text-sm">Manage student records, Saturday test marks, exam schedules, and holiday notices.</p>
+                <p class="text-blue-200 text-xs sm:text-sm">Register students with Gmail/Mobile, upload Saturday test marks, exam schedules, and holidays.</p>
             </div>
             <button onclick="resetDefaultData()" class="bg-white/10 hover:bg-white/20 border border-white/20 text-xs font-semibold px-4 py-2.5 rounded-xl">
-                <i class="fas fa-sync-alt mr-1"></i> Reset Demo Data
+                <i class="fas fa-sync-alt mr-1"></i> Reset System Data
             </button>
         </div>
 
-        <div class="grid lg:grid-cols-3 gap-8">
-            <!-- Form 1: Add Weekly Test Marks -->
+        <!-- Row 1: Register New Student + Upload Marks -->
+        <div class="grid lg:grid-cols-2 gap-8 mb-8">
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                <h3 class="font-extrabold text-lg text-slate-900 mb-4 flex items-center gap-2">
+                    <i class="fas fa-user-plus text-emerald-600"></i> Register New Student (Gmail & Mobile Login)
+                </h3>
+                <form onsubmit="registerNewStudent(event)" class="space-y-3 text-sm">
+                    <div class="grid grid-cols-2 gap-3">
+                        <input type="text" id="regName" required placeholder="Student Full Name" class="w-full px-3.5 py-2.5 rounded-lg border border-slate-300">
+                        <input type="text" id="regRoll" required placeholder="Roll ID (e.g. APEX103)" class="w-full px-3.5 py-2.5 rounded-lg border border-slate-300">
+                    </div>
+                    <div class="grid grid-cols-2 gap-3">
+                        <input type="email" id="regEmail" required placeholder="Student/Parent Gmail ID" class="w-full px-3.5 py-2.5 rounded-lg border border-slate-300">
+                        <input type="tel" id="regPhone" required placeholder="10-Digit Mobile No." class="w-full px-3.5 py-2.5 rounded-lg border border-slate-300">
+                    </div>
+                    <div class="grid grid-cols-2 gap-3">
+                        <select id="regBatch" required class="w-full px-3.5 py-2.5 rounded-lg border border-slate-300 bg-white">
+                            <option value="Class 6 & 7 (Shift 1: 3:30 - 5:30 PM)">Class 6 & 7 (Shift 1)</option>
+                            <option value="Class 8 (Shift 1: 3:30 - 5:30 PM)">Class 8 (Shift 1)</option>
+                            <option value="Class 9 (Shift 2: 5:30 - 7:30 PM)">Class 9 (Shift 2)</option>
+                            <option value="Class 10 (Shift 2: 5:30 - 7:30 PM)">Class 10 (Shift 2)</option>
+                        </select>
+                        <input type="text" id="regPin" required placeholder="Set Login PIN (e.g. 1234)" class="w-full px-3.5 py-2.5 rounded-lg border border-slate-300">
+                    </div>
+                    <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 rounded-xl">Create Student & Parent Login</button>
+                </form>
+            </div>
+
             <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
                 <h3 class="font-extrabold text-lg text-slate-900 mb-4 flex items-center gap-2">
                     <i class="fas fa-poll text-blue-600"></i> Upload Weekly Test Marks
                 </h3>
                 <form onsubmit="addTestMark(event)" class="space-y-3 text-sm">
                     <select id="markRoll" required class="w-full px-3.5 py-2.5 rounded-lg border border-slate-300 bg-white"></select>
-                    <input type="text" id="markSubject" required placeholder="Subject (e.g., Mathematics / Science)" class="w-full px-3.5 py-2.5 rounded-lg border border-slate-300">
-                    <input type="text" id="markTopic" required placeholder="Topic (e.g., Quadratic Equations OMR)" class="w-full px-3.5 py-2.5 rounded-lg border border-slate-300">
+                    <div class="grid grid-cols-2 gap-3">
+                        <input type="text" id="markSubject" required placeholder="Subject (e.g. Maths)" class="w-full px-3.5 py-2.5 rounded-lg border border-slate-300">
+                        <input type="date" id="markDate" required class="w-full px-3.5 py-2.5 rounded-lg border border-slate-300">
+                    </div>
+                    <input type="text" id="markTopic" required placeholder="Chapter / Topic Name" class="w-full px-3.5 py-2.5 rounded-lg border border-slate-300">
                     <div class="grid grid-cols-2 gap-3">
                         <input type="number" id="markScore" required placeholder="Marks Obtained" class="w-full px-3.5 py-2.5 rounded-lg border border-slate-300">
                         <input type="number" id="markTotal" required placeholder="Total Marks (e.g. 50)" class="w-full px-3.5 py-2.5 rounded-lg border border-slate-300">
                     </div>
-                    <input type="date" id="markDate" required class="w-full px-3.5 py-2.5 rounded-lg border border-slate-300">
                     <button type="submit" class="w-full bg-blue-700 hover:bg-blue-800 text-white font-bold py-2.5 rounded-xl">Publish Score</button>
                 </form>
             </div>
+        </div>
 
-            <!-- Form 2: Add Upcoming Exam Schedule -->
+        <!-- Row 2: Exam Schedule, Holidays & Attendance -->
+        <div class="grid lg:grid-cols-2 gap-8">
             <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
                 <h3 class="font-extrabold text-lg text-slate-900 mb-4 flex items-center gap-2">
                     <i class="fas fa-calendar-check text-amber-500"></i> Add Exam Schedule
@@ -137,37 +325,40 @@
                         <option value="Class 10">Class 10 (Shift 2)</option>
                     </select>
                     <input type="text" id="examSubject" required placeholder="Subject & Syllabus Chapter" class="w-full px-3.5 py-2.5 rounded-lg border border-slate-300">
-                    <input type="date" id="examDate" required class="w-full px-3.5 py-2.5 rounded-lg border border-slate-300">
-                    <input type="text" id="examTime" required placeholder="Time (e.g., Saturday 5:30 PM - 6:45 PM)" class="w-full px-3.5 py-2.5 rounded-lg border border-slate-300">
+                    <div class="grid grid-cols-2 gap-3">
+                        <input type="date" id="examDate" required class="w-full px-3.5 py-2.5 rounded-lg border border-slate-300">
+                        <input type="text" id="examTime" required placeholder="Time (e.g. Sat 5:30 PM)" class="w-full px-3.5 py-2.5 rounded-lg border border-slate-300">
+                    </div>
                     <button type="submit" class="w-full bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold py-2.5 rounded-xl">Add Exam to Calendar</button>
                 </form>
             </div>
 
-            <!-- Form 3: Add Holiday / Notice & Attendance -->
-            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 space-y-6">
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 space-y-5">
                 <div>
-                    <h3 class="font-extrabold text-lg text-slate-900 mb-3 flex items-center gap-2">
+                    <h3 class="font-extrabold text-base text-slate-900 mb-2 flex items-center gap-2">
                         <i class="fas fa-umbrella-beach text-emerald-600"></i> Announce Holiday / Notice
                     </h3>
-                    <form onsubmit="addHoliday(event)" class="space-y-3 text-sm">
-                        <input type="text" id="holTitle" required placeholder="Holiday / Event Title" class="w-full px-3.5 py-2.5 rounded-lg border border-slate-300">
-                        <input type="text" id="holDate" required placeholder="Date (e.g., 25 Dec 2026 - Winter Break)" class="w-full px-3.5 py-2.5 rounded-lg border border-slate-300">
-                        <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 rounded-xl">Publish Notice</button>
+                    <form onsubmit="addHoliday(event)" class="flex gap-2 text-sm">
+                        <input type="text" id="holTitle" required placeholder="Holiday Title" class="w-1/2 px-3 py-2 rounded-lg border border-slate-300">
+                        <input type="text" id="holDate" required placeholder="Date" class="w-1/3 px-3 py-2 rounded-lg border border-slate-300">
+                        <button type="submit" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-4 py-2 rounded-lg">Add</button>
                     </form>
                 </div>
 
-                <div class="pt-4 border-t border-slate-200">
-                    <h4 class="font-bold text-sm text-slate-800 mb-2">Update Attendance & Fee Status</h4>
+                <div class="pt-3 border-t border-slate-200">
+                    <h4 class="font-bold text-sm text-slate-800 mb-2">Update Attendance, Fee & Parent Remark</h4>
                     <form onsubmit="updateStudentMeta(event)" class="space-y-2.5 text-sm">
-                        <select id="metaRoll" required class="w-full px-3 py-2 rounded-lg border border-slate-300 bg-white"></select>
-                        <div class="grid grid-cols-2 gap-2">
-                            <input type="number" id="metaAtt" required min="1" max="100" placeholder="Attendance %" class="w-full px-3 py-2 rounded-lg border border-slate-300">
-                            <select id="metaFee" class="w-full px-3 py-2 rounded-lg border border-slate-300 bg-white">
+                        <div class="grid grid-cols-3 gap-2">
+                            <select id="metaRoll" required class="col-span-2 px-3 py-2 rounded-lg border border-slate-300 bg-white"></select>
+                            <input type="number" id="metaAtt" required min="1" max="100" placeholder="Att. %" class="px-3 py-2 rounded-lg border border-slate-300">
+                        </div>
+                        <div class="grid grid-cols-3 gap-2">
+                            <select id="metaFee" class="px-3 py-2 rounded-lg border border-slate-300 bg-white">
                                 <option value="Paid">Fee: Paid</option>
                                 <option value="Pending">Fee: Pending</option>
                             </select>
+                            <input type="text" id="metaRemark" placeholder="Teacher's Remark for Parent" class="col-span-2 px-3 py-2 rounded-lg border border-slate-300">
                         </div>
-                        <input type="text" id="metaRemark" placeholder="Teacher's Remark for Parent" class="w-full px-3 py-2 rounded-lg border border-slate-300">
                         <button type="submit" class="w-full bg-slate-800 hover:bg-slate-900 text-white font-semibold py-2 rounded-xl">Save Student Status</button>
                     </form>
                 </div>
@@ -177,20 +368,20 @@
         <!-- Admin Student Overview Table -->
         <div class="mt-8 bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
             <div class="px-6 py-4 bg-slate-900 text-white flex justify-between items-center">
-                <h3 class="font-bold">Enrolled Candidates Directory</h3>
+                <h3 class="font-bold">Enrolled Candidates (Gmail & Mobile Directory)</h3>
                 <span class="text-xs text-amber-400">Live Sync Enabled</span>
             </div>
             <div class="overflow-x-auto">
                 <table class="w-full text-left border-collapse text-sm">
                     <thead>
                         <tr class="bg-slate-100 text-slate-700 border-b">
-                            <th class="py-3 px-4">Roll No</th>
+                            <th class="py-3 px-4">Roll ID</th>
                             <th class="py-3 px-4">Student Name</th>
-                            <th class="py-3 px-4">Class & Batch</th>
-                            <th class="py-3 px-4">Parent Mobile</th>
+                            <th class="py-3 px-4">Gmail ID</th>
+                            <th class="py-3 px-4">Mobile No.</th>
+                            <th class="py-3 px-4">PIN</th>
                             <th class="py-3 px-4">Attendance</th>
-                            <th class="py-3 px-4">Fee Status</th>
-                            <th class="py-3 px-4">Latest Remark</th>
+                            <th class="py-3 px-4">Fee</th>
                         </tr>
                     </thead>
                     <tbody id="adminStudentTable" class="divide-y divide-slate-200"></tbody>
@@ -201,12 +392,11 @@
 
     <!-- ================= 3. CANDIDATE & PARENT DASHBOARD ================= -->
     <section id="userDashboard" class="hidden flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <!-- Top Banner -->
-        <div id="userBanner" class="bg-gradient-to-r from-blue-800 to-indigo-900 text-white rounded-2xl p-6 mb-8 shadow-lg flex flex-wrap justify-between items-center gap-4">
+        <div class="bg-gradient-to-r from-blue-800 to-indigo-900 text-white rounded-2xl p-6 mb-8 shadow-lg flex flex-wrap justify-between items-center gap-4">
             <div>
                 <span id="userRolePill" class="bg-amber-400 text-slate-950 text-xs font-extrabold px-3 py-1 rounded-full uppercase">Candidate View</span>
                 <h1 id="userNameHeading" class="text-2xl sm:text-3xl font-extrabold mt-2">Student Name</h1>
-                <p id="userBatchSub" class="text-blue-200 text-xs sm:text-sm">Roll No: APEX101 • Class 10 Board Batch</p>
+                <p id="userBatchSub" class="text-blue-200 text-xs sm:text-sm"></p>
             </div>
             <div class="flex gap-4">
                 <div class="bg-white/10 px-4 py-2.5 rounded-xl text-center">
@@ -234,14 +424,13 @@
                 <div class="bg-white p-4 rounded-xl border border-amber-200 md:col-span-2">
                     <span class="text-xs font-bold uppercase text-slate-400">Founder / Mentor's Remark (Massawar Sir)</span>
                     <div id="parentRemarkText" class="text-sm font-semibold text-slate-800 mt-1"></div>
-                    <p class="text-xs text-slate-500 mt-1">For direct PTM inquiry call: +91 9337042839</p>
+                    <p class="text-xs text-slate-500 mt-1">Direct Helpline: +91 9337042839</p>
                 </div>
             </div>
         </div>
 
         <!-- Main Progress Grid: Weekly Tests, Exam Schedule & Holidays -->
         <div class="grid lg:grid-cols-3 gap-8">
-            <!-- Weekly Test Scorecard (2 Cols) -->
             <div class="lg:col-span-2 bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
                 <div class="px-6 py-4 bg-slate-900 text-white flex justify-between items-center">
                     <h3 class="font-bold"><i class="fas fa-chart-bar text-amber-400 mr-2"></i>Saturday Weekly Test Results & Progress</h3>
@@ -252,9 +441,7 @@
                 </div>
             </div>
 
-            <!-- Right Column: Upcoming Exams & Holidays -->
             <div class="space-y-8">
-                <!-- Upcoming Exam Schedule -->
                 <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
                     <div class="px-5 py-3.5 bg-blue-900 text-white font-bold text-sm flex items-center gap-2">
                         <i class="fas fa-calendar-alt text-amber-400"></i> Upcoming Exam Schedule
@@ -262,7 +449,6 @@
                     <div id="studentExamList" class="p-5 space-y-3 text-sm divide-y divide-slate-100"></div>
                 </div>
 
-                <!-- Holidays & Official Notices -->
                 <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
                     <div class="px-5 py-3.5 bg-emerald-800 text-white font-bold text-sm flex items-center gap-2">
                         <i class="fas fa-bullhorn text-amber-300"></i> Holidays & Center Notices
@@ -274,13 +460,13 @@
     </section>
 
     <script>
-        // Default ERP Database stored in Browser LocalStorage
         const defaultERPData = {
             students: [
                 {
                     roll: "APEX101",
-                    pass: "1234",
+                    email: "aarav@gmail.com",
                     parentPhone: "9876543210",
+                    pass: "1234",
                     name: "Aarav Sharma",
                     classBatch: "Class 10 (Shift 2: 5:30 - 7:30 PM)",
                     attendance: 94,
@@ -294,8 +480,9 @@
                 },
                 {
                     roll: "APEX102",
-                    pass: "1234",
+                    email: "zoya@gmail.com",
                     parentPhone: "9123456789",
+                    pass: "1234",
                     name: "Zoya Khan",
                     classBatch: "Class 8 (Shift 1: 3:30 - 5:30 PM)",
                     attendance: 89,
@@ -319,21 +506,20 @@
             ]
         };
 
-        let erpData = JSON.parse(localStorage.getItem('apexERP_v1')) || defaultERPData;
+        let erpData = JSON.parse(localStorage.getItem('apexERP_v2')) || defaultERPData;
         let currentRole = 'admin';
 
         function saveERP() {
-            localStorage.setItem('apexERP_v1', JSON.stringify(erpData));
+            localStorage.setItem('apexERP_v2', JSON.stringify(erpData));
         }
 
         function resetDefaultData() {
-            localStorage.removeItem('apexERP_v1');
+            localStorage.removeItem('apexERP_v2');
             erpData = JSON.parse(JSON.stringify(defaultERPData));
             renderAdminDashboard();
-            alert("Demo database reset to default values!");
+            alert("System data reset!");
         }
 
-        // Switch Role Tabs on Login Screen
         function selectRole(role) {
             currentRole = role;
             ['admin', 'candidate', 'parent'].forEach(r => {
@@ -348,63 +534,74 @@
             const sub = document.getElementById('roleSub');
             const idLbl = document.getElementById('idLabel');
             const passLbl = document.getElementById('passLabel');
+            const idInput = document.getElementById('loginId');
 
             if (role === 'admin') {
                 badge.innerText = "Administration Login";
                 title.innerText = "Welcome Back, Admin";
-                sub.innerText = "Full control over marks, schedules, tests & holidays";
-                idLbl.innerText = "Admin Username *";
+                sub.innerText = "Sign in with Admin Gmail, Mobile No. or Username";
+                idLbl.innerText = "Admin Gmail / Mobile Number *";
                 passLbl.innerText = "Admin Password *";
+                idInput.placeholder = "Enter Admin Gmail or Mobile No.";
             } else if (role === 'candidate') {
-                badge.innerText = "Candidate Portal (Limited Access)";
+                badge.innerText = "Candidate Portal";
                 title.innerText = "Student Learning Desk";
-                sub.innerText = "View your weekly test scores, exam dates & holidays";
-                idLbl.innerText = "Candidate Roll Number (e.g. APEX101) *";
-                passLbl.innerText = "Student PIN (e.g. 1234) *";
+                sub.innerText = "Login with your registered Gmail ID, Mobile No. or Roll ID";
+                idLbl.innerText = "Student Gmail / Mobile No. / Roll ID *";
+                passLbl.innerText = "Student Login PIN *";
+                idInput.placeholder = "e.g. yourname@gmail.com or 10-digit Mobile";
             } else {
                 badge.innerText = "Parent Monitoring Portal";
-                title.innerText = "Complete Child Progress Tracker";
-                sub.innerText = "Track all test marks, attendance, fees, remarks & holidays";
-                idLbl.innerText = "Child's Roll Number (e.g. APEX101) *";
-                passLbl.innerText = "Registered Parent Mobile Number *";
+                title.innerText = "Child Progress Tracker";
+                sub.innerText = "Login using Registered Parent Mobile Number or Gmail ID";
+                idLbl.innerText = "Parent Gmail ID or Registered Mobile No. *";
+                passLbl.innerText = "Login PIN or Registered Mobile No. *";
+                idInput.placeholder = "Enter Parent Gmail or 10-digit Mobile No.";
             }
             document.getElementById('loginError').classList.add('hidden');
         }
 
-        function fillDemo(role, id, pass) {
-            selectRole(role);
-            document.getElementById('loginId').value = id;
-            document.getElementById('loginPass').value = pass;
+        function quickMethodPrompt(method) {
+            const idInput = document.getElementById('loginId');
+            idInput.focus();
+            idInput.placeholder = method === 'gmail'
+                ? "Type your @gmail.com address here..."
+                : "Type your 10-digit mobile number here...";
         }
 
-        // Handle Login Verification
         function handleLogin(event) {
             event.preventDefault();
-            const id = document.getElementById('loginId').value.trim();
+            const id = document.getElementById('loginId').value.trim().toLowerCase();
             const pass = document.getElementById('loginPass').value.trim();
             const errBox = document.getElementById('loginError');
 
             if (currentRole === 'admin') {
-                if (id.toLowerCase() === 'admin' && pass === 'apex2026') {
+                const isAdmin = (id === 'admin' || id === '9337042839' || id === 'massawarali@gmail.com') && pass === 'apex2026';
+                if (isAdmin) {
                     showDashboard('admin', null);
                 } else {
-                    errBox.innerText = "Invalid Admin Credentials! Use ID: admin | Pass: apex2026";
+                    errBox.innerText = "Invalid Admin Gmail/Mobile or Password!";
                     errBox.classList.remove('hidden');
                 }
             } else if (currentRole === 'candidate') {
-                const student = erpData.students.find(s => s.roll.toUpperCase() === id.toUpperCase() && s.pass === pass);
+                const student = erpData.students.find(s =>
+                    (s.email.toLowerCase() === id || s.parentPhone === id || s.roll.toLowerCase() === id) && s.pass === pass
+                );
                 if (student) {
                     showDashboard('candidate', student);
                 } else {
-                    errBox.innerText = "Invalid Roll No or PIN! Try APEX101 and PIN 1234.";
+                    errBox.innerText = "Invalid Student Gmail/Mobile or PIN! Please contact Admin.";
                     errBox.classList.remove('hidden');
                 }
             } else if (currentRole === 'parent') {
-                const student = erpData.students.find(s => s.roll.toUpperCase() === id.toUpperCase() && s.parentPhone === pass);
+                const student = erpData.students.find(s =>
+                    (s.email.toLowerCase() === id || s.parentPhone === id || s.roll.toLowerCase() === id) &&
+                    (s.pass === pass || s.parentPhone === pass)
+                );
                 if (student) {
                     showDashboard('parent', student);
                 } else {
-                    errBox.innerText = "Invalid Roll No or Parent Mobile! Try APEX101 and Mobile 9876543210.";
+                    errBox.innerText = "Invalid Parent Gmail/Mobile or PIN! Please verify with Coaching Admin.";
                     errBox.classList.remove('hidden');
                 }
             }
@@ -428,11 +625,11 @@
             document.getElementById('userDashboard').classList.add('hidden');
             document.getElementById('logoutBtn').classList.add('hidden');
             document.getElementById('loginSection').classList.remove('hidden');
+            document.getElementById('loginPass').value = '';
         }
 
-        // Render Admin Views
         function renderAdminDashboard() {
-            const rollOptions = erpData.students.map(s => `<option value="${s.roll}">${s.roll} - ${s.name} (${s.classBatch.split('(')[0]})</option>`).join('');
+            const rollOptions = erpData.students.map(s => `<option value="${s.roll}">${s.roll} - ${s.name} (${s.parentPhone})</option>`).join('');
             document.getElementById('markRoll').innerHTML = rollOptions;
             document.getElementById('metaRoll').innerHTML = rollOptions;
 
@@ -441,18 +638,38 @@
                 <tr>
                     <td class="py-3 px-4 font-bold text-blue-700">${s.roll}</td>
                     <td class="py-3 px-4 font-semibold text-slate-900">${s.name}</td>
-                    <td class="py-3 px-4 text-slate-600">${s.classBatch}</td>
+                    <td class="py-3 px-4 text-slate-600">${s.email}</td>
                     <td class="py-3 px-4 text-slate-600">${s.parentPhone}</td>
+                    <td class="py-3 px-4 font-mono text-xs text-slate-500">${s.pass}</td>
                     <td class="py-3 px-4 font-bold text-slate-800">${s.attendance}%</td>
                     <td class="py-3 px-4">
                         <span class="px-2.5 py-1 rounded-full text-xs font-bold ${s.feeStatus === 'Paid' ? 'bg-emerald-100 text-emerald-800' : 'bg-red-100 text-red-800'}">${s.feeStatus}</span>
                     </td>
-                    <td class="py-3 px-4 text-xs text-slate-600 max-w-xs">${s.remark}</td>
                 </tr>
             `).join('');
         }
 
-        // Admin Actions
+        function registerNewStudent(e) {
+            e.preventDefault();
+            const newStudent = {
+                roll: document.getElementById('regRoll').value.trim().toUpperCase(),
+                name: document.getElementById('regName').value.trim(),
+                email: document.getElementById('regEmail').value.trim().toLowerCase(),
+                parentPhone: document.getElementById('regPhone').value.trim(),
+                classBatch: document.getElementById('regBatch').value,
+                pass: document.getElementById('regPin').value.trim(),
+                attendance: 100,
+                feeStatus: "Paid",
+                remark: "Newly enrolled student at Apex CBSE Academy.",
+                marks: []
+            };
+            erpData.students.push(newStudent);
+            saveERP();
+            renderAdminDashboard();
+            e.target.reset();
+            alert(`Student ${newStudent.name} registered! Login enabled via Gmail (${newStudent.email}) or Mobile (${newStudent.parentPhone}).`);
+        }
+
         function addTestMark(e) {
             e.preventDefault();
             const roll = document.getElementById('markRoll').value;
@@ -511,21 +728,18 @@
             }
         }
 
-        // Render Candidate & Parent Views
         function renderUserDashboard(role, student) {
             document.getElementById('userRolePill').innerText = role === 'parent'
                 ? "Parent Portal • Full Progress Access"
                 : "Candidate Portal • Student View";
             document.getElementById('userNameHeading').innerText = student.name;
-            document.getElementById('userBatchSub').innerText = `Roll No: ${student.roll} • ${student.classBatch}`;
+            document.getElementById('userBatchSub').innerText = `Roll ID: ${student.roll} • ${student.email} • Mob: ${student.parentPhone}`;
             document.getElementById('userAttStat').innerText = `${student.attendance}%`;
 
-            // Calculate Average Score
             const totalPct = student.marks.reduce((acc, m) => acc + ((m.score / m.total) * 100), 0);
             const avg = student.marks.length ? Math.round(totalPct / student.marks.length) : 0;
             document.getElementById('userAvgStat').innerText = `${avg}%`;
 
-            // Show Parent-Exclusive Section only if role === 'parent'
             const parentBox = document.getElementById('parentExclusiveBox');
             if (role === 'parent') {
                 parentBox.classList.remove('hidden');
@@ -539,8 +753,7 @@
                 parentBox.classList.add('hidden');
             }
 
-            // Render Marks List with Progress Bars
-            const marksHTML = student.marks.map(m => {
+            const marksHTML = student.marks.length ? student.marks.map(m => {
                 const pct = Math.round((m.score / m.total) * 100);
                 return `
                     <div class="p-4 rounded-xl bg-slate-50 border border-slate-200">
@@ -560,10 +773,9 @@
                         </div>
                     </div>
                 `;
-            }).join('');
+            }).join('') : `<p class="text-sm text-slate-500">No weekly test records uploaded yet.</p>`;
             document.getElementById('studentMarksList').innerHTML = marksHTML;
 
-            // Render Exams
             document.getElementById('studentExamList').innerHTML = erpData.exams.map(ex => `
                 <div class="pt-3 first:pt-0">
                     <span class="bg-blue-100 text-blue-800 text-[11px] font-bold px-2.5 py-0.5 rounded-full">${ex.targetClass}</span>
@@ -572,7 +784,6 @@
                 </div>
             `).join('');
 
-            // Render Holidays
             document.getElementById('studentHolidayList').innerHTML = erpData.holidays.map(h => `
                 <div class="pt-3 first:pt-0">
                     <div class="font-bold text-slate-900">${h.title}</div>
