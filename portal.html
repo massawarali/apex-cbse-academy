@@ -204,7 +204,7 @@
         </div>
     </div>
 
-    <!-- ================= CANDIDATE & PARENT SELF PASSWORD RESET MODAL (BY MOBILE OTP) ================= -->
+    <!-- ================= ADMIN, CANDIDATE & PARENT SELF PASSWORD RESET MODAL (BY MOBILE OTP) ================= -->
     <div id="selfOtpResetModal" class="hidden fixed inset-0 z-50 bg-slate-950/75 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto no-print">
         <div class="bg-white rounded-3xl max-w-md w-full p-6 sm:p-7 shadow-2xl border border-slate-200 modal-animate">
             <div class="flex justify-between items-center pb-3 mb-4 border-b border-slate-100">
@@ -213,8 +213,8 @@
                         <i class="fas fa-mobile-alt"></i>
                     </div>
                     <div>
-                        <h3 class="text-base sm:text-lg font-extrabold text-slate-900 leading-none">Reset Password / PIN</h3>
-                        <span class="text-[11px] text-slate-500">Candidate & Parent Mobile OTP Verification</span>
+                        <h3 id="otpModalTitle" class="text-base sm:text-lg font-extrabold text-slate-900 leading-none">Reset Password / PIN</h3>
+                        <span id="otpModalSub" class="text-[11px] text-slate-500">Mobile Number OTP Verification</span>
                     </div>
                 </div>
                 <button type="button" onclick="closeSelfOtpResetModal()" class="text-slate-400 hover:text-slate-700 text-lg">
@@ -222,17 +222,17 @@
                 </button>
             </div>
 
-            <!-- STEP 1: Enter Registered Mobile Number to Get OTP -->
+            <!-- STEP 1: Enter Registered 10-Digit Mobile Number to Get OTP -->
             <form id="otpStep1Form" onsubmit="sendMobileResetOtp(event)" class="space-y-4 text-sm">
                 <div>
-                    <label class="block text-xs font-bold uppercase text-slate-600 mb-1">Registered 10-Digit Mobile Number *</label>
+                    <label id="otpMobileLabel" class="block text-xs font-bold uppercase text-slate-600 mb-1">Registered 10-Digit Mobile Number *</label>
                     <div class="relative">
                         <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400">
                             <i class="fas fa-phone-alt"></i>
                         </span>
-                        <input type="tel" id="resetMobileInput" required pattern="[0-9]{10}" placeholder="Enter 10-digit registered mobile" class="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-600 text-sm font-semibold">
+                        <input type="tel" id="resetMobileInput" required pattern="[0-9]{10}" maxlength="10" placeholder="Enter 10-digit registered mobile" class="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-600 text-sm font-mono font-bold">
                     </div>
-                    <p class="text-[11px] text-slate-400 mt-1">We will verify your mobile number in the MAKDEMY database and send a 6-digit OTP.</p>
+                    <p id="otpMobileHint" class="text-[11px] text-slate-400 mt-1">We will verify your mobile number in the MAKDEMY database and send a 6-digit OTP.</p>
                 </div>
 
                 <div id="otpStep1Error" class="hidden bg-red-50 border border-red-200 text-red-700 text-xs font-semibold p-3 rounded-xl text-center"></div>
@@ -251,7 +251,7 @@
                         <button type="button" onclick="resendMobileResetOtp()" class="text-blue-700 font-bold hover:underline text-[11px]">Resend OTP</button>
                     </div>
                     <p class="text-emerald-800 mt-1">
-                        Account: <strong id="otpMatchedStudentName">Student</strong> (<span id="otpMatchedMobile"></span>)
+                        Account: <strong id="otpMatchedStudentName">User</strong> (<span id="otpMatchedMobile" class="font-mono"></span>)
                     </p>
                     <div class="mt-2 bg-white border border-emerald-200 rounded-xl p-2 text-center">
                         <span class="text-[10px] text-slate-400 uppercase font-bold block">Your 6-Digit Verification OTP</span>
@@ -267,11 +267,11 @@
                 <div class="grid grid-cols-2 gap-2.5">
                     <div>
                         <label class="block text-[11px] font-bold uppercase text-slate-600 mb-1">New Password / PIN *</label>
-                        <input type="password" id="newSelfResetPass" required minlength="4" placeholder="New PIN (4+ chars)" class="w-full px-3 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-600 text-sm">
+                        <input type="text" id="newSelfResetPass" required minlength="4" placeholder="New PIN (4+ chars)" class="w-full px-3 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-600 text-sm font-mono font-bold">
                     </div>
                     <div>
                         <label class="block text-[11px] font-bold uppercase text-slate-600 mb-1">Confirm PIN *</label>
-                        <input type="password" id="confirmSelfResetPass" required minlength="4" placeholder="Re-enter PIN" class="w-full px-3 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-600 text-sm">
+                        <input type="text" id="confirmSelfResetPass" required minlength="4" placeholder="Re-enter PIN" class="w-full px-3 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-600 text-sm font-mono font-bold">
                     </div>
                 </div>
 
@@ -289,7 +289,7 @@
         </div>
     </div>
 
-    <!-- ================= ADMIN MANUAL PASSWORD / PIN RESET MODAL ================= -->
+    <!-- ================= ADMIN MANUAL PASSWORD / PIN RESET MODAL (FOR CANDIDATES & PARENTS) ================= -->
     <div id="adminPassResetModal" class="hidden fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm flex items-center justify-center p-4 no-print">
         <div class="bg-white rounded-3xl max-w-sm w-full p-6 shadow-2xl border border-slate-200 modal-animate">
             <div class="flex justify-between items-center pb-3 mb-4 border-b border-slate-100">
@@ -536,29 +536,23 @@
 
                 <div class="grid grid-cols-2 gap-3">
                     <div>
-                        <label class="block text-[11px] font-bold uppercase text-slate-500 mb-1">Registered Gmail ID *</label>
-                        <input type="email" id="editCandEmail" required class="w-full px-3.5 py-2 rounded-lg border border-slate-300">
-                    </div>
-                    <div>
-                        <label class="block text-[11px] font-bold uppercase text-slate-500 mb-1">Mobile No. (10-Digit) *</label>
-                        <input type="tel" id="editCandPhone" required class="w-full px-3.5 py-2 rounded-lg border border-slate-300">
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-2 gap-3">
-                    <div>
-                        <label class="block text-[11px] font-bold uppercase text-slate-500 mb-1">Batch & Shift *</label>
-                        <select id="editCandBatch" required class="w-full px-3 py-2 rounded-lg border border-slate-300 bg-white">
-                            <option value="Class 6 & 7 (Shift 1: 3:30 - 5:30 PM)">Class 6 & 7 (Shift 1)</option>
-                            <option value="Class 8 (Shift 1: 3:30 - 5:30 PM)">Class 8 (Shift 1)</option>
-                            <option value="Class 9 (Shift 2: 5:30 - 7:30 PM)">Class 9 (Shift 2)</option>
-                            <option value="Class 10 (Shift 2: 5:30 - 7:30 PM)">Class 10 (Shift 2)</option>
-                        </select>
+                        <label class="block text-[11px] font-bold uppercase text-slate-500 mb-1">Registered Mobile No. (10-Digit) *</label>
+                        <input type="tel" id="editCandPhone" required pattern="[0-9]{10}" maxlength="10" class="w-full px-3.5 py-2 rounded-lg border border-slate-300 font-mono font-bold">
                     </div>
                     <div>
                         <label class="block text-[11px] font-bold uppercase text-slate-500 mb-1">Login PIN / Password *</label>
-                        <input type="text" id="editCandPin" required class="w-full px-3.5 py-2 rounded-lg border border-slate-300 font-mono">
+                        <input type="text" id="editCandPin" required class="w-full px-3.5 py-2 rounded-lg border border-slate-300 font-mono font-bold text-purple-700">
                     </div>
+                </div>
+
+                <div>
+                    <label class="block text-[11px] font-bold uppercase text-slate-500 mb-1">Batch & Shift *</label>
+                    <select id="editCandBatch" required class="w-full px-3 py-2 rounded-lg border border-slate-300 bg-white">
+                        <option value="Class 6 & 7 (Shift 1: 3:30 - 5:30 PM)">Class 6 & 7 (Shift 1)</option>
+                        <option value="Class 8 (Shift 1: 3:30 - 5:30 PM)">Class 8 (Shift 1)</option>
+                        <option value="Class 9 (Shift 2: 5:30 - 7:30 PM)">Class 9 (Shift 2)</option>
+                        <option value="Class 10 (Shift 2: 5:30 - 7:30 PM)">Class 10 (Shift 2)</option>
+                    </select>
                 </div>
 
                 <div class="grid grid-cols-3 gap-2.5">
@@ -781,13 +775,9 @@
                             <span class="text-slate-400 font-bold uppercase">Shift Timing:</span>
                             <strong id="idCardTiming" class="text-blue-700 text-right">5:30 PM – 7:30 PM</strong>
                         </div>
-                        <div class="flex justify-between border-b border-slate-200/70 pb-1.5">
-                            <span class="text-slate-400 font-bold uppercase">Parent Mobile:</span>
-                            <strong id="idCardPhone" class="text-slate-800">9876543210</strong>
-                        </div>
                         <div class="flex justify-between">
-                            <span class="text-slate-400 font-bold uppercase">Student Gmail:</span>
-                            <strong id="idCardEmail" class="text-slate-700 truncate max-w-[155px]">aarav@gmail.com</strong>
+                            <span class="text-slate-400 font-bold uppercase">Registered Mobile:</span>
+                            <strong id="idCardPhone" class="text-slate-900 font-mono">9876543210</strong>
                         </div>
                     </div>
 
@@ -911,7 +901,7 @@
         </div>
     </div>
 
-    <!-- ================= 1. ANIMATED LOGIN & SIGNUP SCREEN ================= -->
+    <!-- ================= 1. ANIMATED LOGIN & SIGNUP SCREEN (100% MOBILE NUMBER BASED) ================= -->
     <main id="loginSection" class="flex-grow login-bg relative overflow-hidden flex flex-col justify-between no-print">
         
         <i class="fas fa-atom text-white/5 text-8xl absolute top-12 left-10 animate-float pointer-events-none"></i>
@@ -935,7 +925,7 @@
                         Welcome to <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-300 to-amber-500">MAKDEMY ERP</span> — Track Every Test, Master Every Concept.
                     </h1>
                     <p class="text-blue-100 text-sm sm:text-base mb-8 max-w-xl">
-                        Sign in to MAKDEMY's live Student & Parent Portal. Download Chapter-wise Notes & Worksheet PDFs, pay coaching fees via UPI/NetBanking, and track Saturday test scores.
+                        Sign in or create your account using your <strong>10-Digit Mobile Number</strong>. Download Chapter-wise Notes & Worksheet PDFs, pay coaching fees via UPI/NetBanking, and track Saturday test scores.
                     </p>
 
                     <div class="relative flex items-center justify-center my-4 w-full max-w-md mx-auto lg:mx-0">
@@ -956,11 +946,11 @@
 
                         <div class="hidden sm:flex items-center gap-2.5 bg-white text-slate-900 px-3.5 py-2 rounded-2xl shadow-xl absolute -top-4 -left-4 z-20 animate-float">
                             <div class="w-8 h-8 rounded-lg bg-amber-100 text-amber-600 flex items-center justify-center font-bold">
-                                <i class="fas fa-book-open"></i>
+                                <i class="fas fa-mobile-alt"></i>
                             </div>
                             <div class="text-left">
-                                <div class="text-[11px] font-extrabold leading-tight">Chapter Notes & PDF</div>
-                                <div class="text-[10px] text-slate-500">NCERT & Worksheets</div>
+                                <div class="text-[11px] font-extrabold leading-tight">Mobile OTP Verified</div>
+                                <div class="text-[10px] text-slate-500">Quick Sign-Up & Reset</div>
                             </div>
                         </div>
 
@@ -991,7 +981,7 @@
                     </div>
                 </div>
 
-                <!-- RIGHT SIDE: Interactive Login & Create Account Card (5 Cols) -->
+                <!-- RIGHT SIDE: Mobile-Only Login & Create Account Card (5 Cols) -->
                 <div class="lg:col-span-5">
                     <div class="max-w-md mx-auto bg-white rounded-3xl shadow-2xl overflow-hidden border border-white/20">
                         <div class="grid grid-cols-3 bg-slate-100 p-1.5 border-b border-slate-200 text-xs sm:text-sm font-bold text-center">
@@ -1010,35 +1000,35 @@
                             <div class="text-center mb-5">
                                 <span id="roleBadge" class="bg-blue-100 text-blue-800 text-xs font-extrabold px-3 py-1 rounded-full uppercase tracking-wider">MAKDEMY Administration</span>
                                 <h2 id="roleTitle" class="text-2xl font-extrabold text-slate-900 mt-2">Welcome Back, Admin</h2>
-                                <p id="roleSub" class="text-xs text-slate-500 mt-1">Sign in using your registered Gmail or Mobile Number</p>
+                                <p id="roleSub" class="text-xs text-slate-500 mt-1">Sign in using your registered 10-Digit Mobile Number</p>
                             </div>
 
                             <div id="authModeToggle" class="hidden grid grid-cols-2 bg-slate-100 p-1 rounded-xl mb-5 text-xs font-bold">
                                 <button type="button" id="modeLoginBtn" onclick="switchAuthMode('login')" class="py-2 rounded-lg bg-white text-blue-700 shadow-sm transition">
-                                    <i class="fas fa-sign-in-alt mr-1"></i> Existing User Login
+                                    <i class="fas fa-sign-in-alt mr-1"></i> Mobile Login
                                 </button>
                                 <button type="button" id="modeSignupBtn" onclick="switchAuthMode('signup')" class="py-2 rounded-lg text-slate-600 hover:text-slate-900 transition">
                                     <i class="fas fa-user-plus mr-1"></i> Create Account
                                 </button>
                             </div>
 
-                            <!-- 1A. LOGIN FORM -->
+                            <!-- 1A. MOBILE-ONLY LOGIN FORM -->
                             <form id="loginForm" onsubmit="handleLogin(event)" class="space-y-4">
                                 <div>
-                                    <label id="idLabel" class="block text-xs font-bold uppercase text-slate-600 mb-1">Registered Gmail or Mobile No. *</label>
+                                    <label id="idLabel" class="block text-xs font-bold uppercase text-slate-600 mb-1">Registered 10-Digit Mobile Number *</label>
                                     <div class="relative">
-                                        <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400">
-                                            <i class="fas fa-envelope"></i>
+                                        <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-blue-600">
+                                            <i class="fas fa-mobile-alt text-base"></i>
                                         </span>
-                                        <input type="text" id="loginId" required placeholder="Enter Gmail ID or 10-digit Mobile" class="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-600 text-sm">
+                                        <input type="tel" id="loginId" required pattern="[0-9]{10}" maxlength="10" placeholder="Enter 10-digit Mobile Number" class="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-600 text-sm font-mono font-bold">
                                     </div>
                                 </div>
                                 <div>
                                     <div class="flex justify-between items-center mb-1">
                                         <label id="passLabel" class="block text-xs font-bold uppercase text-slate-600">Password / PIN *</label>
-                                        <!-- Self Password Reset Link via Mobile OTP -->
-                                        <button type="button" id="forgotPinLinkBtn" onclick="openSelfOtpResetModal()" class="hidden text-[11px] font-extrabold text-blue-700 hover:text-amber-600 hover:underline transition">
-                                            <i class="fas fa-key mr-0.5"></i> Forgot PIN? Reset via OTP
+                                        <!-- Self Password Reset Link via Mobile OTP (Works for Admin, Candidate & Parent) -->
+                                        <button type="button" id="forgotPinLinkBtn" onclick="openSelfOtpResetModal()" class="text-[11px] font-extrabold text-blue-700 hover:text-amber-600 hover:underline transition">
+                                            <i class="fas fa-key mr-0.5"></i> Forgot Password/PIN? Reset via OTP
                                         </button>
                                     </div>
                                     <div class="relative">
@@ -1052,52 +1042,42 @@
                                 <div id="loginError" class="hidden bg-red-50 border border-red-200 text-red-700 text-xs font-semibold p-3 rounded-xl text-center"></div>
 
                                 <button type="submit" class="w-full bg-blue-700 hover:bg-blue-800 text-white font-bold py-3.5 rounded-xl shadow-lg shadow-blue-700/25 transition transform hover:scale-[1.01] flex items-center justify-center gap-2">
-                                    <i class="fas fa-sign-in-alt"></i> Login to MAKDEMY Dashboard
+                                    <i class="fas fa-sign-in-alt"></i> Login with Mobile Number
                                 </button>
 
                                 <!-- Bottom Self Reset & Create Account Links -->
-                                <div id="bottomSignupHint" class="hidden pt-2 space-y-1.5 text-center text-xs text-slate-500">
+                                <div class="pt-2 space-y-1.5 text-center text-xs text-slate-500 border-t border-slate-100">
                                     <div>
                                         Forgot your Password/PIN? 
                                         <button type="button" onclick="openSelfOtpResetModal()" class="text-emerald-700 font-extrabold hover:underline">Reset by Mobile OTP</button>
                                     </div>
-                                    <div>
+                                    <div id="bottomSignupHint" class="hidden">
                                         Don't have an account yet? 
                                         <button type="button" onclick="switchAuthMode('signup')" class="text-blue-700 font-bold hover:underline">Create New Account</button>
                                     </div>
                                 </div>
                             </form>
 
-                            <!-- 1B. CREATE ACCOUNT (SIGN UP) FORM -->
-                            <form id="signupForm" onsubmit="handleSelfSignup(event)" class="hidden space-y-3">
+                            <!-- 1B. MOBILE-ONLY CREATE ACCOUNT (SIGN UP) FORM -->
+                            <form id="signupForm" onsubmit="handleSelfSignup(event)" class="hidden space-y-3.5">
                                 <div>
                                     <label class="block text-xs font-bold uppercase text-slate-600 mb-1">Student's Full Name *</label>
                                     <div class="relative">
                                         <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400">
                                             <i class="fas fa-user-graduate"></i>
                                         </span>
-                                        <input type="text" id="selfName" required placeholder="Enter student full name" class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-600 text-sm">
-                                    </div>
-                                </div>
-
-                                <div>
-                                    <label class="block text-xs font-bold uppercase text-slate-600 mb-1">Gmail ID (For Login & Reports) *</label>
-                                    <div class="relative">
-                                        <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400">
-                                            <i class="fas fa-envelope"></i>
-                                        </span>
-                                        <input type="email" id="selfEmail" required placeholder="student.or.parent@gmail.com" class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-600 text-sm">
+                                        <input type="text" id="selfName" required placeholder="Enter student full name" class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-600 text-sm font-semibold">
                                     </div>
                                 </div>
 
                                 <div class="grid grid-cols-2 gap-3">
                                     <div>
-                                        <label class="block text-xs font-bold uppercase text-slate-600 mb-1">Mobile Number *</label>
-                                        <input type="tel" id="selfPhone" required pattern="[0-9]{10}" placeholder="10-digit Mobile" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-600 text-sm">
+                                        <label class="block text-xs font-bold uppercase text-slate-600 mb-1">10-Digit Mobile No. *</label>
+                                        <input type="tel" id="selfPhone" required pattern="[0-9]{10}" maxlength="10" placeholder="10-digit Mobile" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-600 text-sm font-mono font-bold">
                                     </div>
                                     <div>
                                         <label class="block text-xs font-bold uppercase text-slate-600 mb-1">Select Class *</label>
-                                        <select id="selfBatch" required class="w-full px-3 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-600 text-sm bg-white">
+                                        <select id="selfBatch" required class="w-full px-3 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-600 text-sm bg-white font-semibold">
                                             <option value="Class 6 & 7 (Shift 1: 3:30 - 5:30 PM)">Class 6 / 7</option>
                                             <option value="Class 8 (Shift 1: 3:30 - 5:30 PM)">Class 8</option>
                                             <option value="Class 9 (Shift 2: 5:30 - 7:30 PM)">Class 9</option>
@@ -1119,44 +1099,29 @@
                                 </div>
 
                                 <div>
-                                    <label class="block text-xs font-bold uppercase text-slate-600 mb-1">Create Secret Login PIN / Password *</label>
+                                    <label class="block text-xs font-bold uppercase text-slate-600 mb-1">Create Login PIN / Password *</label>
                                     <div class="relative">
                                         <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400">
                                             <i class="fas fa-key"></i>
                                         </span>
-                                        <input type="text" id="selfPin" required minlength="4" placeholder="Set a 4+ digit PIN (e.g. 1234)" class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-600 text-sm font-mono">
+                                        <input type="text" id="selfPin" required minlength="4" placeholder="Set a 4+ digit PIN (e.g. 1234)" class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-600 text-sm font-mono font-bold">
                                     </div>
-                                    <p class="text-[10px] text-slate-400 mt-0.5">Your Mobile No. & Password will sync with MAKDEMY Admin Database.</p>
+                                    <p class="text-[10px] text-emerald-700 font-semibold mt-1">
+                                        <i class="fas fa-sync-alt mr-1"></i> Your Mobile No. & Password will instantly appear in MAKDEMY Admin Database.
+                                    </p>
                                 </div>
 
                                 <div id="signupNotice" class="hidden p-3 rounded-xl text-xs font-semibold text-center"></div>
 
                                 <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 rounded-xl shadow-lg shadow-emerald-600/25 transition transform hover:scale-[1.01] flex items-center justify-center gap-2">
-                                    <i class="fas fa-user-check"></i> Register & Sync with MAKDEMY DB
+                                    <i class="fas fa-user-check"></i> Create Account with Mobile No.
                                 </button>
 
                                 <p class="text-center text-xs text-slate-500 pt-1">
                                     Already registered? 
-                                    <button type="button" onclick="switchAuthMode('login')" class="text-blue-700 font-bold hover:underline">Back to Login</button>
+                                    <button type="button" onclick="switchAuthMode('login')" class="text-blue-700 font-bold hover:underline">Back to Mobile Login</button>
                                 </p>
                             </form>
-
-                            <div id="quickMethodSection">
-                                <div class="relative flex py-5 items-center">
-                                    <div class="flex-grow border-t border-slate-200"></div>
-                                    <span class="flex-shrink mx-3 text-slate-400 text-xs font-semibold uppercase">Or Quick Sign In With</span>
-                                    <div class="flex-grow border-t border-slate-200"></div>
-                                </div>
-
-                                <div class="grid grid-cols-2 gap-3">
-                                    <button type="button" onclick="quickMethodPrompt('gmail')" class="flex items-center justify-center gap-2 py-2.5 px-4 border border-slate-300 rounded-xl hover:bg-slate-50 transition text-xs font-bold text-slate-700 shadow-sm">
-                                        <i class="fab fa-google text-red-500 text-base"></i> Gmail Login
-                                    </button>
-                                    <button type="button" onclick="quickMethodPrompt('mobile')" class="flex items-center justify-center gap-2 py-2.5 px-4 border border-slate-300 rounded-xl hover:bg-slate-50 transition text-xs font-bold text-slate-700 shadow-sm">
-                                        <i class="fas fa-mobile-alt text-blue-600 text-base"></i> Mobile Login
-                                    </button>
-                                </div>
-                            </div>
 
                         </div>
                     </div>
@@ -1167,8 +1132,8 @@
 
         <div class="bg-slate-950/90 border-t border-white/10 py-3 overflow-hidden relative z-10">
             <div class="marquee-track text-slate-300 text-xs font-semibold space-x-10 px-4">
-                <span class="flex items-center gap-2"><i class="fas fa-book-open text-amber-400"></i> MAKDEMY Chapter-Wise NCERT Notes & Worksheet PDFs</span>
-                <span class="flex items-center gap-2"><i class="fas fa-key text-emerald-400"></i> Self Password Reset via Mobile OTP Verification</span>
+                <span class="flex items-center gap-2"><i class="fas fa-mobile-alt text-amber-400"></i> 100% Mobile Number Based Login & Instant Sign-Up</span>
+                <span class="flex items-center gap-2"><i class="fas fa-key text-emerald-400"></i> Self Password Reset via Mobile OTP for Admin, Candidate & Parents</span>
                 <span class="flex items-center gap-2"><i class="fas fa-receipt text-blue-400"></i> Instant or Admin-Verified Receipt Generation</span>
                 <span class="flex items-center gap-2"><i class="fas fa-file-pdf text-amber-300"></i> Official Printable Progress Report Cards</span>
             </div>
@@ -1181,11 +1146,16 @@
             <div>
                 <span class="bg-amber-400 text-slate-950 text-xs font-extrabold px-3 py-1 rounded-full uppercase">MAKDEMY Full Admin Control</span>
                 <h1 class="text-2xl sm:text-3xl font-extrabold mt-2">MAKDEMY Founder & Admin Panel — Massawar Ali Khan</h1>
-                <p class="text-blue-200 text-xs sm:text-sm">View all registered Mobile Numbers & Passwords/PINs, reset candidate/parent passwords, and manage records.</p>
+                <p class="text-blue-200 text-xs sm:text-sm">All Candidate & Parent accounts created via Mobile Number automatically sync into the database table below.</p>
             </div>
-            <button onclick="resetDefaultData()" class="bg-white/10 hover:bg-white/20 border border-white/20 text-xs font-semibold px-4 py-2.5 rounded-xl">
-                <i class="fas fa-sync-alt mr-1"></i> Reset System Data
-            </button>
+            <div class="flex items-center gap-2.5">
+                <a href="#adminStudentDirectorySection" class="bg-amber-400 hover:bg-amber-300 text-slate-950 text-xs font-extrabold px-4 py-2.5 rounded-xl shadow transition">
+                    <i class="fas fa-users mr-1"></i> View Registered Database
+                </a>
+                <button onclick="resetDefaultData()" class="bg-white/10 hover:bg-white/20 border border-white/20 text-xs font-semibold px-4 py-2.5 rounded-xl">
+                    <i class="fas fa-sync-alt mr-1"></i> Reset System Data
+                </button>
+            </div>
         </div>
 
         <!-- ADMIN RECEIPT GENERATOR & PENDING PAYMENT QUEUE -->
@@ -1227,7 +1197,7 @@
             </div>
         </div>
 
-        <!-- Row 1: Register New Student (WITH PHOTO UPLOAD) + Upload & Manage Marks -->
+        <!-- Row 1: Register New Student (MOBILE-ONLY + PHOTO UPLOAD) + Upload & Manage Marks -->
         <div class="grid lg:grid-cols-2 gap-8 mb-8">
             <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
                 <h3 class="font-extrabold text-lg text-slate-900 mb-4 flex items-center gap-2">
@@ -1235,12 +1205,12 @@
                 </h3>
                 <form onsubmit="registerNewStudent(event)" class="space-y-3 text-sm">
                     <div class="grid grid-cols-2 gap-3">
-                        <input type="text" id="regName" required placeholder="Student Full Name" class="w-full px-3.5 py-2.5 rounded-lg border border-slate-300">
-                        <input type="text" id="regRoll" required placeholder="Roll ID (e.g. MAK105)" class="w-full px-3.5 py-2.5 rounded-lg border border-slate-300">
+                        <input type="text" id="regName" required placeholder="Student Full Name *" class="w-full px-3.5 py-2.5 rounded-lg border border-slate-300">
+                        <input type="text" id="regRoll" required placeholder="Roll ID (e.g. MAK105) *" class="w-full px-3.5 py-2.5 rounded-lg border border-slate-300 uppercase">
                     </div>
                     <div class="grid grid-cols-2 gap-3">
-                        <input type="email" id="regEmail" required placeholder="Student/Parent Gmail ID" class="w-full px-3.5 py-2.5 rounded-lg border border-slate-300">
-                        <input type="tel" id="regPhone" required placeholder="10-Digit Mobile No." class="w-full px-3.5 py-2.5 rounded-lg border border-slate-300">
+                        <input type="tel" id="regPhone" required pattern="[0-9]{10}" maxlength="10" placeholder="10-Digit Mobile No. *" class="w-full px-3.5 py-2.5 rounded-lg border border-slate-300 font-mono font-bold">
+                        <input type="text" id="regPin" required minlength="4" placeholder="Set Login PIN (e.g. 1234) *" class="w-full px-3.5 py-2.5 rounded-lg border border-slate-300 font-mono font-bold">
                     </div>
                     <div class="grid grid-cols-3 gap-2">
                         <select id="regBatch" required class="col-span-2 px-3 py-2.5 rounded-lg border border-slate-300 bg-white">
@@ -1269,19 +1239,30 @@
                         </button>
                     </div>
 
-                    <input type="text" id="regPin" required placeholder="Set Login PIN (e.g. 1234)" class="w-full px-3.5 py-2.5 rounded-lg border border-slate-300">
                     <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 rounded-xl shadow">
-                        <i class="fas fa-user-check mr-1"></i> Add Student with Photo to MAKDEMY DB
+                        <i class="fas fa-user-check mr-1"></i> Add Student to MAKDEMY Database
                     </button>
                 </form>
 
-                <div class="mt-5 pt-4 border-t border-slate-200">
-                    <h4 class="font-bold text-xs uppercase text-blue-700 mb-2"><i class="fas fa-qrcode mr-1"></i> MAKDEMY UPI & NetBanking Receiver Settings</h4>
-                    <form onsubmit="saveGatewaySettings(event)" class="grid grid-cols-3 gap-2 text-xs">
-                        <input type="text" id="adminUpiId" required placeholder="UPI ID (e.g. 9337042839@ybl)" class="px-2.5 py-2 rounded-lg border border-slate-300 font-mono">
-                        <input type="text" id="adminBankAcc" required placeholder="Bank Account No." class="px-2.5 py-2 rounded-lg border border-slate-300 font-mono">
-                        <button type="submit" class="bg-blue-700 hover:bg-blue-800 text-white font-bold rounded-lg px-3 py-2">Save UPI/Bank</button>
-                    </form>
+                <!-- Admin UPI/Bank Settings + Admin Own Password Reset Box -->
+                <div class="mt-5 pt-4 border-t border-slate-200 space-y-3">
+                    <div>
+                        <h4 class="font-bold text-xs uppercase text-blue-700 mb-1.5"><i class="fas fa-qrcode mr-1"></i> MAKDEMY UPI & NetBanking Receiver Settings</h4>
+                        <form onsubmit="saveGatewaySettings(event)" class="grid grid-cols-3 gap-2 text-xs">
+                            <input type="text" id="adminUpiId" required placeholder="UPI ID (e.g. 9337042839@ybl)" class="px-2.5 py-2 rounded-lg border border-slate-300 font-mono">
+                            <input type="text" id="adminBankAcc" required placeholder="Bank Account No." class="px-2.5 py-2 rounded-lg border border-slate-300 font-mono">
+                            <button type="submit" class="bg-blue-700 hover:bg-blue-800 text-white font-bold rounded-lg px-3 py-2">Save UPI/Bank</button>
+                        </form>
+                    </div>
+
+                    <div class="pt-2 border-t border-slate-100">
+                        <h4 class="font-bold text-xs uppercase text-purple-700 mb-1.5"><i class="fas fa-user-shield mr-1"></i> Admin Login Mobile & Password Reset</h4>
+                        <form onsubmit="saveAdminOwnCredentials(event)" class="grid grid-cols-3 gap-2 text-xs">
+                            <input type="tel" id="adminConfigPhone" required pattern="[0-9]{10}" maxlength="10" placeholder="Admin 10-Digit Mobile" class="px-2.5 py-2 rounded-lg border border-purple-300 font-mono font-bold">
+                            <input type="text" id="adminConfigPass" required minlength="4" placeholder="New Admin Password" class="px-2.5 py-2 rounded-lg border border-purple-300 font-mono font-bold">
+                            <button type="submit" class="bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-lg px-3 py-2">Update Admin PIN</button>
+                        </form>
+                    </div>
                 </div>
             </div>
 
@@ -1426,7 +1407,7 @@
         </div>
 
         <!-- Admin Student Overview Table (Shows Mobile No., Password/PIN & Manual Reset Option) -->
-        <div class="mt-8 bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+        <div id="adminStudentDirectorySection" class="mt-8 bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
             <div class="px-6 py-4 bg-slate-900 text-white flex flex-wrap justify-between items-center gap-2">
                 <div>
                     <h3 class="font-bold">MAKDEMY Registered Candidates & Parents Database</h3>
@@ -1441,7 +1422,7 @@
                             <th class="py-3 px-4">Photo & Roll ID</th>
                             <th class="py-3 px-4">Student Name & Source</th>
                             <th class="py-3 px-4">Batch</th>
-                            <th class="py-3 px-4">Registered Mobile & Gmail</th>
+                            <th class="py-3 px-4">Registered Mobile No.</th>
                             <th class="py-3 px-4">Password / PIN</th>
                             <th class="py-3 px-4">Fee & Receipt Status</th>
                             <th class="py-3 px-4 text-center">Actions (ID / Receipt / Report / PIN / Edit / Delete)</th>
@@ -1627,9 +1608,13 @@
         let editingCandidateOriginalRoll = null;
         let tempEditCandPhotoData = "";
         let adminResetTargetRoll = null;
-        let activeOtpSession = { roll: null, mobile: null, code: null };
+        let activeOtpSession = { isAdmin: false, roll: null, mobile: null, code: null };
 
         const defaultERPData = {
+            adminAuth: {
+                phone: "9337042839",
+                pass: "apex2026"
+            },
             gatewayConfig: {
                 upiId: "9337042839@ybl",
                 bankAccount: "309876543210",
@@ -1693,7 +1678,6 @@
             students: [
                 {
                     roll: "MAK101",
-                    email: "aarav@gmail.com",
                     parentPhone: "9876543210",
                     pass: "1234",
                     name: "Aarav Sharma",
@@ -1718,7 +1702,6 @@
                 },
                 {
                     roll: "MAK102",
-                    email: "zoya@gmail.com",
                     parentPhone: "9123456789",
                     pass: "1234",
                     name: "Zoya Khan",
@@ -1754,6 +1737,7 @@
         };
 
         let erpData = JSON.parse(localStorage.getItem('makdemyERP_v1')) || defaultERPData;
+        if (!erpData.adminAuth) erpData.adminAuth = { phone: "9337042839", pass: "apex2026" };
         if (!erpData.gatewayConfig) erpData.gatewayConfig = defaultERPData.gatewayConfig;
         if (!erpData.generatedReceipts) erpData.generatedReceipts = defaultERPData.generatedReceipts;
         if (!erpData.studyMaterials) erpData.studyMaterials = defaultERPData.studyMaterials;
@@ -1769,7 +1753,27 @@
             localStorage.setItem('makdemyERP_v1', JSON.stringify(erpData));
         }
 
-        // ================= 1. ADMIN MANUAL PASSWORD / PIN RESET ENGINE =================
+        // Always read freshest data from localStorage so self-created accounts immediately show in Admin Table
+        function reloadLatestERPData() {
+            const raw = localStorage.getItem('makdemyERP_v1');
+            if (raw) {
+                try {
+                    erpData = JSON.parse(raw);
+                    if (!erpData.adminAuth) erpData.adminAuth = { phone: "9337042839", pass: "apex2026" };
+                } catch (e) {}
+            }
+        }
+
+        // ================= 1. ADMIN OWN PASSWORD UPDATE & MANUAL CANDIDATE PIN RESET =================
+        function saveAdminOwnCredentials(e) {
+            e.preventDefault();
+            const newPhone = document.getElementById('adminConfigPhone').value.trim();
+            const newPass = document.getElementById('adminConfigPass').value.trim();
+            erpData.adminAuth = { phone: newPhone, pass: newPass };
+            saveERP();
+            alert(`✅ Admin Login Credentials Updated!\nAdmin Mobile: ${newPhone}\nNew Password: ${newPass}`);
+        }
+
         function openAdminPassResetModal(rollId) {
             const student = erpData.students.find(s => s.roll === rollId);
             if (!student) return;
@@ -1800,20 +1804,32 @@
             alert(`✅ Password / PIN for ${student.name} (${student.roll}) has been manually reset to: ${newPin}`);
         }
 
-        // ================= 2. CANDIDATE & PARENT SELF PASSWORD RESET BY MOBILE OTP =================
+        // ================= 2. SELF PASSWORD RESET BY MOBILE OTP (FOR ADMIN, CANDIDATE & PARENTS) =================
         function openSelfOtpResetModal() {
+            reloadLatestERPData();
             document.getElementById('otpStep1Form').reset();
             document.getElementById('otpStep2Form').reset();
             document.getElementById('otpStep1Error').classList.add('hidden');
             document.getElementById('otpStep2Error').classList.add('hidden');
             document.getElementById('otpStep1Form').classList.remove('hidden');
             document.getElementById('otpStep2Form').classList.add('hidden');
+
+            if (currentRole === 'admin') {
+                document.getElementById('otpModalTitle').innerText = "Reset Admin Password";
+                document.getElementById('otpModalSub').innerText = "Verify Admin Mobile Number via 6-Digit OTP";
+                document.getElementById('otpMobileHint').innerText = `Enter registered Admin Mobile Number (Default: ${erpData.adminAuth.phone}).`;
+            } else {
+                document.getElementById('otpModalTitle').innerText = "Reset Candidate / Parent PIN";
+                document.getElementById('otpModalSub').innerText = "Verify Registered 10-Digit Mobile via OTP";
+                document.getElementById('otpMobileHint').innerText = "We will verify your mobile number in the MAKDEMY database and send a 6-digit OTP.";
+            }
+
             document.getElementById('selfOtpResetModal').classList.remove('hidden');
         }
 
         function closeSelfOtpResetModal() {
             document.getElementById('selfOtpResetModal').classList.add('hidden');
-            activeOtpSession = { roll: null, mobile: null, code: null };
+            activeOtpSession = { isAdmin: false, roll: null, mobile: null, code: null };
         }
 
         function backToOtpStep1() {
@@ -1823,9 +1839,32 @@
 
         function sendMobileResetOtp(e) {
             e.preventDefault();
+            reloadLatestERPData();
             const mobile = document.getElementById('resetMobileInput').value.trim();
             const errEl = document.getElementById('otpStep1Error');
 
+            // Case A: Admin Password Reset via OTP
+            if (currentRole === 'admin') {
+                const adminPhone = (erpData.adminAuth && erpData.adminAuth.phone) ? erpData.adminAuth.phone : "9337042839";
+                if (mobile !== adminPhone) {
+                    errEl.innerText = `⚠️ Mobile number does not match Admin registered mobile (${adminPhone})!`;
+                    errEl.classList.remove('hidden');
+                    return;
+                }
+                errEl.classList.add('hidden');
+                const otpCode = String(Math.floor(100000 + Math.random() * 900000));
+                activeOtpSession = { isAdmin: true, roll: 'ADMIN', mobile: mobile, code: otpCode };
+
+                document.getElementById('otpMatchedStudentName').innerText = "Massawar Ali Khan (Founder & Admin)";
+                document.getElementById('otpMatchedMobile').innerText = `+91 ${mobile}`;
+                document.getElementById('liveGeneratedOtpDisplay').innerText = otpCode;
+
+                document.getElementById('otpStep1Form').classList.add('hidden');
+                document.getElementById('otpStep2Form').classList.remove('hidden');
+                return;
+            }
+
+            // Case B: Candidate / Parent Password Reset via OTP
             const student = erpData.students.find(s => s.parentPhone === mobile);
             if (!student) {
                 errEl.innerText = "⚠️ This mobile number is not registered in MAKDEMY database! Please check the number or Create Account.";
@@ -1835,7 +1874,7 @@
 
             errEl.classList.add('hidden');
             const otpCode = String(Math.floor(100000 + Math.random() * 900000));
-            activeOtpSession = { roll: student.roll, mobile: mobile, code: otpCode };
+            activeOtpSession = { isAdmin: false, roll: student.roll, mobile: mobile, code: otpCode };
 
             document.getElementById('otpMatchedStudentName').innerText = `${student.name} (${student.roll})`;
             document.getElementById('otpMatchedMobile').innerText = `+91 ${mobile}`;
@@ -1872,18 +1911,27 @@
                 return;
             }
 
+            if (activeOtpSession.isAdmin) {
+                erpData.adminAuth.pass = newPass;
+                saveERP();
+                document.getElementById('loginId').value = erpData.adminAuth.phone;
+                document.getElementById('loginPass').value = newPass;
+                closeSelfOtpResetModal();
+                alert(`✅ Admin Mobile OTP Verified! Your new Admin Password is now set to: ${newPass}`);
+                return;
+            }
+
             const student = erpData.students.find(s => s.roll === activeOtpSession.roll);
             if (!student) return;
 
             student.pass = newPass;
             saveERP();
 
-            // Pre-fill login form for convenience
             document.getElementById('loginId').value = student.parentPhone;
             document.getElementById('loginPass').value = newPass;
 
             closeSelfOtpResetModal();
-            alert(`✅ Mobile OTP Verified! Password / PIN for ${student.name} (${student.roll}) has been updated and synced with Admin Database. You can now click Login!`);
+            alert(`✅ Mobile OTP Verified! Password / PIN for ${student.name} (${student.roll}) has been updated to "${newPass}" and synced with Admin Database.`);
         }
 
         // ================= STUDENT PHOTO UPLOAD & AUTO-RESIZE ENGINE =================
@@ -1965,7 +2013,6 @@
 
             document.getElementById('editCandRoll').value = student.roll;
             document.getElementById('editCandName').value = student.name;
-            document.getElementById('editCandEmail').value = student.email;
             document.getElementById('editCandPhone').value = student.parentPhone;
             document.getElementById('editCandBatch').value = student.classBatch;
             document.getElementById('editCandPin').value = student.pass;
@@ -2023,7 +2070,6 @@
 
             student.roll = newRoll;
             student.name = newName;
-            student.email = document.getElementById('editCandEmail').value.trim().toLowerCase();
             student.parentPhone = document.getElementById('editCandPhone').value.trim();
             student.classBatch = document.getElementById('editCandBatch').value;
             student.pass = document.getElementById('editCandPin').value.trim();
@@ -2521,6 +2567,7 @@
         }
 
         window.addEventListener('DOMContentLoaded', function () {
+            reloadLatestERPData();
             document.getElementById('sessionDurationSelect').value = String(sessionDurationMinutes);
             const raw = localStorage.getItem(SESSION_STORAGE_KEY);
             if (!raw) return;
@@ -2594,9 +2641,8 @@
             document.getElementById('idCardBatch').innerText = parts[0].trim();
             document.getElementById('idCardTiming').innerText = parts[1] ? parts[1].replace(')', '').trim() : "3:30 PM – 7:30 PM";
             document.getElementById('idCardPhone').innerText = `+91 ${student.parentPhone}`;
-            document.getElementById('idCardEmail').innerText = student.email;
 
-            const qrData = encodeURIComponent(`MAKDEMY | Roll: ${student.roll} | Name: ${student.name} | Batch: ${student.classBatch} | Verified by Massawar Ali Khan`);
+            const qrData = encodeURIComponent(`MAKDEMY | Roll: ${student.roll} | Name: ${student.name} | Mob: ${student.parentPhone} | Batch: ${student.classBatch}`);
             document.getElementById('idCardQrImg').src = `https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=${qrData}`;
 
             document.getElementById('idCardModal').classList.remove('hidden');
@@ -2643,7 +2689,6 @@
             const signupForm = document.getElementById('signupForm');
             const loginBtn = document.getElementById('modeLoginBtn');
             const signupBtn = document.getElementById('modeSignupBtn');
-            const quickSec = document.getElementById('quickMethodSection');
             const roleTitle = document.getElementById('roleTitle');
             const roleSub = document.getElementById('roleSub');
 
@@ -2653,15 +2698,13 @@
             if (mode === 'signup' && currentRole !== 'admin') {
                 loginForm.classList.add('hidden');
                 signupForm.classList.remove('hidden');
-                quickSec.classList.add('hidden');
                 signupBtn.className = "py-2 rounded-lg bg-emerald-600 text-white shadow-sm transition";
                 loginBtn.className = "py-2 rounded-lg text-slate-600 hover:text-slate-900 transition";
                 roleTitle.innerText = currentRole === 'parent' ? "Create Parent Account" : "Create Candidate Account";
-                roleSub.innerText = "Your Mobile Number & Password will automatically sync with Admin DB";
+                roleSub.innerText = "Register with 10-Digit Mobile No. (Syncs to Admin Database)";
             } else {
                 signupForm.classList.add('hidden');
                 loginForm.classList.remove('hidden');
-                quickSec.classList.remove('hidden');
                 loginBtn.className = "py-2 rounded-lg bg-white text-blue-700 shadow-sm transition";
                 signupBtn.className = "py-2 rounded-lg text-slate-600 hover:text-slate-900 transition";
             }
@@ -2684,56 +2727,53 @@
             const idInput = document.getElementById('loginId');
             const authToggle = document.getElementById('authModeToggle');
             const bottomHint = document.getElementById('bottomSignupHint');
-            const forgotLink = document.getElementById('forgotPinLinkBtn');
 
             switchAuthMode('login');
 
             if (role === 'admin') {
                 authToggle.classList.add('hidden');
                 bottomHint.classList.add('hidden');
-                forgotLink.classList.add('hidden');
                 badge.innerText = "MAKDEMY Administration";
                 title.innerText = "Welcome Back, Admin";
-                sub.innerText = "Sign in with Admin Gmail, Mobile No. or Username";
-                idLbl.innerText = "Admin Gmail / Mobile Number *";
+                sub.innerText = "Sign in using Admin 10-Digit Mobile Number";
+                idLbl.innerText = "Admin 10-Digit Mobile Number *";
                 passLbl.innerText = "Admin Password *";
-                idInput.placeholder = "Enter Admin Gmail or Mobile No.";
+                idInput.placeholder = "Enter Admin 10-digit Mobile (9337042839)";
             } else if (role === 'candidate') {
                 authToggle.classList.remove('hidden');
                 bottomHint.classList.remove('hidden');
-                forgotLink.classList.remove('hidden');
                 badge.innerText = "MAKDEMY Candidate Portal";
                 title.innerText = "Student Learning Desk";
-                sub.innerText = "Login with your registered Gmail ID, Mobile No. or Roll ID";
-                idLbl.innerText = "Student Gmail / Mobile No. / Roll ID *";
-                passLbl.innerText = "Student Login PIN *";
-                idInput.placeholder = "e.g. yourname@gmail.com or 10-digit Mobile";
+                sub.innerText = "Login with your registered 10-Digit Mobile Number";
+                idLbl.innerText = "Candidate 10-Digit Mobile Number *";
+                passLbl.innerText = "Candidate Login PIN / Password *";
+                idInput.placeholder = "Enter 10-digit Mobile Number";
             } else {
                 authToggle.classList.remove('hidden');
                 bottomHint.classList.remove('hidden');
-                forgotLink.classList.remove('hidden');
                 badge.innerText = "MAKDEMY Parent Portal";
                 title.innerText = "Child Progress Tracker";
-                sub.innerText = "Login using Registered Parent Mobile Number or Gmail ID";
-                idLbl.innerText = "Parent Gmail ID or Registered Mobile No. *";
-                passLbl.innerText = "Login PIN or Registered Mobile No. *";
-                idInput.placeholder = "Enter Parent Gmail or 10-digit Mobile No.";
+                sub.innerText = "Login using Registered 10-Digit Mobile Number";
+                idLbl.innerText = "Parent 10-Digit Mobile Number *";
+                passLbl.innerText = "Login PIN / Password *";
+                idInput.placeholder = "Enter 10-digit Mobile Number";
             }
         }
 
         function handleSelfSignup(event) {
             event.preventDefault();
+            reloadLatestERPData();
+
             const name = document.getElementById('selfName').value.trim();
-            const email = document.getElementById('selfEmail').value.trim().toLowerCase();
             const phone = document.getElementById('selfPhone').value.trim();
             const batch = document.getElementById('selfBatch').value;
             const pin = document.getElementById('selfPin').value.trim();
             const notice = document.getElementById('signupNotice');
 
-            const existing = erpData.students.find(s => s.email.toLowerCase() === email || s.parentPhone === phone);
+            const existing = erpData.students.find(s => s.parentPhone === phone);
             if (existing) {
                 notice.className = "block p-3 rounded-xl text-xs font-semibold text-center bg-red-50 text-red-700 border border-red-200";
-                notice.innerHTML = `⚠️ This Gmail or Mobile is already registered (Roll ID: <strong>${existing.roll}</strong>). Use 'Forgot PIN? Reset via OTP' if you forgot your password.`;
+                notice.innerHTML = `⚠️ Mobile No. <strong>${phone}</strong> is already registered (Roll ID: <strong>${existing.roll}</strong>). Click 'Forgot Password/PIN? Reset via OTP' to reset PIN.`;
                 return;
             }
 
@@ -2745,7 +2785,6 @@
                 roll: generatedRoll,
                 name: name,
                 photo: tempSelfSignupPhotoData || "",
-                email: email,
                 parentPhone: phone,
                 classBatch: batch,
                 pass: pin,
@@ -2759,71 +2798,56 @@
                 payMode: "Pending",
                 lastTxnId: "",
                 source: currentRole === 'parent' ? "Parent Sign-Up" : "Candidate Sign-Up",
+                createdAt: new Date().toLocaleDateString('en-IN'),
                 remark: "Welcome to MAKDEMY! Complete your fee payment to unlock your official receipt.",
                 marks: []
             };
 
-            erpData.students.push(newAccount);
+            // Unshift to top of students array so Admin sees newly created accounts at the very top of the database table
+            erpData.students.unshift(newAccount);
             saveERP();
             event.target.reset();
             clearUploadedPhoto('self');
 
             notice.className = "block p-3 rounded-xl text-xs font-semibold text-center bg-emerald-50 text-emerald-800 border border-emerald-300";
-            notice.innerHTML = `✅ Account Created! Your Roll ID is <strong>${generatedRoll}</strong> (Mobile: ${phone} & PIN: ${pin} synced to Admin DB). Redirecting...`;
+            notice.innerHTML = `✅ Account Created! Roll ID: <strong>${generatedRoll}</strong> | Mobile: <strong>${phone}</strong> | PIN: <strong>${pin}</strong> synced to Admin Database!`;
 
             setTimeout(() => {
                 showDashboard(currentRole, newAccount, false);
-            }, 1200);
-        }
-
-        function quickMethodPrompt(method) {
-            switchAuthMode('login');
-            const idInput = document.getElementById('loginId');
-            idInput.focus();
-            idInput.placeholder = method === 'gmail'
-                ? "Type your @gmail.com address here..."
-                : "Type your 10-digit mobile number here...";
+            }, 1100);
         }
 
         function handleLogin(event) {
             event.preventDefault();
-            const id = document.getElementById('loginId').value.trim().toLowerCase();
+            reloadLatestERPData();
+
+            const mobile = document.getElementById('loginId').value.trim();
             const pass = document.getElementById('loginPass').value.trim();
             const errBox = document.getElementById('loginError');
 
             if (currentRole === 'admin') {
-                const isAdmin = (id === 'admin' || id === '9337042839' || id === 'massawarali@gmail.com') && pass === 'apex2026';
-                if (isAdmin) {
+                const adminPhone = (erpData.adminAuth && erpData.adminAuth.phone) ? erpData.adminAuth.phone : "9337042839";
+                const adminPass = (erpData.adminAuth && erpData.adminAuth.pass) ? erpData.adminAuth.pass : "apex2026";
+
+                if (mobile === adminPhone && pass === adminPass) {
                     showDashboard('admin', null, false);
                 } else {
-                    errBox.innerText = "Invalid Admin Gmail/Mobile or Password!";
+                    errBox.innerText = "Invalid Admin Mobile Number or Password! Click 'Forgot Password/PIN? Reset via OTP' to reset.";
                     errBox.classList.remove('hidden');
                 }
-            } else if (currentRole === 'candidate') {
-                const student = erpData.students.find(s =>
-                    (s.email.toLowerCase() === id || s.parentPhone === id || s.roll.toLowerCase() === id) && s.pass === pass
-                );
+            } else {
+                const student = erpData.students.find(s => s.parentPhone === mobile && s.pass === pass);
                 if (student) {
-                    showDashboard('candidate', student, false);
+                    showDashboard(currentRole, student, false);
                 } else {
-                    errBox.innerText = "Wrong PIN or Account not found! Click 'Forgot PIN? Reset via OTP' to reset your password.";
-                    errBox.classList.remove('hidden');
-                }
-            } else if (currentRole === 'parent') {
-                const student = erpData.students.find(s =>
-                    (s.email.toLowerCase() === id || s.parentPhone === id || s.roll.toLowerCase() === id) &&
-                    (s.pass === pass || s.parentPhone === pass)
-                );
-                if (student) {
-                    showDashboard('parent', student, false);
-                } else {
-                    errBox.innerText = "Wrong PIN or Account not found! Click 'Forgot PIN? Reset via OTP' to reset your password.";
+                    errBox.innerText = "Wrong Mobile Number or PIN! Click 'Create Account' above or 'Reset by Mobile OTP' below.";
                     errBox.classList.remove('hidden');
                 }
             }
         }
 
         function showDashboard(role, studentObj, isRestoredFromRefresh) {
+            reloadLatestERPData();
             document.getElementById('loginSection').classList.add('hidden');
             document.getElementById('logoutBtn').classList.remove('hidden');
 
@@ -2862,6 +2886,8 @@
         }
 
         function renderAdminDashboard() {
+            reloadLatestERPData();
+
             const currentSelectedRoll = document.getElementById('markRoll').value;
             const rollOptions = erpData.students.map(s => `<option value="${s.roll}">${s.roll} - ${s.name} (${s.parentPhone})</option>`).join('');
             document.getElementById('markRoll').innerHTML = rollOptions;
@@ -2878,6 +2904,10 @@
             if (erpData.gatewayConfig) {
                 document.getElementById('adminUpiId').value = erpData.gatewayConfig.upiId || "9337042839@ybl";
                 document.getElementById('adminBankAcc').value = erpData.gatewayConfig.bankAccount || "309876543210";
+            }
+            if (erpData.adminAuth) {
+                document.getElementById('adminConfigPhone').value = erpData.adminAuth.phone || "9337042839";
+                document.getElementById('adminConfigPass').value = erpData.adminAuth.pass || "apex2026";
             }
 
             // 1. Render Pending Payments / Un-generated Receipts Queue
@@ -2963,6 +2993,7 @@
                 const avatarHtml = s.photo
                     ? `<img src="${s.photo}" class="w-9 h-9 rounded-xl object-cover border border-slate-300 shadow-sm shrink-0">`
                     : `<div class="w-9 h-9 rounded-xl bg-blue-100 text-blue-700 font-extrabold text-xs flex items-center justify-center shrink-0">${initials}</div>`;
+                const isSelfSignup = s.source && s.source.includes('Sign-Up');
 
                 return `
                 <tr class="hover:bg-slate-50 transition">
@@ -2974,12 +3005,15 @@
                     </td>
                     <td class="py-3 px-4">
                         <div class="font-semibold text-slate-900">${s.name}</div>
-                        <span class="inline-block bg-slate-100 text-slate-600 text-[10px] font-bold px-2 py-0.5 rounded mt-0.5">${s.source || 'Admin Desk'}</span>
+                        <span class="inline-block ${isSelfSignup ? 'bg-emerald-100 text-emerald-800' : 'bg-slate-100 text-slate-600'} text-[10px] font-extrabold px-2 py-0.5 rounded mt-0.5">
+                            ${s.source || 'Admin Desk'}
+                        </span>
                     </td>
                     <td class="py-3 px-4 text-xs text-slate-600">${s.classBatch.split('(')[0]}</td>
-                    <td class="py-3 px-4 text-xs">
-                        <div class="font-extrabold text-slate-900 font-mono"><i class="fas fa-phone-alt text-blue-600 mr-1"></i>${s.parentPhone}</div>
-                        <div class="text-slate-500 mt-0.5">${s.email}</div>
+                    <td class="py-3 px-4">
+                        <div class="inline-flex items-center gap-1.5 bg-blue-50 border border-blue-200 px-2.5 py-1 rounded-lg font-mono font-extrabold text-xs text-blue-900">
+                            <i class="fas fa-phone-alt text-blue-600 text-[10px]"></i> ${s.parentPhone}
+                        </div>
                     </td>
                     <td class="py-3 px-4">
                         <div class="inline-flex items-center gap-1.5 bg-purple-50 border border-purple-200 px-2.5 py-1 rounded-lg">
@@ -3238,7 +3272,6 @@
                 roll: document.getElementById('regRoll').value.trim().toUpperCase(),
                 name: document.getElementById('regName').value.trim(),
                 photo: tempAdminRegPhotoData || "",
-                email: document.getElementById('regEmail').value.trim().toLowerCase(),
                 parentPhone: document.getElementById('regPhone').value.trim(),
                 classBatch: document.getElementById('regBatch').value,
                 feeAmount: Number(document.getElementById('regFeeAmount').value) || 1200,
@@ -3255,12 +3288,12 @@
                 remark: "Newly enrolled student at MAKDEMY.",
                 marks: []
             };
-            erpData.students.push(newStudent);
+            erpData.students.unshift(newStudent);
             saveERP();
             renderAdminDashboard();
             e.target.reset();
             clearUploadedPhoto('adminReg');
-            alert(`✅ Student ${newStudent.name} registered with photo! Their Mobile No. (${newStudent.parentPhone}) and PIN (${newStudent.pass}) are now visible in the Admin Database.`);
+            alert(`✅ Student ${newStudent.name} registered! Mobile No. (${newStudent.parentPhone}) and PIN (${newStudent.pass}) are now visible in the Admin Database.`);
         }
 
         function addTestMark(e) {
@@ -3343,7 +3376,7 @@
                 ? "MAKDEMY Parent Portal • Full Progress & Fee Access"
                 : "MAKDEMY Candidate Portal • Student View";
             document.getElementById('userNameHeading').innerText = student.name;
-            document.getElementById('userBatchSub').innerText = `Roll ID: ${student.roll} • ${student.classBatch} • Gmail: ${student.email} • Mob: ${student.parentPhone}`;
+            document.getElementById('userBatchSub').innerText = `Roll ID: ${student.roll} • ${student.classBatch} • Registered Mob: +91 ${student.parentPhone}`;
             document.getElementById('userAttStat').innerText = `${student.attendance}%`;
 
             const dashPhoto = document.getElementById('userDashboardPhoto');
