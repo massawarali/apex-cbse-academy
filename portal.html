@@ -545,8 +545,10 @@
                 </div>
 
                 <div class="px-6 pt-5 pb-4 text-center">
-                    <div class="w-20 h-20 rounded-2xl bg-gradient-to-tr from-blue-700 to-indigo-500 text-white font-extrabold text-3xl flex items-center justify-center mx-auto shadow-md border-4 border-blue-100" id="idCardInitials">
-                        AS
+                    <!-- Dynamic Student Photo or Initials on ID Card -->
+                    <div class="w-24 h-24 rounded-2xl mx-auto shadow-md border-4 border-blue-100 overflow-hidden bg-gradient-to-tr from-blue-700 to-indigo-500 flex items-center justify-center">
+                        <img id="idCardPhotoImg" src="" alt="Student Photo" class="hidden w-full h-full object-cover">
+                        <span id="idCardInitials" class="text-white font-extrabold text-3xl">AS</span>
                     </div>
                     <h4 id="idCardName" class="text-xl font-extrabold text-slate-900 mt-3">Aarav Sharma</h4>
                     <span id="idCardRollBadge" class="inline-block bg-blue-100 text-blue-800 text-xs font-extrabold px-3 py-0.5 rounded-full mt-1">
@@ -615,9 +617,12 @@
                         <p class="text-[11px] text-blue-700 font-bold uppercase tracking-wider">Official Progress Report Card • Session 2026–27</p>
                     </div>
                 </div>
-                <div class="text-right hidden sm:block">
-                    <span class="bg-slate-900 text-amber-400 text-xs font-extrabold px-3 py-1 rounded-full uppercase">CBSE Class 6–10</span>
-                    <p id="rcDateIssued" class="text-[11px] text-slate-500 mt-1"></p>
+                <div class="flex items-center gap-3">
+                    <img id="rcStudentPhoto" src="" alt="Photo" class="hidden w-14 h-14 rounded-xl object-cover border-2 border-slate-800 shadow-sm">
+                    <div class="text-right hidden sm:block">
+                        <span class="bg-slate-900 text-amber-400 text-xs font-extrabold px-3 py-1 rounded-full uppercase">CBSE Class 6–10</span>
+                        <p id="rcDateIssued" class="text-[11px] text-slate-500 mt-1"></p>
+                    </div>
                 </div>
             </div>
 
@@ -834,7 +839,7 @@
                             </form>
 
                             <!-- 1B. CREATE ACCOUNT (SIGN UP) FORM -->
-                            <form id="signupForm" onsubmit="handleSelfSignup(event)" class="hidden space-y-3.5">
+                            <form id="signupForm" onsubmit="handleSelfSignup(event)" class="hidden space-y-3">
                                 <div>
                                     <label class="block text-xs font-bold uppercase text-slate-600 mb-1">Student's Full Name *</label>
                                     <div class="relative">
@@ -871,6 +876,18 @@
                                     </div>
                                 </div>
 
+                                <!-- Optional Passport Photo Upload on Sign-Up -->
+                                <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-200 flex items-center gap-3">
+                                    <div class="w-11 h-11 rounded-xl bg-slate-200 flex items-center justify-center overflow-hidden shrink-0 border border-slate-300">
+                                        <img id="selfPhotoPreview" src="" alt="" class="hidden w-full h-full object-cover">
+                                        <i id="selfPhotoIcon" class="fas fa-camera text-slate-400"></i>
+                                    </div>
+                                    <div class="flex-grow">
+                                        <label class="block text-[10px] font-bold uppercase text-slate-600">Student Passport Photo (For ID Card)</label>
+                                        <input type="file" id="selfPhotoInput" accept="image/*" onchange="handlePhotoUpload(this, 'self')" class="text-[11px] text-slate-500 file:mr-2 file:py-1 file:px-2.5 file:rounded-lg file:border-0 file:text-[11px] file:font-bold file:bg-blue-100 file:text-blue-700 hover:file:bg-blue-200 cursor-pointer w-full mt-0.5">
+                                    </div>
+                                </div>
+
                                 <div>
                                     <label class="block text-xs font-bold uppercase text-slate-600 mb-1">Create Secret Login PIN / Password *</label>
                                     <div class="relative">
@@ -883,7 +900,7 @@
 
                                 <div id="signupNotice" class="hidden p-3 rounded-xl text-xs font-semibold text-center"></div>
 
-                                <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3.5 rounded-xl shadow-lg shadow-emerald-600/25 transition transform hover:scale-[1.01] flex items-center justify-center gap-2">
+                                <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 rounded-xl shadow-lg shadow-emerald-600/25 transition transform hover:scale-[1.01] flex items-center justify-center gap-2">
                                     <i class="fas fa-user-check"></i> Register & Sync with MAKDEMY DB
                                 </button>
 
@@ -933,7 +950,7 @@
             <div>
                 <span class="bg-amber-400 text-slate-950 text-xs font-extrabold px-3 py-1 rounded-full uppercase">MAKDEMY Full Admin Control</span>
                 <h1 class="text-2xl sm:text-3xl font-extrabold mt-2">MAKDEMY Founder & Admin Panel — Massawar Ali Khan</h1>
-                <p class="text-blue-200 text-xs sm:text-sm">Approve pending payments, add/remove fee receipts, upload Chapter Notes & Worksheets, and manage students.</p>
+                <p class="text-blue-200 text-xs sm:text-sm">Register students with passport photos, approve fee receipts, upload Chapter Notes, and manage records.</p>
             </div>
             <button onclick="resetDefaultData()" class="bg-white/10 hover:bg-white/20 border border-white/20 text-xs font-semibold px-4 py-2.5 rounded-xl">
                 <i class="fas fa-sync-alt mr-1"></i> Reset System Data
@@ -979,7 +996,7 @@
             </div>
         </div>
 
-        <!-- Row 1: Register New Student + Upload & Manage Marks -->
+        <!-- Row 1: Register New Student (WITH PHOTO UPLOAD) + Upload & Manage Marks -->
         <div class="grid lg:grid-cols-2 gap-8 mb-8">
             <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
                 <h3 class="font-extrabold text-lg text-slate-900 mb-4 flex items-center gap-2">
@@ -1003,8 +1020,28 @@
                         </select>
                         <input type="number" id="regFeeAmount" required placeholder="Fee ₹ (1200)" class="px-3 py-2.5 rounded-lg border border-slate-300">
                     </div>
+
+                    <!-- NEW: Student Passport Photo Upload Box with Live Preview -->
+                    <div class="bg-slate-50 p-3 rounded-xl border border-dashed border-blue-300 flex items-center justify-between gap-3">
+                        <div class="flex items-center gap-3">
+                            <div class="w-12 h-12 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center overflow-hidden border border-blue-200 shrink-0 shadow-sm">
+                                <img id="adminRegPhotoPreview" src="" alt="Preview" class="hidden w-full h-full object-cover">
+                                <i id="adminRegPhotoIcon" class="fas fa-camera text-lg"></i>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-extrabold text-slate-800">Upload Student Photo (For ID & Report Card)</label>
+                                <input type="file" id="regPhotoInput" accept="image/*" onchange="handlePhotoUpload(this, 'adminReg')" class="text-xs text-slate-500 file:mr-2 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-blue-700 file:text-white hover:file:bg-blue-800 cursor-pointer mt-1">
+                            </div>
+                        </div>
+                        <button type="button" onclick="clearUploadedPhoto('adminReg')" id="clearAdminRegPhotoBtn" class="hidden text-xs text-red-600 hover:text-red-800 font-bold px-2">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+
                     <input type="text" id="regPin" required placeholder="Set Login PIN (e.g. 1234)" class="w-full px-3.5 py-2.5 rounded-lg border border-slate-300">
-                    <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 rounded-xl">Add Student (Fee Starts as Pending)</button>
+                    <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 rounded-xl shadow">
+                        <i class="fas fa-user-check mr-1"></i> Add Student with Photo to MAKDEMY DB
+                    </button>
                 </form>
 
                 <div class="mt-5 pt-4 border-t border-slate-200">
@@ -1089,7 +1126,7 @@
             </div>
         </div>
 
-        <!-- Row 2: Exam Schedule, Holidays & Attendance/Fee Manager -->
+        <!-- Row 2: Exam Schedule, Holidays & Attendance/Fee/Photo Manager -->
         <div class="grid lg:grid-cols-2 gap-8">
             <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
                 <h3 class="font-extrabold text-lg text-slate-900 mb-4 flex items-center gap-2">
@@ -1127,7 +1164,7 @@
                 </div>
 
                 <div class="pt-3 border-t border-slate-200">
-                    <h4 class="font-bold text-sm text-slate-800 mb-2">Update Attendance, Monthly Fee & Parent Remark</h4>
+                    <h4 class="font-bold text-sm text-slate-800 mb-2">Update Attendance, Fee, Remark & Student Photo</h4>
                     <form onsubmit="updateStudentMeta(event)" class="space-y-2.5 text-sm">
                         <div class="grid grid-cols-3 gap-2">
                             <select id="metaRoll" required class="col-span-2 px-3 py-2 rounded-lg border border-slate-300 bg-white"></select>
@@ -1145,8 +1182,14 @@
                                 <option value="Net Banking">Net Banking</option>
                             </select>
                         </div>
+                        <!-- Update Photo for Existing Student -->
+                        <div class="flex items-center gap-2 bg-slate-50 px-3 py-1.5 rounded-lg border border-slate-200 text-xs">
+                            <i class="fas fa-camera text-blue-600"></i>
+                            <span class="font-semibold text-slate-600 shrink-0">Change Photo:</span>
+                            <input type="file" id="metaPhotoInput" accept="image/*" onchange="handlePhotoUpload(this, 'metaUpdate')" class="text-[11px] text-slate-500 file:mr-2 file:py-0.5 file:px-2 file:rounded file:border-0 file:bg-blue-100 file:text-blue-700 file:font-bold w-full">
+                        </div>
                         <input type="text" id="metaRemark" placeholder="Teacher's Remark for Parent" class="w-full px-3 py-2 rounded-lg border border-slate-300">
-                        <button type="submit" class="w-full bg-slate-800 hover:bg-slate-900 text-white font-semibold py-2 rounded-xl">Save Status & Update Receipt</button>
+                        <button type="submit" class="w-full bg-slate-800 hover:bg-slate-900 text-white font-semibold py-2 rounded-xl">Save Status, Photo & Update Receipt</button>
                     </form>
                 </div>
             </div>
@@ -1162,7 +1205,7 @@
                 <table class="w-full text-left border-collapse text-sm">
                     <thead>
                         <tr class="bg-slate-100 text-slate-700 border-b">
-                            <th class="py-3 px-4">Roll ID</th>
+                            <th class="py-3 px-4">Photo & Roll ID</th>
                             <th class="py-3 px-4">Student Name</th>
                             <th class="py-3 px-4">Batch</th>
                             <th class="py-3 px-4">Gmail & Mobile</th>
@@ -1180,10 +1223,17 @@
     <!-- ================= 3. CANDIDATE & PARENT DASHBOARD ================= -->
     <section id="userDashboard" class="hidden flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 no-print">
         <div class="bg-gradient-to-r from-blue-800 to-indigo-900 text-white rounded-2xl p-6 mb-6 shadow-lg flex flex-wrap justify-between items-center gap-4">
-            <div>
-                <span id="userRolePill" class="bg-amber-400 text-slate-950 text-xs font-extrabold px-3 py-1 rounded-full uppercase">MAKDEMY Candidate View</span>
-                <h1 id="userNameHeading" class="text-2xl sm:text-3xl font-extrabold mt-2">Student Name</h1>
-                <p id="userBatchSub" class="text-blue-200 text-xs sm:text-sm"></p>
+            <div class="flex items-center gap-4">
+                <!-- Student Avatar / Uploaded Photo on Dashboard Banner -->
+                <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-white/15 border-2 border-amber-400 overflow-hidden flex items-center justify-center shrink-0 shadow-lg">
+                    <img id="userDashboardPhoto" src="" alt="Student" class="hidden w-full h-full object-cover">
+                    <span id="userDashboardInitials" class="text-2xl sm:text-3xl font-black text-amber-300">AS</span>
+                </div>
+                <div>
+                    <span id="userRolePill" class="bg-amber-400 text-slate-950 text-xs font-extrabold px-3 py-1 rounded-full uppercase">MAKDEMY Candidate View</span>
+                    <h1 id="userNameHeading" class="text-2xl sm:text-3xl font-extrabold mt-2">Student Name</h1>
+                    <p id="userBatchSub" class="text-blue-200 text-xs sm:text-sm"></p>
+                </div>
             </div>
             <div class="flex flex-wrap items-center gap-2 sm:gap-2.5">
                 <div class="bg-white/10 px-3.5 py-2 rounded-xl text-center">
@@ -1338,6 +1388,11 @@
         let lastActivityResetTime = 0;
         let selectedMaterialSubjectFilter = 'ALL';
 
+        // Temporary holders for compressed Base64 student photos
+        let tempAdminRegPhotoData = "";
+        let tempSelfSignupPhotoData = "";
+        let tempMetaUpdatePhotoData = "";
+
         const defaultERPData = {
             gatewayConfig: {
                 upiId: "9337042839@ybl",
@@ -1406,6 +1461,7 @@
                     parentPhone: "9876543210",
                     pass: "1234",
                     name: "Aarav Sharma",
+                    photo: "",
                     classBatch: "Class 10 (Shift 2: 5:30 - 7:30 PM)",
                     attendance: 94,
                     feeAmount: 1200,
@@ -1430,6 +1486,7 @@
                     parentPhone: "9123456789",
                     pass: "1234",
                     name: "Zoya Khan",
+                    photo: "",
                     classBatch: "Class 8 (Shift 1: 3:30 - 5:30 PM)",
                     attendance: 89,
                     feeAmount: 1000,
@@ -1474,6 +1531,69 @@
 
         function saveERP() {
             localStorage.setItem('makdemyERP_v1', JSON.stringify(erpData));
+        }
+
+        // ================= STUDENT PHOTO UPLOAD & AUTO-RESIZE ENGINE =================
+        function handlePhotoUpload(inputEl, targetContext) {
+            const file = inputEl.files && inputEl.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                const img = new Image();
+                img.onload = function () {
+                    // Auto-compress to 220x220 square passport photo so localStorage never overflows
+                    const canvas = document.createElement('canvas');
+                    const SIZE = 220;
+                    canvas.width = SIZE;
+                    canvas.height = SIZE;
+                    const ctx = canvas.getContext('2d');
+
+                    const minSide = Math.min(img.width, img.height);
+                    const sx = (img.width - minSide) / 2;
+                    const sy = (img.height - minSide) / 2;
+                    ctx.drawImage(img, sx, sy, minSide, minSide, 0, 0, SIZE, SIZE);
+
+                    const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.82);
+
+                    if (targetContext === 'adminReg') {
+                        tempAdminRegPhotoData = compressedDataUrl;
+                        const prev = document.getElementById('adminRegPhotoPreview');
+                        const icon = document.getElementById('adminRegPhotoIcon');
+                        const clrBtn = document.getElementById('clearAdminRegPhotoBtn');
+                        prev.src = compressedDataUrl;
+                        prev.classList.remove('hidden');
+                        icon.classList.add('hidden');
+                        clrBtn.classList.remove('hidden');
+                    } else if (targetContext === 'self') {
+                        tempSelfSignupPhotoData = compressedDataUrl;
+                        const prev = document.getElementById('selfPhotoPreview');
+                        const icon = document.getElementById('selfPhotoIcon');
+                        prev.src = compressedDataUrl;
+                        prev.classList.remove('hidden');
+                        icon.classList.add('hidden');
+                    } else if (targetContext === 'metaUpdate') {
+                        tempMetaUpdatePhotoData = compressedDataUrl;
+                    }
+                };
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function clearUploadedPhoto(targetContext) {
+            if (targetContext === 'adminReg') {
+                tempAdminRegPhotoData = "";
+                document.getElementById('regPhotoInput').value = "";
+                document.getElementById('adminRegPhotoPreview').classList.add('hidden');
+                document.getElementById('adminRegPhotoIcon').classList.remove('hidden');
+                document.getElementById('clearAdminRegPhotoBtn').classList.add('hidden');
+            } else if (targetContext === 'self') {
+                tempSelfSignupPhotoData = "";
+                document.getElementById('selfPhotoInput').value = "";
+                document.getElementById('selfPhotoPreview').classList.add('hidden');
+                document.getElementById('selfPhotoIcon').classList.remove('hidden');
+            }
         }
 
         // ================= CHAPTER-WISE NOTES & WORKSHEET PDF ENGINE =================
@@ -1991,7 +2111,7 @@
             window.print();
         }
 
-        // ================= STUDENT ID CARD GENERATOR FUNCTIONS =================
+        // ================= STUDENT ID CARD GENERATOR FUNCTIONS (WITH PHOTO) =================
         function openIdCardByRoll(rollId) {
             const student = erpData.students.find(s => s.roll === rollId);
             if (student) populateAndShowIdCard(student);
@@ -2003,7 +2123,19 @@
 
         function populateAndShowIdCard(student) {
             const initials = student.name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
-            document.getElementById('idCardInitials').innerText = initials;
+            const photoEl = document.getElementById('idCardPhotoImg');
+            const initEl = document.getElementById('idCardInitials');
+
+            if (student.photo) {
+                photoEl.src = student.photo;
+                photoEl.classList.remove('hidden');
+                initEl.classList.add('hidden');
+            } else {
+                photoEl.classList.add('hidden');
+                initEl.innerText = initials;
+                initEl.classList.remove('hidden');
+            }
+
             document.getElementById('idCardName').innerText = student.name;
             document.getElementById('idCardRollBadge').innerText = `Roll ID: ${student.roll}`;
 
@@ -2074,7 +2206,7 @@
                 signupBtn.className = "py-2 rounded-lg bg-emerald-600 text-white shadow-sm transition";
                 loginBtn.className = "py-2 rounded-lg text-slate-600 hover:text-slate-900 transition";
                 roleTitle.innerText = currentRole === 'parent' ? "Create Parent Account" : "Create Candidate Account";
-                roleSub.innerText = "Register your Gmail & Mobile No. with MAKDEMY Admin Database";
+                roleSub.innerText = "Register your Gmail, Mobile & Photo with MAKDEMY Database";
             } else {
                 signupForm.classList.add('hidden');
                 loginForm.classList.remove('hidden');
@@ -2157,6 +2289,7 @@
             const newAccount = {
                 roll: generatedRoll,
                 name: name,
+                photo: tempSelfSignupPhotoData || "",
                 email: email,
                 parentPhone: phone,
                 classBatch: batch,
@@ -2178,6 +2311,7 @@
             erpData.students.push(newAccount);
             saveERP();
             event.target.reset();
+            clearUploadedPhoto('self');
 
             notice.className = "block p-3 rounded-xl text-xs font-semibold text-center bg-emerald-50 text-emerald-800 border border-emerald-300";
             notice.innerHTML = `✅ Account Created! Your MAKDEMY Roll ID is <strong>${generatedRoll}</strong>. Redirecting to Dashboard...`;
@@ -2370,9 +2504,19 @@
             tbody.innerHTML = erpData.students.map(s => {
                 const feeVal = s.feeAmount || 1200;
                 const isPaidAndGen = s.feeStatus === 'Paid' && s.receiptGenerated;
+                const initials = s.name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
+                const avatarHtml = s.photo
+                    ? `<img src="${s.photo}" class="w-9 h-9 rounded-xl object-cover border border-slate-300 shadow-sm shrink-0">`
+                    : `<div class="w-9 h-9 rounded-xl bg-blue-100 text-blue-700 font-extrabold text-xs flex items-center justify-center shrink-0">${initials}</div>`;
+
                 return `
                 <tr class="hover:bg-slate-50 transition">
-                    <td class="py-3 px-4 font-bold text-blue-700">${s.roll}</td>
+                    <td class="py-3 px-4">
+                        <div class="flex items-center gap-2.5">
+                            ${avatarHtml}
+                            <span class="font-bold text-blue-700">${s.roll}</span>
+                        </div>
+                    </td>
                     <td class="py-3 px-4 font-semibold text-slate-900">${s.name}</td>
                     <td class="py-3 px-4 text-xs text-slate-600">${s.classBatch.split('(')[0]}</td>
                     <td class="py-3 px-4 text-xs text-slate-700">
@@ -2535,6 +2679,14 @@
             document.getElementById('rcAttFee').innerText = `${student.attendance}% | Fee: ${student.feeStatus}`;
             document.getElementById('rcRemark').innerText = `"${student.remark}"`;
 
+            const rcPhoto = document.getElementById('rcStudentPhoto');
+            if (student.photo) {
+                rcPhoto.src = student.photo;
+                rcPhoto.classList.remove('hidden');
+            } else {
+                rcPhoto.classList.add('hidden');
+            }
+
             let totalScored = 0;
             let totalMax = 0;
 
@@ -2616,6 +2768,7 @@
             const newStudent = {
                 roll: document.getElementById('regRoll').value.trim().toUpperCase(),
                 name: document.getElementById('regName').value.trim(),
+                photo: tempAdminRegPhotoData || "",
                 email: document.getElementById('regEmail').value.trim().toLowerCase(),
                 parentPhone: document.getElementById('regPhone').value.trim(),
                 classBatch: document.getElementById('regBatch').value,
@@ -2637,7 +2790,8 @@
             saveERP();
             renderAdminDashboard();
             e.target.reset();
-            alert(`Student ${newStudent.name} added to MAKDEMY Database! Fee status is Pending — receipt will generate once payment is completed.`);
+            clearUploadedPhoto('adminReg');
+            alert(`✅ Student ${newStudent.name} registered with photo! Their photo will now appear on their MAKDEMY ID Card and Report Card.`);
         }
 
         function addTestMark(e) {
@@ -2697,6 +2851,10 @@
                 const mode = document.getElementById('metaPayMode').value;
                 const rem = document.getElementById('metaRemark').value.trim();
                 if (rem) student.remark = rem;
+                if (tempMetaUpdatePhotoData) {
+                    student.photo = tempMetaUpdatePhotoData;
+                    tempMetaUpdatePhotoData = "";
+                }
 
                 if (newFeeStatus === 'Paid') {
                     issueOfficialReceipt(student, mode, 'ADM' + Math.floor(10000000 + Math.random() * 90000000), "Admin Portal");
@@ -2707,7 +2865,7 @@
                 }
                 renderAdminDashboard();
                 e.target.reset();
-                alert(`Updated status for ${student.name}!`);
+                alert(`Updated status & photo for ${student.name}!`);
             }
         }
 
@@ -2718,6 +2876,20 @@
             document.getElementById('userNameHeading').innerText = student.name;
             document.getElementById('userBatchSub').innerText = `Roll ID: ${student.roll} • ${student.classBatch} • Gmail: ${student.email} • Mob: ${student.parentPhone}`;
             document.getElementById('userAttStat').innerText = `${student.attendance}%`;
+
+            // Show Student Photo or Initials on User Dashboard Banner
+            const dashPhoto = document.getElementById('userDashboardPhoto');
+            const dashInit = document.getElementById('userDashboardInitials');
+            const initials = student.name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
+            if (student.photo) {
+                dashPhoto.src = student.photo;
+                dashPhoto.classList.remove('hidden');
+                dashInit.classList.add('hidden');
+            } else {
+                dashPhoto.classList.add('hidden');
+                dashInit.innerText = initials;
+                dashInit.classList.remove('hidden');
+            }
 
             const totalPct = student.marks.reduce((acc, m) => acc + ((m.score / m.total) * 100), 0);
             const avg = student.marks.length ? Math.round(totalPct / student.marks.length) : 0;
