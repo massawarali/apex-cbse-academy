@@ -37,6 +37,10 @@
             0% { transform: translateX(0%); }
             100% { transform: translateX(-50%); }
         }
+        @keyframes modalPop {
+            0% { transform: scale(0.9); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
         .animate-float { animation: floatSlow 4s ease-in-out infinite; }
         .animate-float-delayed { animation: floatReverse 5s ease-in-out infinite; }
         .orbit-ring { animation: spinOrbit 24s linear infinite; }
@@ -46,12 +50,28 @@
             width: max-content;
             animation: marqueeSlide 22s linear infinite;
         }
+        .modal-animate { animation: modalPop 0.2s ease-out forwards; }
+
+        /* Print Report Card Styling */
+        @media print {
+            body * { visibility: hidden; }
+            #printableReportCard, #printableReportCard * { visibility: visible; }
+            #printableReportCard {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                box-shadow: none !important;
+                border: 2px solid #0f172a !important;
+            }
+            .no-print { display: none !important; }
+        }
     </style>
 </head>
 <body class="bg-slate-100 text-slate-800 min-h-screen flex flex-col">
 
     <!-- Top Navbar -->
-    <header class="bg-white/95 backdrop-blur-md shadow-sm sticky top-0 z-50">
+    <header class="bg-white/95 backdrop-blur-md shadow-sm sticky top-0 z-50 no-print">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center h-16">
             <a href="index.html" class="flex items-center gap-3 group">
                 <div class="w-10 h-10 rounded-xl bg-blue-700 group-hover:bg-amber-500 transition flex items-center justify-center text-white font-bold text-xl shadow">A</div>
@@ -71,15 +91,164 @@
         </div>
     </header>
 
+    <!-- ================= CUSTOM DELETE CONFIRMATION MODAL ================= -->
+    <div id="confirmModal" class="hidden fixed inset-0 z-50 bg-slate-950/60 backdrop-blur-sm flex items-center justify-center p-4 no-print">
+        <div class="bg-white rounded-3xl max-w-sm w-full p-6 shadow-2xl border border-slate-200 text-center modal-animate">
+            <div class="w-16 h-16 rounded-full bg-red-100 text-red-600 flex items-center justify-center text-2xl mx-auto mb-4">
+                <i class="fas fa-exclamation-triangle"></i>
+            </div>
+            <h3 id="confirmModalTitle" class="text-xl font-extrabold text-slate-900">Are you sure?</h3>
+            <p id="confirmModalDesc" class="text-xs sm:text-sm text-slate-500 mt-2 leading-relaxed">
+                Do you really want to delete this record? This action cannot be undone.
+            </p>
+            <div class="grid grid-cols-2 gap-3 mt-6">
+                <button type="button" onclick="closeConfirmModal()" class="py-2.5 px-4 rounded-xl border border-slate-300 font-bold text-xs sm:text-sm text-slate-700 hover:bg-slate-100 transition">
+                    Cancel
+                </button>
+                <button type="button" id="confirmDeleteBtn" class="py-2.5 px-4 rounded-xl bg-red-600 hover:bg-red-700 font-bold text-xs sm:text-sm text-white shadow-lg shadow-red-600/25 transition">
+                    <i class="fas fa-trash-alt mr-1"></i> Yes, Delete
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= EDIT TEST MARK MODAL (ADMIN) ================= -->
+    <div id="editMarkModal" class="hidden fixed inset-0 z-50 bg-slate-950/60 backdrop-blur-sm flex items-center justify-center p-4 no-print">
+        <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl border border-slate-200 modal-animate">
+            <div class="flex justify-between items-center mb-4 pb-3 border-b border-slate-100">
+                <h3 class="text-lg font-extrabold text-slate-900"><i class="fas fa-edit text-blue-600 mr-1.5"></i> Edit Weekly Test Score</h3>
+                <button onclick="closeEditMarkModal()" class="text-slate-400 hover:text-slate-700"><i class="fas fa-times"></i></button>
+            </div>
+            <form onsubmit="saveEditedMark(event)" class="space-y-3 text-sm">
+                <div>
+                    <label class="block text-xs font-bold uppercase text-slate-500 mb-1">Subject</label>
+                    <input type="text" id="editMarkSubject" required class="w-full px-3.5 py-2 rounded-lg border border-slate-300">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold uppercase text-slate-500 mb-1">Chapter / Topic</label>
+                    <input type="text" id="editMarkTopic" required class="w-full px-3.5 py-2 rounded-lg border border-slate-300">
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-bold uppercase text-slate-500 mb-1">Marks Obtained</label>
+                        <input type="number" id="editMarkScore" required class="w-full px-3.5 py-2 rounded-lg border border-slate-300">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold uppercase text-slate-500 mb-1">Total Marks</label>
+                        <input type="number" id="editMarkTotal" required class="w-full px-3.5 py-2 rounded-lg border border-slate-300">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold uppercase text-slate-500 mb-1">Test Date</label>
+                    <input type="date" id="editMarkDate" required class="w-full px-3.5 py-2 rounded-lg border border-slate-300">
+                </div>
+                <div class="grid grid-cols-2 gap-3 pt-3">
+                    <button type="button" onclick="closeEditMarkModal()" class="py-2.5 rounded-xl border border-slate-300 font-bold text-slate-700 hover:bg-slate-100">Cancel</button>
+                    <button type="submit" class="py-2.5 rounded-xl bg-blue-700 hover:bg-blue-800 font-bold text-white shadow-md">Update Score</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ================= PRINTABLE OFFICIAL REPORT CARD MODAL ================= -->
+    <div id="reportCardModal" class="hidden fixed inset-0 z-50 bg-slate-950/75 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
+        <div class="bg-white rounded-3xl max-w-2xl w-full p-6 sm:p-8 shadow-2xl border border-slate-300 my-8" id="printableReportCard">
+            <!-- Report Header -->
+            <div class="border-b-2 border-slate-900 pb-4 mb-5 flex justify-between items-center">
+                <div class="flex items-center gap-3">
+                    <div class="w-12 h-12 rounded-xl bg-blue-700 text-white flex items-center justify-center font-extrabold text-2xl">A</div>
+                    <div>
+                        <h2 class="text-xl sm:text-2xl font-extrabold text-slate-900 leading-none">APEX CBSE ACADEMY</h2>
+                        <p class="text-xs text-slate-600 font-medium mt-1">In front of IQRA School, Jainthgarh | Helpline: +91 9337042839</p>
+                        <p class="text-[11px] text-blue-700 font-bold uppercase tracking-wider">Official Progress Report Card • Session 2026–27</p>
+                    </div>
+                </div>
+                <div class="text-right hidden sm:block">
+                    <span class="bg-slate-900 text-amber-400 text-xs font-extrabold px-3 py-1 rounded-full uppercase">CBSE Class 6–10</span>
+                    <p id="rcDateIssued" class="text-[11px] text-slate-500 mt-1"></p>
+                </div>
+            </div>
+
+            <!-- Student Info Grid -->
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 bg-slate-50 p-4 rounded-2xl border border-slate-200 text-xs mb-5">
+                <div>
+                    <span class="text-slate-400 font-bold uppercase block">Student Name</span>
+                    <strong id="rcName" class="text-slate-900 text-sm"></strong>
+                </div>
+                <div>
+                    <span class="text-slate-400 font-bold uppercase block">Roll ID</span>
+                    <strong id="rcRoll" class="text-blue-700 text-sm"></strong>
+                </div>
+                <div>
+                    <span class="text-slate-400 font-bold uppercase block">Batch & Class</span>
+                    <strong id="rcBatch" class="text-slate-800"></strong>
+                </div>
+                <div>
+                    <span class="text-slate-400 font-bold uppercase block">Attendance & Fee</span>
+                    <strong id="rcAttFee" class="text-emerald-700"></strong>
+                </div>
+            </div>
+
+            <!-- Marks Table -->
+            <h4 class="text-xs font-extrabold uppercase tracking-wider text-slate-600 mb-2">Saturday Weekly Test Performance Breakdown</h4>
+            <div class="overflow-x-auto border border-slate-300 rounded-xl mb-5">
+                <table class="w-full text-left border-collapse text-xs sm:text-sm">
+                    <thead>
+                        <tr class="bg-slate-900 text-white">
+                            <th class="py-2.5 px-3">Date</th>
+                            <th class="py-2.5 px-3">Subject</th>
+                            <th class="py-2.5 px-3">Topic / Chapter</th>
+                            <th class="py-2.5 px-3 text-center">Marks</th>
+                            <th class="py-2.5 px-3 text-center">% / Grade</th>
+                        </tr>
+                    </thead>
+                    <tbody id="rcMarksTableBody" class="divide-y divide-slate-200"></tbody>
+                </table>
+            </div>
+
+            <!-- Summary & Mentor Remark -->
+            <div class="grid sm:grid-cols-3 gap-4 bg-amber-50/80 border border-amber-300 rounded-2xl p-4 text-xs mb-6">
+                <div>
+                    <span class="text-amber-900 font-bold uppercase block">Overall Aggregate</span>
+                    <div id="rcOverallAggregate" class="text-2xl font-extrabold text-slate-900 mt-0.5"></div>
+                </div>
+                <div class="sm:col-span-2">
+                    <span class="text-amber-900 font-bold uppercase block">Founder & Mentor's Remark</span>
+                    <p id="rcRemark" class="text-slate-800 font-semibold italic mt-0.5"></p>
+                </div>
+            </div>
+
+            <!-- Signatures -->
+            <div class="flex justify-between items-end pt-6 border-t border-slate-200 text-xs text-slate-600">
+                <div>
+                    <div class="font-bold text-slate-900">Parent / Guardian Signature</div>
+                    <div class="text-[11px] text-slate-400">Checked via Apex ERP Portal</div>
+                </div>
+                <div class="text-right">
+                    <div class="font-extrabold text-slate-900">Massawar Ali Khan</div>
+                    <div class="text-[11px] text-blue-700 font-semibold">Founder & Director, Apex CBSE Academy</div>
+                </div>
+            </div>
+
+            <!-- Modal Buttons (Hidden when printing) -->
+            <div class="flex justify-end gap-3 mt-6 pt-4 border-t border-slate-200 no-print">
+                <button type="button" onclick="closeReportCardModal()" class="px-5 py-2.5 rounded-xl border border-slate-300 text-xs sm:text-sm font-bold text-slate-700 hover:bg-slate-100">
+                    Close Preview
+                </button>
+                <button type="button" onclick="window.print()" class="px-6 py-2.5 rounded-xl bg-blue-700 hover:bg-blue-800 text-xs sm:text-sm font-bold text-white shadow-lg flex items-center gap-2">
+                    <i class="fas fa-print"></i> Print / Save as PDF
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- ================= 1. ANIMATED LOGIN & SIGNUP SCREEN ================= -->
-    <main id="loginSection" class="flex-grow login-bg relative overflow-hidden flex flex-col justify-between">
+    <main id="loginSection" class="flex-grow login-bg relative overflow-hidden flex flex-col justify-between no-print">
         
-        <!-- Floating Background Education Icons -->
         <i class="fas fa-atom text-white/5 text-8xl absolute top-12 left-10 animate-float pointer-events-none"></i>
         <i class="fas fa-graduation-cap text-white/5 text-9xl absolute bottom-16 left-1/3 animate-float-delayed pointer-events-none"></i>
         <i class="fas fa-microscope text-white/5 text-8xl absolute top-20 right-12 animate-float pointer-events-none"></i>
 
-        <!-- Glowing Light Blobs -->
         <div class="w-96 h-96 bg-blue-500/20 rounded-full blur-3xl absolute -top-20 -left-20 pointer-events-none"></div>
         <div class="w-96 h-96 bg-amber-500/15 rounded-full blur-3xl absolute bottom-10 right-10 pointer-events-none"></div>
 
@@ -97,13 +266,10 @@
                         Track Every Test, <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-300 to-amber-500">Master Every Concept.</span>
                     </h1>
                     <p class="text-blue-100 text-sm sm:text-base mb-8 max-w-xl">
-                        Welcome to Apex CBSE Academy's live Student & Parent ERP. Create your account or sign in to view Saturday OMR test scores, upcoming board exam schedules, attendance, and mentor remarks.
+                        Welcome to Apex CBSE Academy's live Student & Parent ERP. Create your account or sign in to view Saturday OMR test scores, upcoming board exam schedules, and printable report cards.
                     </p>
 
-                    <!-- Interactive Orbital Animation + Lottie Graphic Centerpiece -->
                     <div class="relative flex items-center justify-center my-4 w-full max-w-md mx-auto lg:mx-0">
-                        
-                        <!-- 360° Rotating Subject Orbit Ring -->
                         <div class="w-72 h-72 sm:w-80 sm:h-80 rounded-full border-2 border-dashed border-blue-400/30 absolute orbit-ring flex items-center justify-center pointer-events-none">
                             <div class="w-11 h-11 rounded-2xl bg-blue-600 text-white shadow-lg flex items-center justify-center text-base absolute -top-5 orbit-item">
                                 <i class="fas fa-square-root-alt"></i>
@@ -119,7 +285,6 @@
                             </div>
                         </div>
 
-                        <!-- Floating Live Badge 1 -->
                         <div class="hidden sm:flex items-center gap-2.5 bg-white text-slate-900 px-3.5 py-2 rounded-2xl shadow-xl absolute -top-4 -left-4 z-20 animate-float">
                             <div class="w-8 h-8 rounded-lg bg-amber-100 text-amber-600 flex items-center justify-center font-bold">
                                 <i class="fas fa-trophy"></i>
@@ -130,16 +295,14 @@
                             </div>
                         </div>
 
-                        <!-- Floating Live Badge 2 -->
                         <div class="hidden sm:flex items-center gap-2.5 bg-emerald-500 text-white px-3.5 py-2 rounded-2xl shadow-xl absolute -bottom-4 -right-2 z-20 animate-float-delayed">
-                            <i class="fas fa-user-check text-lg"></i>
+                            <i class="fas fa-file-pdf text-lg"></i>
                             <div class="text-left">
-                                <div class="text-[11px] font-extrabold leading-tight">Parent Transparency</div>
-                                <div class="text-[10px] text-emerald-100">Attendance & Remarks</div>
+                                <div class="text-[11px] font-extrabold leading-tight">Printable Report Card</div>
+                                <div class="text-[10px] text-emerald-100">1-Click PDF Download</div>
                             </div>
                         </div>
 
-                        <!-- Main Running Lottie Education Graphic Card -->
                         <div class="bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl p-4 shadow-2xl relative z-10 w-64 sm:w-72 text-center animate-float">
                             <div class="bg-slate-950/70 rounded-2xl p-2 border border-white/10">
                                 <lottie-player 
@@ -162,7 +325,6 @@
                 <!-- RIGHT SIDE: Interactive Login & Create Account Card (5 Cols) -->
                 <div class="lg:col-span-5">
                     <div class="max-w-md mx-auto bg-white rounded-3xl shadow-2xl overflow-hidden border border-white/20">
-                        <!-- Role Selector Tabs -->
                         <div class="grid grid-cols-3 bg-slate-100 p-1.5 border-b border-slate-200 text-xs sm:text-sm font-bold text-center">
                             <button onclick="selectRole('admin')" id="tab-admin" class="py-2.5 rounded-xl bg-blue-700 text-white shadow transition">
                                 <i class="fas fa-user-shield mr-1"></i> Admin
@@ -176,14 +338,12 @@
                         </div>
 
                         <div class="p-6 sm:p-8">
-                            <!-- Header -->
                             <div class="text-center mb-5">
                                 <span id="roleBadge" class="bg-blue-100 text-blue-800 text-xs font-extrabold px-3 py-1 rounded-full uppercase tracking-wider">Administration Login</span>
                                 <h2 id="roleTitle" class="text-2xl font-extrabold text-slate-900 mt-2">Welcome Back, Admin</h2>
                                 <p id="roleSub" class="text-xs text-slate-500 mt-1">Sign in using your registered Gmail or Mobile Number</p>
                             </div>
 
-                            <!-- Login / Create Account Mode Switcher (Only for Candidate & Parents) -->
                             <div id="authModeToggle" class="hidden grid grid-cols-2 bg-slate-100 p-1 rounded-xl mb-5 text-xs font-bold">
                                 <button type="button" id="modeLoginBtn" onclick="switchAuthMode('login')" class="py-2 rounded-lg bg-white text-blue-700 shadow-sm transition">
                                     <i class="fas fa-sign-in-alt mr-1"></i> Existing User Login
@@ -220,14 +380,13 @@
                                     <i class="fas fa-sign-in-alt"></i> Login to Dashboard
                                 </button>
 
-                                <!-- Quick Prompt Link to Create Account for Candidate/Parent -->
                                 <p id="bottomSignupHint" class="hidden text-center text-xs text-slate-500 pt-2">
                                     Don't have an account yet? 
                                     <button type="button" onclick="switchAuthMode('signup')" class="text-blue-700 font-bold hover:underline">Create New Account</button>
                                 </p>
                             </form>
 
-                            <!-- 1B. CREATE ACCOUNT (SIGN UP) FORM FOR CANDIDATE & PARENTS -->
+                            <!-- 1B. CREATE ACCOUNT (SIGN UP) FORM -->
                             <form id="signupForm" onsubmit="handleSelfSignup(event)" class="hidden space-y-3.5">
                                 <div>
                                     <label class="block text-xs font-bold uppercase text-slate-600 mb-1">Student's Full Name *</label>
@@ -287,7 +446,6 @@
                                 </p>
                             </form>
 
-                            <!-- Quick Sign-In Method Buttons (Visible in Login Mode) -->
                             <div id="quickMethodSection">
                                 <div class="relative flex py-5 items-center">
                                     <div class="flex-grow border-t border-slate-200"></div>
@@ -312,35 +470,32 @@
             </div>
         </div>
 
-        <!-- Bottom Running Education Marquee Strip -->
         <div class="bg-slate-950/90 border-t border-white/10 py-3 overflow-hidden relative z-10">
             <div class="marquee-track text-slate-300 text-xs font-semibold space-x-10 px-4">
                 <span class="flex items-center gap-2"><i class="fas fa-bolt text-amber-400"></i> Real-Time Saturday Test Scorecards</span>
-                <span class="flex items-center gap-2"><i class="fas fa-calendar-check text-blue-400"></i> Live CBSE Exam Timetable & Syllabus Tracker</span>
-                <span class="flex items-center gap-2"><i class="fas fa-user-shield text-emerald-400"></i> Direct Founder Mentorship by Massawar Ali Khan</span>
+                <span class="flex items-center gap-2"><i class="fas fa-file-pdf text-emerald-400"></i> Official Printable Progress Report Cards</span>
+                <span class="flex items-center gap-2"><i class="fas fa-user-shield text-blue-400"></i> Direct Founder Mentorship by Massawar Ali Khan</span>
                 <span class="flex items-center gap-2"><i class="fas fa-bell text-purple-400"></i> Instant Holiday & PTM Notifications</span>
                 <span class="flex items-center gap-2"><i class="fas fa-bolt text-amber-400"></i> Real-Time Saturday Test Scorecards</span>
-                <span class="flex items-center gap-2"><i class="fas fa-calendar-check text-blue-400"></i> Live CBSE Exam Timetable & Syllabus Tracker</span>
-                <span class="flex items-center gap-2"><i class="fas fa-user-shield text-emerald-400"></i> Direct Founder Mentorship by Massawar Ali Khan</span>
-                <span class="flex items-center gap-2"><i class="fas fa-bell text-purple-400"></i> Instant Holiday & PTM Notifications</span>
+                <span class="flex items-center gap-2"><i class="fas fa-file-pdf text-emerald-400"></i> Official Printable Progress Report Cards</span>
             </div>
         </div>
     </main>
 
     <!-- ================= 2. ADMIN FULL ACCESS DASHBOARD ================= -->
-    <section id="adminDashboard" class="hidden flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <section id="adminDashboard" class="hidden flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 no-print">
         <div class="bg-gradient-to-r from-slate-900 to-blue-900 text-white rounded-2xl p-6 mb-8 shadow-lg flex flex-wrap justify-between items-center gap-4">
             <div>
                 <span class="bg-amber-400 text-slate-950 text-xs font-extrabold px-3 py-1 rounded-full uppercase">Full Admin Control</span>
                 <h1 class="text-2xl sm:text-3xl font-extrabold mt-2">Founder & Admin Panel — Massawar Ali Khan</h1>
-                <p class="text-blue-200 text-xs sm:text-sm">All self-registered Candidate & Parent accounts automatically sync into the directory below.</p>
+                <p class="text-blue-200 text-xs sm:text-sm">Manage students, upload/edit/delete weekly test marks, and print official report cards.</p>
             </div>
             <button onclick="resetDefaultData()" class="bg-white/10 hover:bg-white/20 border border-white/20 text-xs font-semibold px-4 py-2.5 rounded-xl">
                 <i class="fas fa-sync-alt mr-1"></i> Reset System Data
             </button>
         </div>
 
-        <!-- Row 1: Register New Student + Upload Marks -->
+        <!-- Row 1: Register New Student + Upload & Manage Marks -->
         <div class="grid lg:grid-cols-2 gap-8 mb-8">
             <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
                 <h3 class="font-extrabold text-lg text-slate-900 mb-4 flex items-center gap-2">
@@ -368,12 +523,13 @@
                 </form>
             </div>
 
+            <!-- Upload + Edit/Delete Marks Card -->
             <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
                 <h3 class="font-extrabold text-lg text-slate-900 mb-4 flex items-center gap-2">
-                    <i class="fas fa-poll text-blue-600"></i> Upload Weekly Test Marks
+                    <i class="fas fa-poll text-blue-600"></i> Upload & Manage Weekly Test Marks
                 </h3>
                 <form onsubmit="addTestMark(event)" class="space-y-3 text-sm">
-                    <select id="markRoll" required class="w-full px-3.5 py-2.5 rounded-lg border border-slate-300 bg-white"></select>
+                    <select id="markRoll" onchange="renderAdminStudentMarksList()" required class="w-full px-3.5 py-2.5 rounded-lg border border-slate-300 bg-white font-semibold"></select>
                     <div class="grid grid-cols-2 gap-3">
                         <input type="text" id="markSubject" required placeholder="Subject (e.g. Maths)" class="w-full px-3.5 py-2.5 rounded-lg border border-slate-300">
                         <input type="date" id="markDate" required class="w-full px-3.5 py-2.5 rounded-lg border border-slate-300">
@@ -385,6 +541,12 @@
                     </div>
                     <button type="submit" class="w-full bg-blue-700 hover:bg-blue-800 text-white font-bold py-2.5 rounded-xl">Publish Score</button>
                 </form>
+
+                <!-- Selected Student's Uploaded Marks (Edit / Delete List) -->
+                <div class="mt-4 pt-3 border-t border-slate-200">
+                    <div class="text-xs font-extrabold uppercase text-slate-500 mb-2">Uploaded Scores for Selected Candidate (Edit / Delete):</div>
+                    <div id="adminStudentMarksManager" class="space-y-2 max-h-40 overflow-y-auto text-xs"></div>
+                </div>
             </div>
         </div>
 
@@ -392,7 +554,7 @@
         <div class="grid lg:grid-cols-2 gap-8">
             <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
                 <h3 class="font-extrabold text-lg text-slate-900 mb-4 flex items-center gap-2">
-                    <i class="fas fa-calendar-check text-amber-500"></i> Add Exam Schedule
+                    <i class="fas fa-calendar-check text-amber-500"></i> Add & Manage Exam Schedule
                 </h3>
                 <form onsubmit="addExamSchedule(event)" class="space-y-3 text-sm">
                     <select id="examClass" required class="w-full px-3.5 py-2.5 rounded-lg border border-slate-300 bg-white">
@@ -409,6 +571,7 @@
                     </div>
                     <button type="submit" class="w-full bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold py-2.5 rounded-xl">Add Exam to Calendar</button>
                 </form>
+                <div id="adminExamList" class="mt-4 pt-3 border-t border-slate-100 space-y-2 max-h-40 overflow-y-auto text-xs"></div>
             </div>
 
             <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 space-y-5">
@@ -421,6 +584,7 @@
                         <input type="text" id="holDate" required placeholder="Date" class="w-1/3 px-3 py-2 rounded-lg border border-slate-300">
                         <button type="submit" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-4 py-2 rounded-lg">Add</button>
                     </form>
+                    <div id="adminHolidayList" class="mt-3 space-y-1.5 max-h-28 overflow-y-auto text-xs"></div>
                 </div>
 
                 <div class="pt-3 border-t border-slate-200">
@@ -443,7 +607,7 @@
             </div>
         </div>
 
-        <!-- Admin Student Overview Table -->
+        <!-- Admin Student Overview Table (With Report Card + Delete Action Column) -->
         <div class="mt-8 bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
             <div class="px-6 py-4 bg-slate-900 text-white flex justify-between items-center">
                 <h3 class="font-bold">Registered Candidates & Parents Database (Gmail & Mobile Directory)</h3>
@@ -459,8 +623,8 @@
                             <th class="py-3 px-4">Registered Gmail ID</th>
                             <th class="py-3 px-4">Mobile No.</th>
                             <th class="py-3 px-4">PIN</th>
-                            <th class="py-3 px-4">Source</th>
                             <th class="py-3 px-4">Fee</th>
+                            <th class="py-3 px-4 text-center">Actions</th>
                         </tr>
                     </thead>
                     <tbody id="adminStudentTable" class="divide-y divide-slate-200"></tbody>
@@ -470,22 +634,27 @@
     </section>
 
     <!-- ================= 3. CANDIDATE & PARENT DASHBOARD ================= -->
-    <section id="userDashboard" class="hidden flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <section id="userDashboard" class="hidden flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 no-print">
         <div class="bg-gradient-to-r from-blue-800 to-indigo-900 text-white rounded-2xl p-6 mb-8 shadow-lg flex flex-wrap justify-between items-center gap-4">
             <div>
                 <span id="userRolePill" class="bg-amber-400 text-slate-950 text-xs font-extrabold px-3 py-1 rounded-full uppercase">Candidate View</span>
                 <h1 id="userNameHeading" class="text-2xl sm:text-3xl font-extrabold mt-2">Student Name</h1>
                 <p id="userBatchSub" class="text-blue-200 text-xs sm:text-sm"></p>
             </div>
-            <div class="flex gap-4">
-                <div class="bg-white/10 px-4 py-2.5 rounded-xl text-center">
-                    <div id="userAttStat" class="text-2xl font-extrabold text-amber-400">100%</div>
+            <div class="flex flex-wrap items-center gap-3 sm:gap-4">
+                <div class="bg-white/10 px-4 py-2 rounded-xl text-center">
+                    <div id="userAttStat" class="text-xl sm:text-2xl font-extrabold text-amber-400">100%</div>
                     <div class="text-[11px] text-blue-100">Attendance</div>
                 </div>
-                <div class="bg-white/10 px-4 py-2.5 rounded-xl text-center">
-                    <div id="userAvgStat" class="text-2xl font-extrabold text-emerald-400">0%</div>
+                <div class="bg-white/10 px-4 py-2 rounded-xl text-center">
+                    <div id="userAvgStat" class="text-xl sm:text-2xl font-extrabold text-emerald-400">0%</div>
                     <div class="text-[11px] text-blue-100">Avg. Test Score</div>
                 </div>
+                <!-- Printable Progress Report Card Button -->
+                <button onclick="openReportCardForActiveUser()" class="bg-amber-400 hover:bg-amber-300 text-slate-950 font-extrabold text-xs sm:text-sm px-4 py-3 rounded-xl shadow-lg transition flex items-center gap-2">
+                    <i class="fas fa-print"></i>
+                    <span>Print / Download Report Card</span>
+                </button>
             </div>
         </div>
 
@@ -513,7 +682,9 @@
             <div class="lg:col-span-2 bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
                 <div class="px-6 py-4 bg-slate-900 text-white flex justify-between items-center">
                     <h3 class="font-bold"><i class="fas fa-chart-bar text-amber-400 mr-2"></i>Saturday Weekly Test Results & Progress</h3>
-                    <span class="text-xs bg-slate-800 px-2.5 py-1 rounded-full">OMR + Written</span>
+                    <button onclick="openReportCardForActiveUser()" class="text-xs bg-amber-400 text-slate-950 font-bold px-3 py-1 rounded-full hover:bg-amber-300 transition">
+                        <i class="fas fa-file-download mr-1"></i> Report Card PDF
+                    </button>
                 </div>
                 <div class="p-6">
                     <div id="studentMarksList" class="space-y-4"></div>
@@ -590,16 +761,44 @@
         let erpData = JSON.parse(localStorage.getItem('apexERP_v3')) || defaultERPData;
         let currentRole = 'admin';
         let currentAuthMode = 'login';
+        let activeLoggedInStudent = null;
+        let pendingDeleteAction = null;
+        let editingMarkRef = { roll: null, index: null };
 
         function saveERP() {
             localStorage.setItem('apexERP_v3', JSON.stringify(erpData));
         }
 
+        // Custom Confirmation Modal Handler
+        function openConfirmModal(title, description, onConfirmCallback) {
+            document.getElementById('confirmModalTitle').innerText = title;
+            document.getElementById('confirmModalDesc').innerText = description;
+            pendingDeleteAction = onConfirmCallback;
+            document.getElementById('confirmModal').classList.remove('hidden');
+        }
+
+        function closeConfirmModal() {
+            document.getElementById('confirmModal').classList.add('hidden');
+            pendingDeleteAction = null;
+        }
+
+        document.getElementById('confirmDeleteBtn').addEventListener('click', function () {
+            if (typeof pendingDeleteAction === 'function') {
+                pendingDeleteAction();
+            }
+            closeConfirmModal();
+        });
+
         function resetDefaultData() {
-            localStorage.removeItem('apexERP_v3');
-            erpData = JSON.parse(JSON.stringify(defaultERPData));
-            renderAdminDashboard();
-            alert("System data reset!");
+            openConfirmModal(
+                "Reset Entire Database?",
+                "Are you sure you want to reset all students, exams, and marks back to default demo settings?",
+                function () {
+                    localStorage.removeItem('apexERP_v3');
+                    erpData = JSON.parse(JSON.stringify(defaultERPData));
+                    renderAdminDashboard();
+                }
+            );
         }
 
         function switchAuthMode(mode) {
@@ -682,7 +881,6 @@
             }
         }
 
-        // Self-Registration by Candidate or Parent -> Saves directly to Admin Database
         function handleSelfSignup(event) {
             event.preventDefault();
             const name = document.getElementById('selfName').value.trim();
@@ -692,7 +890,6 @@
             const pin = document.getElementById('selfPin').value.trim();
             const notice = document.getElementById('signupNotice');
 
-            // Check if Email or Phone already exists
             const existing = erpData.students.find(s => s.email.toLowerCase() === email || s.parentPhone === phone);
             if (existing) {
                 notice.className = "block p-3 rounded-xl text-xs font-semibold text-center bg-red-50 text-red-700 border border-red-200";
@@ -700,7 +897,6 @@
                 return;
             }
 
-            // Generate next Roll ID automatically (e.g. APEX103, APEX104...)
             const nextNumber = 101 + erpData.students.length;
             const generatedRoll = "APEX" + nextNumber;
 
@@ -722,7 +918,6 @@
             saveERP();
             event.target.reset();
 
-            // Auto-login to their new dashboard after 1.2 seconds
             notice.className = "block p-3 rounded-xl text-xs font-semibold text-center bg-emerald-50 text-emerald-800 border border-emerald-300";
             notice.innerHTML = `✅ Account Created! Your Roll ID is <strong>${generatedRoll}</strong>. Redirecting to Dashboard...`;
 
@@ -786,6 +981,7 @@
                 document.getElementById('adminDashboard').classList.remove('hidden');
                 renderAdminDashboard();
             } else {
+                activeLoggedInStudent = studentObj;
                 document.getElementById('userDashboard').classList.remove('hidden');
                 renderUserDashboard(role, studentObj);
             }
@@ -797,18 +993,24 @@
             document.getElementById('logoutBtn').classList.add('hidden');
             document.getElementById('loginSection').classList.remove('hidden');
             document.getElementById('loginPass').value = '';
+            activeLoggedInStudent = null;
             switchAuthMode('login');
         }
 
         function renderAdminDashboard() {
+            const currentSelectedRoll = document.getElementById('markRoll').value;
             const rollOptions = erpData.students.map(s => `<option value="${s.roll}">${s.roll} - ${s.name} (${s.parentPhone})</option>`).join('');
             document.getElementById('markRoll').innerHTML = rollOptions;
             document.getElementById('metaRoll').innerHTML = rollOptions;
+            if (currentSelectedRoll && erpData.students.some(s => s.roll === currentSelectedRoll)) {
+                document.getElementById('markRoll').value = currentSelectedRoll;
+            }
+
             document.getElementById('totalStudentCount').innerText = `Total Registered: ${erpData.students.length}`;
 
             const tbody = document.getElementById('adminStudentTable');
             tbody.innerHTML = erpData.students.map(s => `
-                <tr>
+                <tr class="hover:bg-slate-50 transition">
                     <td class="py-3 px-4 font-bold text-blue-700">${s.roll}</td>
                     <td class="py-3 px-4 font-semibold text-slate-900">${s.name}</td>
                     <td class="py-3 px-4 text-xs text-slate-600">${s.classBatch.split('(')[0]}</td>
@@ -816,13 +1018,222 @@
                     <td class="py-3 px-4 text-slate-700 font-medium">${s.parentPhone}</td>
                     <td class="py-3 px-4 font-mono text-xs text-slate-500">${s.pass}</td>
                     <td class="py-3 px-4">
-                        <span class="px-2 py-0.5 rounded text-[11px] font-semibold bg-blue-50 text-blue-700">${s.source || 'Admin'}</span>
-                    </td>
-                    <td class="py-3 px-4">
                         <span class="px-2.5 py-1 rounded-full text-xs font-bold ${s.feeStatus === 'Paid' ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'}">${s.feeStatus}</span>
+                    </td>
+                    <td class="py-3 px-4 text-center space-x-1">
+                        <button onclick="openReportCardByRoll('${s.roll}')" title="Print Report Card" class="bg-blue-50 hover:bg-blue-700 text-blue-700 hover:text-white px-2.5 py-1.5 rounded-lg text-xs font-bold transition shadow-sm">
+                            <i class="fas fa-print"></i> Report
+                        </button>
+                        <button onclick="deleteStudent('${s.roll}')" title="Delete Candidate" class="bg-red-50 hover:bg-red-600 text-red-600 hover:text-white px-2.5 py-1.5 rounded-lg text-xs font-bold transition shadow-sm">
+                            <i class="fas fa-trash-alt"></i> Delete
+                        </button>
                     </td>
                 </tr>
             `).join('');
+
+            renderAdminStudentMarksList();
+
+            document.getElementById('adminExamList').innerHTML = erpData.exams.map((ex, idx) => `
+                <div class="flex justify-between items-center bg-slate-50 px-3 py-2 rounded-lg border border-slate-200">
+                    <div>
+                        <span class="font-bold text-blue-700">[${ex.targetClass}]</span>
+                        <span class="font-semibold text-slate-800 ml-1">${ex.subject}</span>
+                        <span class="text-slate-400 ml-1">(${ex.date})</span>
+                    </div>
+                    <button onclick="deleteExam(${idx})" class="text-red-500 hover:text-red-700 font-bold px-2">
+                        <i class="fas fa-trash-alt"></i>
+                    </button>
+                </div>
+            `).join('');
+
+            document.getElementById('adminHolidayList').innerHTML = erpData.holidays.map((h, idx) => `
+                <div class="flex justify-between items-center bg-slate-50 px-3 py-1.5 rounded-lg border border-slate-200">
+                    <div>
+                        <span class="font-semibold text-slate-800">${h.title}</span>
+                        <span class="text-emerald-700 ml-1">(${h.date})</span>
+                    </div>
+                    <button onclick="deleteHoliday(${idx})" class="text-red-500 hover:text-red-700 font-bold px-2">
+                        <i class="fas fa-trash-alt"></i>
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        // Render Selected Student's Marks with Edit & Delete Buttons in Admin Panel
+        function renderAdminStudentMarksList() {
+            const roll = document.getElementById('markRoll').value;
+            const student = erpData.students.find(s => s.roll === roll);
+            const container = document.getElementById('adminStudentMarksManager');
+            if (!student || !student.marks.length) {
+                container.innerHTML = `<div class="text-slate-400 italic py-2">No test scores uploaded for this candidate yet.</div>`;
+                return;
+            }
+            container.innerHTML = student.marks.map((m, idx) => `
+                <div class="flex justify-between items-center bg-slate-50 px-3 py-2 rounded-lg border border-slate-200">
+                    <div>
+                        <span class="font-bold text-blue-700">${m.subject}:</span>
+                        <span class="text-slate-800 font-medium">${m.topic}</span>
+                        <span class="font-extrabold text-emerald-700 ml-1">(${m.score}/${m.total})</span>
+                        <span class="text-[10px] text-slate-400 ml-1">${m.date}</span>
+                    </div>
+                    <div class="flex items-center gap-1.5 shrink-0">
+                        <button type="button" onclick="openEditMarkModal('${student.roll}', ${idx})" class="bg-blue-100 hover:bg-blue-700 text-blue-700 hover:text-white px-2 py-1 rounded text-[11px] font-bold transition">
+                            <i class="fas fa-edit"></i> Edit
+                        </button>
+                        <button type="button" onclick="deleteTestMark('${student.roll}', ${idx})" class="bg-red-100 hover:bg-red-600 text-red-600 hover:text-white px-2 py-1 rounded text-[11px] font-bold transition">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Open Edit Mark Modal
+        function openEditMarkModal(roll, index) {
+            const student = erpData.students.find(s => s.roll === roll);
+            if (!student || !student.marks[index]) return;
+            const mark = student.marks[index];
+            editingMarkRef = { roll, index };
+
+            document.getElementById('editMarkSubject').value = mark.subject;
+            document.getElementById('editMarkTopic').value = mark.topic;
+            document.getElementById('editMarkScore').value = mark.score;
+            document.getElementById('editMarkTotal').value = mark.total;
+            document.getElementById('editMarkDate').value = mark.date;
+            document.getElementById('editMarkModal').classList.remove('hidden');
+        }
+
+        function closeEditMarkModal() {
+            document.getElementById('editMarkModal').classList.add('hidden');
+            editingMarkRef = { roll: null, index: null };
+        }
+
+        function saveEditedMark(e) {
+            e.preventDefault();
+            const { roll, index } = editingMarkRef;
+            const student = erpData.students.find(s => s.roll === roll);
+            if (student && student.marks[index]) {
+                student.marks[index] = {
+                    subject: document.getElementById('editMarkSubject').value.trim(),
+                    topic: document.getElementById('editMarkTopic').value.trim(),
+                    score: Number(document.getElementById('editMarkScore').value),
+                    total: Number(document.getElementById('editMarkTotal').value),
+                    date: document.getElementById('editMarkDate').value
+                };
+                saveERP();
+                renderAdminDashboard();
+                closeEditMarkModal();
+            }
+        }
+
+        // Delete Student Test Mark with Confirmation Modal
+        function deleteTestMark(roll, index) {
+            const student = erpData.students.find(s => s.roll === roll);
+            if (!student || !student.marks[index]) return;
+            const mark = student.marks[index];
+
+            openConfirmModal(
+                "Delete Test Score?",
+                `Are you sure you want to delete ${student.name}'s ${mark.subject} score (${mark.score}/${mark.total})?`,
+                function () {
+                    student.marks.splice(index, 1);
+                    saveERP();
+                    renderAdminDashboard();
+                }
+            );
+        }
+
+        // Printable Report Card Generator
+        function openReportCardByRoll(rollId) {
+            const student = erpData.students.find(s => s.roll === rollId);
+            if (student) populateAndShowReportCard(student);
+        }
+
+        function openReportCardForActiveUser() {
+            if (activeLoggedInStudent) populateAndShowReportCard(activeLoggedInStudent);
+        }
+
+        function populateAndShowReportCard(student) {
+            document.getElementById('rcDateIssued').innerText = "Generated: " + new Date().toLocaleDateString('en-IN');
+            document.getElementById('rcName').innerText = student.name;
+            document.getElementById('rcRoll').innerText = student.roll;
+            document.getElementById('rcBatch').innerText = student.classBatch.split('(')[0];
+            document.getElementById('rcAttFee').innerText = `${student.attendance}% | Fee: ${student.feeStatus}`;
+            document.getElementById('rcRemark').innerText = `"${student.remark}"`;
+
+            let totalScored = 0;
+            let totalMax = 0;
+
+            const rowsHTML = student.marks.length ? student.marks.map(m => {
+                totalScored += Number(m.score);
+                totalMax += Number(m.total);
+                const pct = Math.round((m.score / m.total) * 100);
+                const grade = pct >= 90 ? 'A1' : pct >= 80 ? 'A2' : pct >= 70 ? 'B1' : pct >= 60 ? 'B2' : 'C';
+                return `
+                    <tr>
+                        <td class="py-2 px-3 text-slate-600">${m.date}</td>
+                        <td class="py-2 px-3 font-bold text-slate-900">${m.subject}</td>
+                        <td class="py-2 px-3 text-slate-700">${m.topic}</td>
+                        <td class="py-2 px-3 text-center font-bold text-slate-900">${m.score} / ${m.total}</td>
+                        <td class="py-2 px-3 text-center font-extrabold text-blue-700">${pct}% (${grade})</td>
+                    </tr>
+                `;
+            }).join('') : `<tr><td colspan="5" class="py-4 text-center text-slate-400">No weekly test records available yet.</td></tr>`;
+
+            document.getElementById('rcMarksTableBody').innerHTML = rowsHTML;
+            const overallPct = totalMax > 0 ? Math.round((totalScored / totalMax) * 100) : 0;
+            document.getElementById('rcOverallAggregate').innerText = `${totalScored}/${totalMax} (${overallPct}%)`;
+
+            document.getElementById('reportCardModal').classList.remove('hidden');
+        }
+
+        function closeReportCardModal() {
+            document.getElementById('reportCardModal').classList.add('hidden');
+        }
+
+        function deleteStudent(rollId) {
+            const student = erpData.students.find(s => s.roll === rollId);
+            if (!student) return;
+
+            openConfirmModal(
+                "Delete Candidate?",
+                `Are you sure you want to permanently delete "${student.name}" (Roll ID: ${rollId}) from the Admin Database?`,
+                function () {
+                    erpData.students = erpData.students.filter(s => s.roll !== rollId);
+                    saveERP();
+                    renderAdminDashboard();
+                }
+            );
+        }
+
+        function deleteExam(index) {
+            const exam = erpData.exams[index];
+            if (!exam) return;
+
+            openConfirmModal(
+                "Delete Exam Schedule?",
+                `Are you sure you want to remove "${exam.subject}" (${exam.targetClass}) from the schedule?`,
+                function () {
+                    erpData.exams.splice(index, 1);
+                    saveERP();
+                    renderAdminDashboard();
+                }
+            );
+        }
+
+        function deleteHoliday(index) {
+            const hol = erpData.holidays[index];
+            if (!hol) return;
+
+            openConfirmModal(
+                "Remove Holiday Notice?",
+                `Are you sure you want to delete "${hol.title}"?`,
+                function () {
+                    erpData.holidays.splice(index, 1);
+                    saveERP();
+                    renderAdminDashboard();
+                }
+            );
         }
 
         function registerNewStudent(e) {
@@ -860,8 +1271,11 @@
                     date: document.getElementById('markDate').value
                 });
                 saveERP();
-                e.target.reset();
-                alert(`Test score published for ${student.name}!`);
+                renderAdminDashboard();
+                document.getElementById('markSubject').value = '';
+                document.getElementById('markTopic').value = '';
+                document.getElementById('markScore').value = '';
+                document.getElementById('markTotal').value = '';
             }
         }
 
@@ -874,8 +1288,8 @@
                 time: document.getElementById('examTime').value
             });
             saveERP();
+            renderAdminDashboard();
             e.target.reset();
-            alert("New exam schedule added!");
         }
 
         function addHoliday(e) {
@@ -885,8 +1299,8 @@
                 date: document.getElementById('holDate').value
             });
             saveERP();
+            renderAdminDashboard();
             e.target.reset();
-            alert("Holiday / Notice published!");
         }
 
         function updateStudentMeta(e) {
