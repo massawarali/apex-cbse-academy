@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Apex CBSE Academy | ERP Login & Student Portal</title>
+    <title>Apex CBSE Academy | ERP Login & Online Fee Portal</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Google Fonts -->
@@ -166,6 +166,124 @@
         </div>
     </div>
 
+    <!-- ================= ONLINE FEE PAYMENT GATEWAY MODAL (UPI + NET BANKING) ================= -->
+    <div id="paymentGatewayModal" class="hidden fixed inset-0 z-50 bg-slate-950/75 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto no-print">
+        <div class="bg-white rounded-3xl max-w-md w-full overflow-hidden shadow-2xl border border-slate-200 my-6 modal-animate">
+            <!-- Gateway Header -->
+            <div class="bg-gradient-to-r from-slate-900 via-blue-900 to-indigo-900 text-white p-5 flex justify-between items-center">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-emerald-500 text-slate-950 flex items-center justify-center font-extrabold text-lg shadow">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <div>
+                        <span class="text-[10px] font-bold uppercase tracking-widest text-emerald-300 block">Apex Secure Checkout</span>
+                        <h3 class="text-base font-extrabold leading-tight" id="payGatewayStudentName">Student Name</h3>
+                    </div>
+                </div>
+                <div class="text-right">
+                    <span class="text-[10px] text-blue-200 block">Payable Fee</span>
+                    <strong class="text-xl font-extrabold text-amber-400" id="payGatewayAmount">₹1,200</strong>
+                </div>
+            </div>
+
+            <!-- Method Tabs: UPI vs Net Banking -->
+            <div class="grid grid-cols-2 bg-slate-100 p-1.5 border-b border-slate-200 text-xs font-bold">
+                <button type="button" id="payTabUpi" onclick="switchPaymentTab('upi')" class="py-2.5 rounded-xl bg-white text-blue-700 shadow-sm transition flex items-center justify-center gap-1.5">
+                    <i class="fas fa-qrcode text-emerald-600"></i> UPI / QR Scan
+                </button>
+                <button type="button" id="payTabBank" onclick="switchPaymentTab('netbanking')" class="py-2.5 rounded-xl text-slate-600 hover:text-slate-900 transition flex items-center justify-center gap-1.5">
+                    <i class="fas fa-university text-blue-600"></i> Net Banking
+                </button>
+            </div>
+
+            <div class="p-6">
+                <!-- TAB 1: UPI QR & APPS -->
+                <div id="upiPaymentView" class="space-y-4">
+                    <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4 text-center">
+                        <span class="inline-block bg-emerald-100 text-emerald-800 text-[10px] font-extrabold px-2.5 py-0.5 rounded-full uppercase mb-2">
+                            Scan with GPay • PhonePe • Paytm • BHIM
+                        </span>
+                        <div class="w-40 h-40 mx-auto bg-white p-2 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-center">
+                            <img id="dynamicUpiQr" src="" alt="UPI QR" class="w-full h-full object-contain">
+                        </div>
+                        <p class="text-xs font-bold text-slate-800 mt-2">
+                            Merchant UPI ID: <span id="displayMerchantUpi" class="text-blue-700 font-mono">9337042839@ybl</span>
+                        </p>
+                        <!-- Direct UPI Deep-Link Button for Mobile Users -->
+                        <a id="upiIntentLink" href="#" class="mt-2.5 inline-flex items-center justify-center gap-2 bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 text-xs font-bold px-4 py-2 rounded-xl transition">
+                            <i class="fas fa-mobile-alt"></i> Open UPI App on Phone
+                        </a>
+                    </div>
+
+                    <form onsubmit="completeOnlinePayment(event, 'UPI')" class="space-y-3">
+                        <div>
+                            <label class="block text-[11px] font-bold uppercase text-slate-600 mb-1">Enter 12-Digit UPI Ref / UTR No. (Or Click Instant Demo Pay) *</label>
+                            <input type="text" id="upiUtrInput" required minlength="6" placeholder="e.g. 432189765412" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-600 text-sm font-mono">
+                        </div>
+                        <div class="grid grid-cols-2 gap-2.5">
+                            <button type="button" onclick="simulateInstantGateway('UPI App')" class="py-2.5 px-3 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-extrabold text-xs shadow transition flex items-center justify-center gap-1.5">
+                                <i class="fas fa-bolt"></i> Instant UPI Pay
+                            </button>
+                            <button type="submit" class="py-2.5 px-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs shadow-lg transition flex items-center justify-center gap-1.5">
+                                <i class="fas fa-check-circle"></i> Verify UTR & Pay
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- TAB 2: NET BANKING & NEFT/IMPS -->
+                <div id="netbankingPaymentView" class="hidden space-y-4">
+                    <div>
+                        <label class="block text-[11px] font-bold uppercase text-slate-600 mb-1.5">Select Your Bank for Net Banking *</label>
+                        <div class="grid grid-cols-3 gap-2 mb-2 text-xs font-bold">
+                            <button type="button" onclick="selectQuickBank('State Bank of India (SBI)')" class="p-2 border border-slate-200 rounded-xl hover:border-blue-600 hover:bg-blue-50 text-slate-700 transition">SBI</button>
+                            <button type="button" onclick="selectQuickBank('HDFC Bank NetBanking')" class="p-2 border border-slate-200 rounded-xl hover:border-blue-600 hover:bg-blue-50 text-slate-700 transition">HDFC</button>
+                            <button type="button" onclick="selectQuickBank('ICICI Bank NetBanking')" class="p-2 border border-slate-200 rounded-xl hover:border-blue-600 hover:bg-blue-50 text-slate-700 transition">ICICI</button>
+                        </div>
+                        <select id="bankSelector" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 bg-white text-sm font-semibold">
+                            <option value="State Bank of India (SBI)">State Bank of India (SBI)</option>
+                            <option value="HDFC Bank NetBanking">HDFC Bank</option>
+                            <option value="ICICI Bank NetBanking">ICICI Bank</option>
+                            <option value="Axis Bank NetBanking">Axis Bank</option>
+                            <option value="Bank of India / PNB / Canara">Punjab National Bank / Canara / BOI</option>
+                            <option value="UCO / Odisha Gramya Bank">UCO Bank / Odisha Gramya Bank</option>
+                        </select>
+                    </div>
+
+                    <!-- Direct Bank Account Details for NEFT / IMPS -->
+                    <div class="bg-slate-50 p-3.5 rounded-2xl border border-slate-200 text-xs space-y-1">
+                        <div class="font-extrabold text-slate-800 uppercase text-[10px] text-blue-700 mb-1">Academy Bank Account (For NEFT / IMPS)</div>
+                        <div class="flex justify-between"><span class="text-slate-500">Account Name:</span><strong class="text-slate-900">Apex CBSE Academy</strong></div>
+                        <div class="flex justify-between"><span class="text-slate-500">Account No:</span><strong id="displayBankAcc" class="text-slate-900 font-mono">309876543210</strong></div>
+                        <div class="flex justify-between"><span class="text-slate-500">IFSC Code:</span><strong id="displayBankIfsc" class="text-slate-900 font-mono">SBIN0004567</strong></div>
+                    </div>
+
+                    <form onsubmit="completeOnlinePayment(event, 'NetBanking')" class="space-y-3">
+                        <div>
+                            <label class="block text-[11px] font-bold uppercase text-slate-600 mb-1">IMPS / NetBanking Ref No. (Optional for Instant Checkout)</label>
+                            <input type="text" id="bankRefInput" placeholder="Enter Transaction Ref ID" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm font-mono">
+                        </div>
+                        <button type="button" onclick="simulateInstantGateway('NetBanking')" id="netBankingPayBtn" class="w-full py-3 rounded-xl bg-blue-700 hover:bg-blue-800 text-white font-extrabold text-sm shadow-lg transition flex items-center justify-center gap-2">
+                            <i class="fas fa-lock"></i> Proceed to Bank Login & Pay
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Processing Animation Box -->
+                <div id="paymentProcessingBox" class="hidden py-6 text-center space-y-3">
+                    <i class="fas fa-circle-notch fa-spin text-3xl text-blue-700"></i>
+                    <div class="text-sm font-extrabold text-slate-900">Connecting to Bank Server & Verifying Payment...</div>
+                    <p class="text-xs text-slate-500">Please do not close or refresh this window.</p>
+                </div>
+
+                <div class="mt-4 pt-3 border-t border-slate-100 flex justify-between items-center text-[11px] text-slate-400">
+                    <span><i class="fas fa-lock text-emerald-600 mr-1"></i>100% Secure 256-Bit Encrypted</span>
+                    <button type="button" onclick="closePaymentGateway()" class="text-slate-600 hover:text-red-600 font-bold">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- ================= CUSTOM DELETE CONFIRMATION MODAL ================= -->
     <div id="confirmModal" class="hidden fixed inset-0 z-50 bg-slate-950/60 backdrop-blur-sm flex items-center justify-center p-4 no-print">
         <div class="bg-white rounded-3xl max-w-sm w-full p-6 shadow-2xl border border-slate-200 text-center modal-animate">
@@ -228,7 +346,6 @@
     <!-- ================= PRINTABLE FEE RECEIPT GENERATOR MODAL ================= -->
     <div id="feeReceiptModal" class="hidden fixed inset-0 z-50 bg-slate-950/75 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
         <div class="bg-white rounded-3xl max-w-xl w-full p-6 sm:p-8 shadow-2xl border-2 border-slate-900 my-8 modal-animate" id="printableFeeReceipt">
-            <!-- Receipt Top Header -->
             <div class="flex justify-between items-start border-b-2 border-slate-900 pb-4 mb-5">
                 <div class="flex items-center gap-3">
                     <div class="w-12 h-12 rounded-xl bg-emerald-600 text-white flex items-center justify-center font-extrabold text-2xl shadow">A</div>
@@ -249,7 +366,6 @@
                 </div>
             </div>
 
-            <!-- Student Details Grid -->
             <div class="grid grid-cols-2 gap-3 bg-slate-50 p-4 rounded-2xl border border-slate-200 text-xs mb-5">
                 <div>
                     <span class="text-slate-400 font-bold uppercase block">Student Name</span>
@@ -264,12 +380,11 @@
                     <strong id="recStudentBatch" class="text-slate-800">Class 10 (Shift 2)</strong>
                 </div>
                 <div>
-                    <span class="text-slate-400 font-bold uppercase block">Registered Mobile & Mode</span>
-                    <strong id="recStudentPhoneMode" class="text-slate-800">9876543210 • UPI / Cash</strong>
+                    <span class="text-slate-400 font-bold uppercase block">Payment Mode & Ref ID</span>
+                    <strong id="recStudentPhoneMode" class="text-slate-800">UPI • Ref: N/A</strong>
                 </div>
             </div>
 
-            <!-- Fee Breakdown Table -->
             <div class="border border-slate-300 rounded-xl overflow-hidden mb-5">
                 <table class="w-full text-left border-collapse text-xs sm:text-sm">
                     <thead>
@@ -300,7 +415,6 @@
                 </table>
             </div>
 
-            <!-- QR & Authorized Signature -->
             <div class="flex justify-between items-center pt-4 border-t border-slate-200 text-xs">
                 <div class="flex items-center gap-2.5">
                     <img id="recQrImg" src="" alt="QR" class="w-12 h-12 rounded-lg border border-slate-200 p-0.5">
@@ -315,7 +429,6 @@
                 </div>
             </div>
 
-            <!-- Modal Buttons -->
             <div class="flex justify-end gap-3 mt-6 pt-4 border-t border-slate-200 no-print">
                 <button type="button" onclick="closeFeeReceiptModal()" class="px-5 py-2.5 rounded-xl border border-slate-300 text-xs sm:text-sm font-bold text-slate-700 hover:bg-slate-100">
                     Close
@@ -511,7 +624,7 @@
                         Track Every Test, <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-300 to-amber-500">Master Every Concept.</span>
                     </h1>
                     <p class="text-blue-100 text-sm sm:text-base mb-8 max-w-xl">
-                        Welcome to Apex CBSE Academy's live Student & Parent ERP. Create your account or sign in to view Saturday OMR test scores, digital Student ID Cards, Fee Receipts, and printable report cards.
+                        Welcome to Apex CBSE Academy's live Student & Parent ERP. Pay coaching fees online via UPI or Net Banking, download instant receipts, and track weekly test scores.
                     </p>
 
                     <div class="relative flex items-center justify-center my-4 w-full max-w-md mx-auto lg:mx-0">
@@ -532,11 +645,11 @@
 
                         <div class="hidden sm:flex items-center gap-2.5 bg-white text-slate-900 px-3.5 py-2 rounded-2xl shadow-xl absolute -top-4 -left-4 z-20 animate-float">
                             <div class="w-8 h-8 rounded-lg bg-amber-100 text-amber-600 flex items-center justify-center font-bold">
-                                <i class="fas fa-id-badge"></i>
+                                <i class="fas fa-qrcode"></i>
                             </div>
                             <div class="text-left">
-                                <div class="text-[11px] font-extrabold leading-tight">Digital ID & Receipt</div>
-                                <div class="text-[10px] text-slate-500">Instant QR Verification</div>
+                                <div class="text-[11px] font-extrabold leading-tight">UPI & Net Banking</div>
+                                <div class="text-[10px] text-slate-500">Instant Online Fee Pay</div>
                             </div>
                         </div>
 
@@ -717,8 +830,8 @@
 
         <div class="bg-slate-950/90 border-t border-white/10 py-3 overflow-hidden relative z-10">
             <div class="marquee-track text-slate-300 text-xs font-semibold space-x-10 px-4">
-                <span class="flex items-center gap-2"><i class="fas fa-bolt text-amber-400"></i> Real-Time Saturday Test Scorecards</span>
-                <span class="flex items-center gap-2"><i class="fas fa-receipt text-emerald-400"></i> Digital Tuition Fee Receipts with QR</span>
+                <span class="flex items-center gap-2"><i class="fas fa-qrcode text-emerald-400"></i> Instant Online Fee Payment via UPI & Net Banking</span>
+                <span class="flex items-center gap-2"><i class="fas fa-receipt text-amber-400"></i> Automated Digital Fee Receipts with UTR</span>
                 <span class="flex items-center gap-2"><i class="fas fa-id-card text-blue-400"></i> Instant Printable Student ID Cards</span>
                 <span class="flex items-center gap-2"><i class="fas fa-file-pdf text-amber-300"></i> Official Printable Progress Report Cards</span>
                 <span class="flex items-center gap-2"><i class="fas fa-user-shield text-purple-400"></i> Direct Founder Mentorship by Massawar Ali Khan</span>
@@ -732,7 +845,7 @@
             <div>
                 <span class="bg-amber-400 text-slate-950 text-xs font-extrabold px-3 py-1 rounded-full uppercase">Full Admin Control</span>
                 <h1 class="text-2xl sm:text-3xl font-extrabold mt-2">Founder & Admin Panel — Massawar Ali Khan</h1>
-                <p class="text-blue-200 text-xs sm:text-sm">Manage students, edit/delete weekly test marks, and print Student ID Cards, Fee Receipts & Report Cards.</p>
+                <p class="text-blue-200 text-xs sm:text-sm">Manage students, configure UPI/Bank gateway, and print Student ID Cards, Fee Receipts & Report Cards.</p>
             </div>
             <button onclick="resetDefaultData()" class="bg-white/10 hover:bg-white/20 border border-white/20 text-xs font-semibold px-4 py-2.5 rounded-xl">
                 <i class="fas fa-sync-alt mr-1"></i> Reset System Data
@@ -766,6 +879,16 @@
                     <input type="text" id="regPin" required placeholder="Set Login PIN (e.g. 1234)" class="w-full px-3.5 py-2.5 rounded-lg border border-slate-300">
                     <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 rounded-xl">Add Student to Database</button>
                 </form>
+
+                <!-- Admin Payment Gateway Settings (UPI ID & Bank Account) -->
+                <div class="mt-5 pt-4 border-t border-slate-200">
+                    <h4 class="font-bold text-xs uppercase text-blue-700 mb-2"><i class="fas fa-qrcode mr-1"></i> Academy UPI & NetBanking Receiver Settings</h4>
+                    <form onsubmit="saveGatewaySettings(event)" class="grid grid-cols-3 gap-2 text-xs">
+                        <input type="text" id="adminUpiId" required placeholder="UPI ID (e.g. 9337042839@ybl)" class="px-2.5 py-2 rounded-lg border border-slate-300 font-mono">
+                        <input type="text" id="adminBankAcc" required placeholder="Bank Account No." class="px-2.5 py-2 rounded-lg border border-slate-300 font-mono">
+                        <button type="submit" class="bg-blue-700 hover:bg-blue-800 text-white font-bold rounded-lg px-3 py-2">Save UPI/Bank</button>
+                    </form>
+                </div>
             </div>
 
             <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
@@ -845,6 +968,7 @@
                             </select>
                             <select id="metaPayMode" class="px-3 py-2 rounded-lg border border-slate-300 bg-white">
                                 <option value="UPI / Online">UPI / Online</option>
+                                <option value="Net Banking">Net Banking</option>
                                 <option value="Cash Desk">Cash Desk</option>
                             </select>
                         </div>
@@ -858,7 +982,7 @@
         <!-- Admin Student Overview Table -->
         <div class="mt-8 bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
             <div class="px-6 py-4 bg-slate-900 text-white flex justify-between items-center">
-                <h3 class="font-bold">Registered Candidates & Parents Database (Gmail & Mobile Directory)</h3>
+                <h3 class="font-bold">Registered Candidates & Parents Database (Gmail, Mobile & Online Fee Status)</h3>
                 <span id="totalStudentCount" class="text-xs bg-amber-400 text-slate-950 font-extrabold px-3 py-1 rounded-full"></span>
             </div>
             <div class="overflow-x-auto">
@@ -868,10 +992,9 @@
                             <th class="py-3 px-4">Roll ID</th>
                             <th class="py-3 px-4">Student Name</th>
                             <th class="py-3 px-4">Batch</th>
-                            <th class="py-3 px-4">Gmail ID</th>
-                            <th class="py-3 px-4">Mobile No.</th>
+                            <th class="py-3 px-4">Gmail & Mobile</th>
                             <th class="py-3 px-4">PIN</th>
-                            <th class="py-3 px-4">Fee Status</th>
+                            <th class="py-3 px-4">Fee Status & UTR</th>
                             <th class="py-3 px-4 text-center">Actions (ID / Receipt / Report / Delete)</th>
                         </tr>
                     </thead>
@@ -883,7 +1006,7 @@
 
     <!-- ================= 3. CANDIDATE & PARENT DASHBOARD ================= -->
     <section id="userDashboard" class="hidden flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 no-print">
-        <div class="bg-gradient-to-r from-blue-800 to-indigo-900 text-white rounded-2xl p-6 mb-8 shadow-lg flex flex-wrap justify-between items-center gap-4">
+        <div class="bg-gradient-to-r from-blue-800 to-indigo-900 text-white rounded-2xl p-6 mb-6 shadow-lg flex flex-wrap justify-between items-center gap-4">
             <div>
                 <span id="userRolePill" class="bg-amber-400 text-slate-950 text-xs font-extrabold px-3 py-1 rounded-full uppercase">Candidate View</span>
                 <h1 id="userNameHeading" class="text-2xl sm:text-3xl font-extrabold mt-2">Student Name</h1>
@@ -898,17 +1021,49 @@
                     <div id="userAvgStat" class="text-xl font-extrabold text-emerald-400">0%</div>
                     <div class="text-[10px] text-blue-100">Avg. Score</div>
                 </div>
+                <!-- Pay Fee Online Button (Visible to Both Candidate & Parents) -->
+                <button onclick="openOnlinePaymentGateway()" class="bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-extrabold text-xs px-4 py-3 rounded-xl shadow-lg transition flex items-center gap-1.5">
+                    <i class="fas fa-credit-card"></i>
+                    <span>Pay Fee (UPI / Bank)</span>
+                </button>
                 <button onclick="openIdCardForActiveUser()" class="bg-white hover:bg-blue-50 text-blue-900 font-extrabold text-xs px-3.5 py-3 rounded-xl shadow-lg transition flex items-center gap-1.5">
                     <i class="fas fa-id-badge text-blue-700"></i>
                     <span>ID Card</span>
                 </button>
-                <button onclick="openFeeReceiptForActiveUser()" class="bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-extrabold text-xs px-3.5 py-3 rounded-xl shadow-lg transition flex items-center gap-1.5">
+                <button onclick="openFeeReceiptForActiveUser()" class="bg-blue-600 hover:bg-blue-500 text-white font-extrabold text-xs px-3.5 py-3 rounded-xl shadow-lg transition flex items-center gap-1.5">
                     <i class="fas fa-receipt"></i>
-                    <span>Fee Receipt</span>
+                    <span>Receipt</span>
                 </button>
                 <button onclick="openReportCardForActiveUser()" class="bg-amber-400 hover:bg-amber-300 text-slate-950 font-extrabold text-xs px-3.5 py-3 rounded-xl shadow-lg transition flex items-center gap-1.5">
                     <i class="fas fa-print"></i>
                     <span>Report Card</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- ONLINE FEE PAYMENT BANNER (FOR BOTH STUDENT & PARENTS) -->
+        <div class="mb-8 bg-white border-2 border-blue-600/20 rounded-2xl p-5 shadow-sm flex flex-wrap justify-between items-center gap-4">
+            <div class="flex items-center gap-4">
+                <div id="feeBannerIcon" class="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center text-2xl shrink-0">
+                    <i class="fas fa-rupee-sign"></i>
+                </div>
+                <div>
+                    <div class="flex items-center gap-2">
+                        <span class="text-xs font-extrabold uppercase tracking-wider text-slate-400">Monthly Tuition Fee</span>
+                        <span id="dashboardFeePill" class="px-2.5 py-0.5 rounded-full text-[11px] font-extrabold bg-emerald-100 text-emerald-800">PAID</span>
+                    </div>
+                    <div class="text-lg sm:text-xl font-extrabold text-slate-900 mt-0.5">
+                        <span id="dashboardFeeAmount">₹1,200 / month</span>
+                        <span id="dashboardLastTxn" class="text-xs font-medium text-slate-500 ml-2"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="flex items-center gap-2.5">
+                <button onclick="openOnlinePaymentGateway()" id="mainPayActionBtn" class="bg-blue-700 hover:bg-blue-800 text-white font-extrabold text-xs sm:text-sm px-5 py-3 rounded-xl shadow-md transition flex items-center gap-2">
+                    <i class="fas fa-qrcode"></i> Pay Online via UPI / Net Banking
+                </button>
+                <button onclick="openFeeReceiptForActiveUser()" class="bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs sm:text-sm px-4 py-3 rounded-xl transition flex items-center gap-1.5">
+                    <i class="fas fa-download text-emerald-600"></i> Receipt PDF
                 </button>
             </div>
         </div>
@@ -927,9 +1082,14 @@
                             <span id="parentFeeAmountText" class="text-sm font-bold text-slate-700">(₹1,200/mo)</span>
                         </div>
                     </div>
-                    <button onclick="openFeeReceiptForActiveUser()" class="mt-3 w-full bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold py-2 px-3 rounded-lg transition flex items-center justify-center gap-1.5">
-                        <i class="fas fa-file-invoice-dollar"></i> Download Fee Receipt PDF
-                    </button>
+                    <div class="grid grid-cols-2 gap-2 mt-3">
+                        <button onclick="openOnlinePaymentGateway()" class="bg-blue-700 hover:bg-blue-800 text-white text-xs font-bold py-2 px-2.5 rounded-lg transition flex items-center justify-center gap-1">
+                            <i class="fas fa-bolt"></i> Pay Online
+                        </button>
+                        <button onclick="openFeeReceiptForActiveUser()" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold py-2 px-2.5 rounded-lg transition flex items-center justify-center gap-1">
+                            <i class="fas fa-receipt"></i> Receipt
+                        </button>
+                    </div>
                 </div>
                 <div class="bg-white p-4 rounded-xl border border-amber-200 md:col-span-2">
                     <span class="text-xs font-bold uppercase text-slate-400">Founder / Mentor's Remark (Massawar Sir)</span>
@@ -987,6 +1147,11 @@
         let lastActivityResetTime = 0;
 
         const defaultERPData = {
+            gatewayConfig: {
+                upiId: "9337042839@ybl",
+                bankAccount: "309876543210",
+                bankIfsc: "SBIN0004567"
+            },
             students: [
                 {
                     roll: "APEX101",
@@ -999,6 +1164,7 @@
                     feeAmount: 1200,
                     feeStatus: "Paid",
                     payMode: "UPI / Online",
+                    lastTxnId: "UTR4329812094",
                     source: "Admin",
                     remark: "Strong in Maths & IT concepts. Needs slight speed improvement in Physics numericals.",
                     marks: [
@@ -1017,7 +1183,8 @@
                     attendance: 89,
                     feeAmount: 1000,
                     feeStatus: "Pending",
-                    payMode: "Cash Desk",
+                    payMode: "Pending",
+                    lastTxnId: "",
                     source: "Admin",
                     remark: "Very regular with NCERT homework. Scored highest in Friday Mental Maths quiz.",
                     marks: [
@@ -1039,6 +1206,10 @@
         };
 
         let erpData = JSON.parse(localStorage.getItem('apexERP_v3')) || defaultERPData;
+        if (!erpData.gatewayConfig) {
+            erpData.gatewayConfig = { upiId: "9337042839@ybl", bankAccount: "309876543210", bankIfsc: "SBIN0004567" };
+        }
+
         let currentRole = 'admin';
         let currentAuthMode = 'login';
         let activeLoggedInStudent = null;
@@ -1048,6 +1219,105 @@
 
         function saveERP() {
             localStorage.setItem('apexERP_v3', JSON.stringify(erpData));
+        }
+
+        // ================= ONLINE FEE PAYMENT GATEWAY FUNCTIONS (UPI + NET BANKING) =================
+        function openOnlinePaymentGateway() {
+            if (!activeLoggedInStudent) return;
+            const student = activeLoggedInStudent;
+            const feeVal = student.feeAmount || (student.classBatch.includes('Class 6') ? 800 : student.classBatch.includes('Class 8') ? 1000 : 1200);
+            const upiId = (erpData.gatewayConfig && erpData.gatewayConfig.upiId) ? erpData.gatewayConfig.upiId : "9337042839@ybl";
+            const bankAcc = (erpData.gatewayConfig && erpData.gatewayConfig.bankAccount) ? erpData.gatewayConfig.bankAccount : "309876543210";
+
+            document.getElementById('payGatewayStudentName').innerText = `${student.name} (${student.roll})`;
+            document.getElementById('payGatewayAmount').innerText = `₹${Number(feeVal).toLocaleString('en-IN')}`;
+            document.getElementById('displayMerchantUpi').innerText = upiId;
+            document.getElementById('displayBankAcc').innerText = bankAcc;
+
+            // Build standard UPI Deep-Link & QR Code
+            const upiString = `upi://pay?pa=${encodeURIComponent(upiId)}&pn=${encodeURIComponent('Apex CBSE Academy')}&am=${feeVal}&cu=INR&tn=${encodeURIComponent('Fee ' + student.roll)}`;
+            document.getElementById('upiIntentLink').href = upiString;
+            document.getElementById('dynamicUpiQr').src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(upiString)}`;
+
+            switchPaymentTab('upi');
+            document.getElementById('paymentProcessingBox').classList.add('hidden');
+            document.getElementById('paymentGatewayModal').classList.remove('hidden');
+        }
+
+        function closePaymentGateway() {
+            document.getElementById('paymentGatewayModal').classList.add('hidden');
+        }
+
+        function switchPaymentTab(tab) {
+            const upiView = document.getElementById('upiPaymentView');
+            const bankView = document.getElementById('netbankingPaymentView');
+            const tabUpi = document.getElementById('payTabUpi');
+            const tabBank = document.getElementById('payTabBank');
+
+            if (tab === 'upi') {
+                upiView.classList.remove('hidden');
+                bankView.classList.add('hidden');
+                tabUpi.className = "py-2.5 rounded-xl bg-white text-blue-700 shadow-sm transition flex items-center justify-center gap-1.5";
+                tabBank.className = "py-2.5 rounded-xl text-slate-600 hover:text-slate-900 transition flex items-center justify-center gap-1.5";
+            } else {
+                upiView.classList.add('hidden');
+                bankView.classList.remove('hidden');
+                tabBank.className = "py-2.5 rounded-xl bg-white text-blue-700 shadow-sm transition flex items-center justify-center gap-1.5";
+                tabUpi.className = "py-2.5 rounded-xl text-slate-600 hover:text-slate-900 transition flex items-center justify-center gap-1.5";
+            }
+        }
+
+        function selectQuickBank(bankName) {
+            document.getElementById('bankSelector').value = bankName;
+        }
+
+        function simulateInstantGateway(methodType) {
+            const generatedRef = (methodType === 'UPI App' ? 'UPI' : 'NBK') + Math.floor(1000000000 + Math.random() * 9000000000);
+            processAndFinalizePayment(methodType === 'UPI App' ? 'UPI / QR Scan' : `NetBanking (${document.getElementById('bankSelector').value.split(' ')[0]})`, generatedRef);
+        }
+
+        function completeOnlinePayment(event, methodType) {
+            event.preventDefault();
+            const utr = methodType === 'UPI'
+                ? document.getElementById('upiUtrInput').value.trim().toUpperCase()
+                : (document.getElementById('bankRefInput').value.trim().toUpperCase() || 'NBK' + Math.floor(1000000000 + Math.random() * 9000000000));
+            const label = methodType === 'UPI'
+                ? 'UPI / QR Scan'
+                : `NetBanking (${document.getElementById('bankSelector').value.split(' ')[0]})`;
+            processAndFinalizePayment(label, utr);
+        }
+
+        function processAndFinalizePayment(payMethodLabel, txnRef) {
+            document.getElementById('upiPaymentView').classList.add('hidden');
+            document.getElementById('netbankingPaymentView').classList.add('hidden');
+            document.getElementById('paymentProcessingBox').classList.remove('hidden');
+
+            setTimeout(() => {
+                if (activeLoggedInStudent) {
+                    const target = erpData.students.find(s => s.roll === activeLoggedInStudent.roll);
+                    if (target) {
+                        target.feeStatus = "Paid";
+                        target.payMode = payMethodLabel;
+                        target.lastTxnId = txnRef;
+                        activeLoggedInStudent = target;
+                        saveERP();
+                        renderUserDashboard(currentRole, target);
+                    }
+                }
+                closePaymentGateway();
+                openFeeReceiptForActiveUser();
+            }, 1300);
+        }
+
+        function saveGatewaySettings(e) {
+            e.preventDefault();
+            erpData.gatewayConfig = {
+                upiId: document.getElementById('adminUpiId').value.trim(),
+                bankAccount: document.getElementById('adminBankAcc').value.trim(),
+                bankIfsc: "SBIN0004567"
+            };
+            saveERP();
+            alert("UPI ID & Bank Account updated for Student/Parent Online Payments!");
         }
 
         // ================= CONFIGURABLE SESSION + MOUSE/ACTIVITY AUTO-EXTEND ENGINE =================
@@ -1179,7 +1449,6 @@
             }
         });
 
-        // Print Helper for Report Card, Student ID Card & Fee Receipt
         function printDocument(type) {
             document.body.classList.remove('printing-report', 'printing-idcard', 'printing-receipt');
             if (type === 'idcard') {
@@ -1204,7 +1473,8 @@
 
         function populateAndShowFeeReceipt(student) {
             const feeVal = student.feeAmount || (student.classBatch.includes('Class 6') ? 800 : student.classBatch.includes('Class 8') ? 1000 : 1200);
-            const modeVal = student.payMode || "UPI / Cash";
+            const modeVal = student.payMode || "UPI / Online";
+            const txnRef = student.lastTxnId ? ` • Ref: ${student.lastTxnId}` : "";
             const dateStr = new Date().toLocaleDateString('en-IN');
 
             document.getElementById('recNumber').innerText = `Receipt #: APEX-2026-${student.roll.replace('APEX', '')}`;
@@ -1219,11 +1489,11 @@
             document.getElementById('recStudentName').innerText = student.name;
             document.getElementById('recStudentRoll').innerText = student.roll;
             document.getElementById('recStudentBatch').innerText = student.classBatch.split('(')[0].trim();
-            document.getElementById('recStudentPhoneMode').innerText = `${student.parentPhone} • ${modeVal}`;
+            document.getElementById('recStudentPhoneMode').innerText = `${modeVal}${txnRef}`;
             document.getElementById('recBaseAmount').innerText = `₹${Number(feeVal).toLocaleString('en-IN')}`;
             document.getElementById('recTotalAmount').innerText = `₹${Number(feeVal).toLocaleString('en-IN')}`;
 
-            const qrText = encodeURIComponent(`APEX FEE RECEIPT | Roll: ${student.roll} | Name: ${student.name} | Amount: Rs.${feeVal} | Status: ${student.feeStatus} | Date: ${dateStr}`);
+            const qrText = encodeURIComponent(`APEX FEE RECEIPT | Roll: ${student.roll} | Name: ${student.name} | Amount: Rs.${feeVal} | Status: ${student.feeStatus} | Ref: ${student.lastTxnId || 'NA'}`);
             document.getElementById('recQrImg').src = `https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=${qrText}`;
 
             document.getElementById('feeReceiptModal').classList.remove('hidden');
@@ -1265,7 +1535,6 @@
             document.getElementById('idCardModal').classList.add('hidden');
         }
 
-        // Custom Confirmation Modal Handler
         function openConfirmModal(title, description, onConfirmCallback) {
             document.getElementById('confirmModalTitle').innerText = title;
             document.getElementById('confirmModalDesc').innerText = description;
@@ -1407,7 +1676,8 @@
                 attendance: 100,
                 feeAmount: defaultFee,
                 feeStatus: "Pending",
-                payMode: "UPI / Online",
+                payMode: "Pending",
+                lastTxnId: "",
                 source: currentRole === 'parent' ? "Parent Sign-Up" : "Candidate Sign-Up",
                 remark: "Welcome to Apex CBSE Academy! Account created via Online ERP Portal.",
                 marks: []
@@ -1519,6 +1789,11 @@
                 document.getElementById('markRoll').value = currentSelectedRoll;
             }
 
+            if (erpData.gatewayConfig) {
+                document.getElementById('adminUpiId').value = erpData.gatewayConfig.upiId || "9337042839@ybl";
+                document.getElementById('adminBankAcc').value = erpData.gatewayConfig.bankAccount || "309876543210";
+            }
+
             document.getElementById('totalStudentCount').innerText = `Total Registered: ${erpData.students.length}`;
 
             const tbody = document.getElementById('adminStudentTable');
@@ -1529,13 +1804,16 @@
                     <td class="py-3 px-4 font-bold text-blue-700">${s.roll}</td>
                     <td class="py-3 px-4 font-semibold text-slate-900">${s.name}</td>
                     <td class="py-3 px-4 text-xs text-slate-600">${s.classBatch.split('(')[0]}</td>
-                    <td class="py-3 px-4 text-slate-700 font-medium">${s.email}</td>
-                    <td class="py-3 px-4 text-slate-700 font-medium">${s.parentPhone}</td>
+                    <td class="py-3 px-4 text-xs text-slate-700">
+                        <div class="font-medium">${s.email}</div>
+                        <div class="text-slate-500">${s.parentPhone}</div>
+                    </td>
                     <td class="py-3 px-4 font-mono text-xs text-slate-500">${s.pass}</td>
                     <td class="py-3 px-4">
                         <span class="px-2.5 py-1 rounded-full text-xs font-bold ${s.feeStatus === 'Paid' ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'}">
                             ${s.feeStatus} (₹${feeVal})
                         </span>
+                        <div class="text-[10px] text-slate-400 font-mono mt-0.5">${s.payMode || ''} ${s.lastTxnId ? '• ' + s.lastTxnId : ''}</div>
                     </td>
                     <td class="py-3 px-4 text-center space-x-1 whitespace-nowrap">
                         <button onclick="openIdCardByRoll('${s.roll}')" title="Student ID Card" class="bg-indigo-50 hover:bg-indigo-700 text-indigo-700 hover:text-white px-2.5 py-1.5 rounded-lg text-xs font-bold transition shadow-sm">
@@ -1768,6 +2046,7 @@
                 attendance: 100,
                 feeStatus: "Paid",
                 payMode: "Cash Desk",
+                lastTxnId: "",
                 source: "Admin Desk",
                 remark: "Newly enrolled student at Apex CBSE Academy.",
                 marks: []
@@ -1845,7 +2124,7 @@
 
         function renderUserDashboard(role, student) {
             document.getElementById('userRolePill').innerText = role === 'parent'
-                ? "Parent Portal • Full Progress Access"
+                ? "Parent Portal • Full Progress & Fee Access"
                 : "Candidate Portal • Student View";
             document.getElementById('userNameHeading').innerText = student.name;
             document.getElementById('userBatchSub').innerText = `Roll ID: ${student.roll} • ${student.classBatch} • Gmail: ${student.email} • Mob: ${student.parentPhone}`;
@@ -1855,16 +2134,31 @@
             const avg = student.marks.length ? Math.round(totalPct / student.marks.length) : 0;
             document.getElementById('userAvgStat').innerText = `${avg}%`;
 
+            const feeVal = student.feeAmount || (student.classBatch.includes('Class 6') ? 800 : student.classBatch.includes('Class 8') ? 1000 : 1200);
+            document.getElementById('dashboardFeeAmount').innerText = `₹${Number(feeVal).toLocaleString('en-IN')} / month`;
+            document.getElementById('dashboardLastTxn').innerText = student.lastTxnId ? `(Last Ref: ${student.lastTxnId})` : "";
+
+            const feePill = document.getElementById('dashboardFeePill');
+            const payBtn = document.getElementById('mainPayActionBtn');
+            if (student.feeStatus === 'Paid') {
+                feePill.innerText = "PAID";
+                feePill.className = "px-2.5 py-0.5 rounded-full text-[11px] font-extrabold bg-emerald-100 text-emerald-800";
+                payBtn.innerHTML = `<i class="fas fa-check-circle"></i> Pay Next Installment (UPI / Bank)`;
+            } else {
+                feePill.innerText = "PAYMENT DUE";
+                feePill.className = "px-2.5 py-0.5 rounded-full text-[11px] font-extrabold bg-amber-100 text-amber-800 animate-pulse";
+                payBtn.innerHTML = `<i class="fas fa-qrcode"></i> Pay Now ₹${feeVal} (UPI / Net Banking)`;
+            }
+
             const parentBox = document.getElementById('parentExclusiveBox');
             if (role === 'parent') {
                 parentBox.classList.remove('hidden');
                 const feeEl = document.getElementById('parentFeeBadge');
-                const feeVal = student.feeAmount || 1200;
                 feeEl.innerText = student.feeStatus;
                 feeEl.className = student.feeStatus === 'Paid'
                     ? "text-lg font-extrabold text-emerald-600"
                     : "text-lg font-extrabold text-amber-600";
-                document.getElementById('parentFeeAmountText').innerText = `(₹${feeVal}/mo • ${student.payMode || 'UPI/Cash'})`;
+                document.getElementById('parentFeeAmountText').innerText = `(₹${feeVal}/mo • ${student.payMode || 'UPI/Bank'})`;
                 document.getElementById('parentRemarkText').innerText = `"${student.remark}"`;
             } else {
                 parentBox.classList.add('hidden');
