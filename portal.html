@@ -52,17 +52,35 @@
         }
         .modal-animate { animation: modalPop 0.2s ease-out forwards; }
 
-        /* Print Report Card Styling */
+        /* Print Styling for Both Report Card & Student ID Card */
         @media print {
             body * { visibility: hidden; }
-            #printableReportCard, #printableReportCard * { visibility: visible; }
-            #printableReportCard {
+            body.printing-report #printableReportCard,
+            body.printing-report #printableReportCard * {
+                visibility: visible;
+            }
+            body.printing-report #printableReportCard {
                 position: absolute;
                 left: 0;
                 top: 0;
                 width: 100%;
                 box-shadow: none !important;
                 border: 2px solid #0f172a !important;
+            }
+            body.printing-idcard #printableIdCard,
+            body.printing-idcard #printableIdCard * {
+                visibility: visible;
+            }
+            body.printing-idcard #printableIdCard {
+                position: absolute;
+                left: 50%;
+                top: 20px;
+                transform: translateX(-50%);
+                width: 340px !important;
+                box-shadow: none !important;
+                border: 2px solid #1e3a8a !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
             }
             .no-print { display: none !important; }
         }
@@ -80,16 +98,60 @@
                     <span class="text-[10px] font-semibold text-slate-500 uppercase tracking-widest">Jainthgarh • CBSE Class 6–10</span>
                 </div>
             </a>
-            <div class="flex items-center gap-3">
-                <a href="index.html" class="text-xs sm:text-sm font-semibold text-slate-600 hover:text-blue-700 transition flex items-center gap-1.5 bg-slate-100 px-3.5 py-2 rounded-lg">
-                    <i class="fas fa-arrow-left text-blue-600"></i> Back to Website
+            <div class="flex items-center gap-2 sm:gap-3">
+                <!-- Live Session Countdown + Duration Selector (2m / 5m / 10m) + Auto-Extend Indicator -->
+                <div id="sessionTimerPill" class="hidden items-center gap-1.5 sm:gap-2 bg-slate-900 text-white px-2.5 sm:px-3 py-1.5 rounded-xl text-xs font-semibold shadow-sm border border-slate-700">
+                    <span id="activityDot" title="Auto-Extend Active on Mouse/Keyboard Activity" class="w-2 h-2 rounded-full bg-emerald-400"></span>
+                    <i class="far fa-clock text-amber-400"></i>
+                    <span id="navbarTimerDisplay" class="font-mono font-bold text-amber-400 text-xs sm:text-sm">05:00</span>
+                    
+                    <!-- Duration Selector (2m / 5m / 10m) -->
+                    <select id="sessionDurationSelect" onchange="changeSessionDuration(this.value)" title="Select Idle Session Timeout" class="bg-slate-800 text-blue-200 border border-slate-600 rounded px-1.5 py-0.5 text-[10px] font-bold focus:outline-none cursor-pointer">
+                        <option value="2">2 Min</option>
+                        <option value="5" selected>5 Min</option>
+                        <option value="10">10 Min</option>
+                    </select>
+
+                    <button onclick="extendSession(true)" title="Reset Timer Now" class="bg-emerald-600 hover:bg-emerald-500 text-white text-[10px] font-bold px-2 py-0.5 rounded transition">
+                        +Extend
+                    </button>
+                </div>
+
+                <a href="index.html" class="text-xs sm:text-sm font-semibold text-slate-600 hover:text-blue-700 transition flex items-center gap-1.5 bg-slate-100 px-3 py-2 rounded-lg">
+                    <i class="fas fa-arrow-left text-blue-600"></i> <span class="hidden md:inline">Back to Website</span>
                 </a>
-                <button id="logoutBtn" onclick="logout()" class="hidden bg-red-600 hover:bg-red-700 text-white text-xs sm:text-sm font-semibold px-4 py-2 rounded-lg shadow transition">
+                <button id="logoutBtn" onclick="logout()" class="hidden bg-red-600 hover:bg-red-700 text-white text-xs sm:text-sm font-semibold px-3.5 py-2 rounded-lg shadow transition">
                     <i class="fas fa-sign-out-alt mr-1"></i> Logout
                 </button>
             </div>
         </div>
     </header>
+
+    <!-- ================= 30-SEC LOGOUT REMINDER TOAST ================= -->
+    <div id="sessionWarningToast" class="hidden fixed bottom-5 right-5 z-50 max-w-sm w-full bg-slate-900 text-white border-2 border-amber-400 rounded-2xl p-4 shadow-2xl modal-animate no-print">
+        <div class="flex items-start gap-3.5">
+            <div class="w-11 h-11 rounded-xl bg-amber-400/20 border border-amber-400/40 text-amber-400 flex items-center justify-center text-xl shrink-0 animate-bounce">
+                <i class="fas fa-hourglass-half"></i>
+            </div>
+            <div class="flex-grow">
+                <div class="flex justify-between items-center">
+                    <span class="text-[11px] font-extrabold uppercase tracking-wider text-amber-400">Idle Timeout Warning</span>
+                    <span id="toastCountdown" class="font-mono text-sm font-extrabold text-red-400 bg-red-950/80 px-2 py-0.5 rounded">30s</span>
+                </div>
+                <p class="text-xs text-slate-200 mt-1 leading-relaxed">
+                    No activity detected! You will be logged out in <strong id="toastSecText" class="text-amber-300">30</strong> seconds. Move mouse or click Extend to stay logged in.
+                </p>
+                <div class="flex items-center gap-2 mt-3">
+                    <button type="button" onclick="extendSession(true)" class="flex-1 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-extrabold text-xs py-2 px-3 rounded-xl shadow transition flex items-center justify-center gap-1.5">
+                        <i class="fas fa-redo-alt"></i> Extend Session
+                    </button>
+                    <button type="button" onclick="logout()" class="bg-slate-800 hover:bg-red-600 text-slate-300 hover:text-white font-bold text-xs py-2 px-3 rounded-xl transition">
+                        Logout Now
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- ================= CUSTOM DELETE CONFIRMATION MODAL ================= -->
     <div id="confirmModal" class="hidden fixed inset-0 z-50 bg-slate-950/60 backdrop-blur-sm flex items-center justify-center p-4 no-print">
@@ -150,10 +212,90 @@
         </div>
     </div>
 
+    <!-- ================= PRINTABLE STUDENT ID CARD GENERATOR MODAL ================= -->
+    <div id="idCardModal" class="hidden fixed inset-0 z-50 bg-slate-950/75 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
+        <div class="flex flex-col items-center my-6">
+            <!-- Actual Printable ID Card -->
+            <div id="printableIdCard" class="w-[330px] bg-white rounded-3xl overflow-hidden shadow-2xl border-2 border-blue-900 modal-animate">
+                <!-- ID Top Header -->
+                <div class="bg-gradient-to-br from-slate-900 via-blue-900 to-blue-700 text-white p-5 text-center relative">
+                    <div class="w-11 h-11 rounded-xl bg-amber-400 text-slate-950 font-extrabold text-2xl flex items-center justify-center mx-auto mb-2 shadow-md">
+                        A
+                    </div>
+                    <h3 class="text-lg font-extrabold tracking-tight leading-none">APEX CBSE ACADEMY</h3>
+                    <p class="text-[10px] text-amber-300 font-semibold uppercase tracking-widest mt-1">In front of IQRA School, Jainthgarh</p>
+                    <span class="inline-block bg-white/15 border border-white/25 text-[10px] font-bold px-3 py-0.5 rounded-full mt-2 uppercase tracking-wider">
+                        Student Identity Card • 2026–27
+                    </span>
+                </div>
+
+                <!-- Avatar & Student Name -->
+                <div class="px-6 pt-5 pb-4 text-center">
+                    <div class="w-20 h-20 rounded-2xl bg-gradient-to-tr from-blue-700 to-indigo-500 text-white font-extrabold text-3xl flex items-center justify-center mx-auto shadow-md border-4 border-blue-100" id="idCardInitials">
+                        AS
+                    </div>
+                    <h4 id="idCardName" class="text-xl font-extrabold text-slate-900 mt-3">Aarav Sharma</h4>
+                    <span id="idCardRollBadge" class="inline-block bg-blue-100 text-blue-800 text-xs font-extrabold px-3 py-0.5 rounded-full mt-1">
+                        Roll ID: APEX101
+                    </span>
+
+                    <!-- ID Details Table -->
+                    <div class="mt-4 bg-slate-50 rounded-2xl p-3.5 border border-slate-200 text-left text-xs space-y-2">
+                        <div class="flex justify-between border-b border-slate-200/70 pb-1.5">
+                            <span class="text-slate-400 font-bold uppercase">Class & Batch:</span>
+                            <strong id="idCardBatch" class="text-slate-800 text-right">Class 10 (Shift 2)</strong>
+                        </div>
+                        <div class="flex justify-between border-b border-slate-200/70 pb-1.5">
+                            <span class="text-slate-400 font-bold uppercase">Shift Timing:</span>
+                            <strong id="idCardTiming" class="text-blue-700 text-right">5:30 PM – 7:30 PM</strong>
+                        </div>
+                        <div class="flex justify-between border-b border-slate-200/70 pb-1.5">
+                            <span class="text-slate-400 font-bold uppercase">Parent Mobile:</span>
+                            <strong id="idCardPhone" class="text-slate-800">9876543210</strong>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-slate-400 font-bold uppercase">Student Gmail:</span>
+                            <strong id="idCardEmail" class="text-slate-700 truncate max-w-[155px]">aarav@gmail.com</strong>
+                        </div>
+                    </div>
+
+                    <!-- QR Code & Director Sign -->
+                    <div class="mt-4 pt-3 border-t border-slate-200 flex items-center justify-between">
+                        <div class="flex items-center gap-2 text-left">
+                            <img id="idCardQrImg" src="" alt="QR" class="w-12 h-12 rounded-lg border border-slate-200 p-0.5">
+                            <div>
+                                <div class="text-[10px] font-extrabold text-emerald-700 uppercase">Verified Student</div>
+                                <div class="text-[9px] text-slate-400">Scan for ERP ID</div>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <div class="text-xs font-extrabold text-slate-900 italic font-serif">Massawar Ali Khan</div>
+                            <div class="text-[9px] font-bold text-blue-700 uppercase">Founder & Director</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ID Bottom Footer -->
+                <div class="bg-slate-900 text-white py-2 px-4 text-center text-[10px] font-semibold">
+                    <i class="fas fa-phone-alt text-amber-400 mr-1"></i> Center Helpline: +91 9337042839
+                </div>
+            </div>
+
+            <!-- Action Buttons Below ID Card -->
+            <div class="flex gap-3 mt-5 no-print">
+                <button type="button" onclick="closeIdCardModal()" class="px-5 py-2.5 rounded-xl bg-white text-slate-800 font-bold text-xs sm:text-sm shadow hover:bg-slate-100">
+                    Close
+                </button>
+                <button type="button" onclick="printDocument('idcard')" class="px-6 py-2.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-extrabold text-xs sm:text-sm shadow-lg flex items-center gap-2">
+                    <i class="fas fa-print"></i> Print / Save ID Card PDF
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- ================= PRINTABLE OFFICIAL REPORT CARD MODAL ================= -->
     <div id="reportCardModal" class="hidden fixed inset-0 z-50 bg-slate-950/75 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
         <div class="bg-white rounded-3xl max-w-2xl w-full p-6 sm:p-8 shadow-2xl border border-slate-300 my-8" id="printableReportCard">
-            <!-- Report Header -->
             <div class="border-b-2 border-slate-900 pb-4 mb-5 flex justify-between items-center">
                 <div class="flex items-center gap-3">
                     <div class="w-12 h-12 rounded-xl bg-blue-700 text-white flex items-center justify-center font-extrabold text-2xl">A</div>
@@ -169,7 +311,6 @@
                 </div>
             </div>
 
-            <!-- Student Info Grid -->
             <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 bg-slate-50 p-4 rounded-2xl border border-slate-200 text-xs mb-5">
                 <div>
                     <span class="text-slate-400 font-bold uppercase block">Student Name</span>
@@ -189,7 +330,6 @@
                 </div>
             </div>
 
-            <!-- Marks Table -->
             <h4 class="text-xs font-extrabold uppercase tracking-wider text-slate-600 mb-2">Saturday Weekly Test Performance Breakdown</h4>
             <div class="overflow-x-auto border border-slate-300 rounded-xl mb-5">
                 <table class="w-full text-left border-collapse text-xs sm:text-sm">
@@ -206,7 +346,6 @@
                 </table>
             </div>
 
-            <!-- Summary & Mentor Remark -->
             <div class="grid sm:grid-cols-3 gap-4 bg-amber-50/80 border border-amber-300 rounded-2xl p-4 text-xs mb-6">
                 <div>
                     <span class="text-amber-900 font-bold uppercase block">Overall Aggregate</span>
@@ -218,7 +357,6 @@
                 </div>
             </div>
 
-            <!-- Signatures -->
             <div class="flex justify-between items-end pt-6 border-t border-slate-200 text-xs text-slate-600">
                 <div>
                     <div class="font-bold text-slate-900">Parent / Guardian Signature</div>
@@ -230,12 +368,11 @@
                 </div>
             </div>
 
-            <!-- Modal Buttons (Hidden when printing) -->
             <div class="flex justify-end gap-3 mt-6 pt-4 border-t border-slate-200 no-print">
                 <button type="button" onclick="closeReportCardModal()" class="px-5 py-2.5 rounded-xl border border-slate-300 text-xs sm:text-sm font-bold text-slate-700 hover:bg-slate-100">
                     Close Preview
                 </button>
-                <button type="button" onclick="window.print()" class="px-6 py-2.5 rounded-xl bg-blue-700 hover:bg-blue-800 text-xs sm:text-sm font-bold text-white shadow-lg flex items-center gap-2">
+                <button type="button" onclick="printDocument('report')" class="px-6 py-2.5 rounded-xl bg-blue-700 hover:bg-blue-800 text-xs sm:text-sm font-bold text-white shadow-lg flex items-center gap-2">
                     <i class="fas fa-print"></i> Print / Save as PDF
                 </button>
             </div>
@@ -266,7 +403,7 @@
                         Track Every Test, <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-300 to-amber-500">Master Every Concept.</span>
                     </h1>
                     <p class="text-blue-100 text-sm sm:text-base mb-8 max-w-xl">
-                        Welcome to Apex CBSE Academy's live Student & Parent ERP. Create your account or sign in to view Saturday OMR test scores, upcoming board exam schedules, and printable report cards.
+                        Welcome to Apex CBSE Academy's live Student & Parent ERP. Create your account or sign in to view Saturday OMR test scores, digital Student ID Cards, and printable report cards.
                     </p>
 
                     <div class="relative flex items-center justify-center my-4 w-full max-w-md mx-auto lg:mx-0">
@@ -287,11 +424,11 @@
 
                         <div class="hidden sm:flex items-center gap-2.5 bg-white text-slate-900 px-3.5 py-2 rounded-2xl shadow-xl absolute -top-4 -left-4 z-20 animate-float">
                             <div class="w-8 h-8 rounded-lg bg-amber-100 text-amber-600 flex items-center justify-center font-bold">
-                                <i class="fas fa-trophy"></i>
+                                <i class="fas fa-id-badge"></i>
                             </div>
                             <div class="text-left">
-                                <div class="text-[11px] font-extrabold leading-tight">Weekly Test Analytics</div>
-                                <div class="text-[10px] text-slate-500">Live Progress Graphs</div>
+                                <div class="text-[11px] font-extrabold leading-tight">Digital Student ID</div>
+                                <div class="text-[10px] text-slate-500">Instant QR Verification</div>
                             </div>
                         </div>
 
@@ -473,11 +610,11 @@
         <div class="bg-slate-950/90 border-t border-white/10 py-3 overflow-hidden relative z-10">
             <div class="marquee-track text-slate-300 text-xs font-semibold space-x-10 px-4">
                 <span class="flex items-center gap-2"><i class="fas fa-bolt text-amber-400"></i> Real-Time Saturday Test Scorecards</span>
+                <span class="flex items-center gap-2"><i class="fas fa-id-card text-blue-400"></i> Instant Printable Student ID Cards with QR</span>
                 <span class="flex items-center gap-2"><i class="fas fa-file-pdf text-emerald-400"></i> Official Printable Progress Report Cards</span>
-                <span class="flex items-center gap-2"><i class="fas fa-user-shield text-blue-400"></i> Direct Founder Mentorship by Massawar Ali Khan</span>
-                <span class="flex items-center gap-2"><i class="fas fa-bell text-purple-400"></i> Instant Holiday & PTM Notifications</span>
+                <span class="flex items-center gap-2"><i class="fas fa-user-shield text-purple-400"></i> Direct Founder Mentorship by Massawar Ali Khan</span>
                 <span class="flex items-center gap-2"><i class="fas fa-bolt text-amber-400"></i> Real-Time Saturday Test Scorecards</span>
-                <span class="flex items-center gap-2"><i class="fas fa-file-pdf text-emerald-400"></i> Official Printable Progress Report Cards</span>
+                <span class="flex items-center gap-2"><i class="fas fa-id-card text-blue-400"></i> Instant Printable Student ID Cards with QR</span>
             </div>
         </div>
     </main>
@@ -488,7 +625,7 @@
             <div>
                 <span class="bg-amber-400 text-slate-950 text-xs font-extrabold px-3 py-1 rounded-full uppercase">Full Admin Control</span>
                 <h1 class="text-2xl sm:text-3xl font-extrabold mt-2">Founder & Admin Panel — Massawar Ali Khan</h1>
-                <p class="text-blue-200 text-xs sm:text-sm">Manage students, upload/edit/delete weekly test marks, and print official report cards.</p>
+                <p class="text-blue-200 text-xs sm:text-sm">Manage students, edit/delete weekly test marks, and print Student ID Cards & Report Cards.</p>
             </div>
             <button onclick="resetDefaultData()" class="bg-white/10 hover:bg-white/20 border border-white/20 text-xs font-semibold px-4 py-2.5 rounded-xl">
                 <i class="fas fa-sync-alt mr-1"></i> Reset System Data
@@ -523,7 +660,6 @@
                 </form>
             </div>
 
-            <!-- Upload + Edit/Delete Marks Card -->
             <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
                 <h3 class="font-extrabold text-lg text-slate-900 mb-4 flex items-center gap-2">
                     <i class="fas fa-poll text-blue-600"></i> Upload & Manage Weekly Test Marks
@@ -542,7 +678,6 @@
                     <button type="submit" class="w-full bg-blue-700 hover:bg-blue-800 text-white font-bold py-2.5 rounded-xl">Publish Score</button>
                 </form>
 
-                <!-- Selected Student's Uploaded Marks (Edit / Delete List) -->
                 <div class="mt-4 pt-3 border-t border-slate-200">
                     <div class="text-xs font-extrabold uppercase text-slate-500 mb-2">Uploaded Scores for Selected Candidate (Edit / Delete):</div>
                     <div id="adminStudentMarksManager" class="space-y-2 max-h-40 overflow-y-auto text-xs"></div>
@@ -607,7 +742,7 @@
             </div>
         </div>
 
-        <!-- Admin Student Overview Table (With Report Card + Delete Action Column) -->
+        <!-- Admin Student Overview Table -->
         <div class="mt-8 bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
             <div class="px-6 py-4 bg-slate-900 text-white flex justify-between items-center">
                 <h3 class="font-bold">Registered Candidates & Parents Database (Gmail & Mobile Directory)</h3>
@@ -624,7 +759,7 @@
                             <th class="py-3 px-4">Mobile No.</th>
                             <th class="py-3 px-4">PIN</th>
                             <th class="py-3 px-4">Fee</th>
-                            <th class="py-3 px-4 text-center">Actions</th>
+                            <th class="py-3 px-4 text-center">Actions (ID / Report / Delete)</th>
                         </tr>
                     </thead>
                     <tbody id="adminStudentTable" class="divide-y divide-slate-200"></tbody>
@@ -641,19 +776,24 @@
                 <h1 id="userNameHeading" class="text-2xl sm:text-3xl font-extrabold mt-2">Student Name</h1>
                 <p id="userBatchSub" class="text-blue-200 text-xs sm:text-sm"></p>
             </div>
-            <div class="flex flex-wrap items-center gap-3 sm:gap-4">
-                <div class="bg-white/10 px-4 py-2 rounded-xl text-center">
-                    <div id="userAttStat" class="text-xl sm:text-2xl font-extrabold text-amber-400">100%</div>
-                    <div class="text-[11px] text-blue-100">Attendance</div>
+            <div class="flex flex-wrap items-center gap-2.5 sm:gap-3">
+                <div class="bg-white/10 px-3.5 py-2 rounded-xl text-center">
+                    <div id="userAttStat" class="text-xl font-extrabold text-amber-400">100%</div>
+                    <div class="text-[10px] text-blue-100">Attendance</div>
                 </div>
-                <div class="bg-white/10 px-4 py-2 rounded-xl text-center">
-                    <div id="userAvgStat" class="text-xl sm:text-2xl font-extrabold text-emerald-400">0%</div>
-                    <div class="text-[11px] text-blue-100">Avg. Test Score</div>
+                <div class="bg-white/10 px-3.5 py-2 rounded-xl text-center">
+                    <div id="userAvgStat" class="text-xl font-extrabold text-emerald-400">0%</div>
+                    <div class="text-[10px] text-blue-100">Avg. Score</div>
                 </div>
+                <!-- Student ID Card Generator Button -->
+                <button onclick="openIdCardForActiveUser()" class="bg-white hover:bg-blue-50 text-blue-900 font-extrabold text-xs sm:text-sm px-4 py-3 rounded-xl shadow-lg transition flex items-center gap-2">
+                    <i class="fas fa-id-badge text-blue-700"></i>
+                    <span>Student ID Card</span>
+                </button>
                 <!-- Printable Progress Report Card Button -->
                 <button onclick="openReportCardForActiveUser()" class="bg-amber-400 hover:bg-amber-300 text-slate-950 font-extrabold text-xs sm:text-sm px-4 py-3 rounded-xl shadow-lg transition flex items-center gap-2">
                     <i class="fas fa-print"></i>
-                    <span>Print / Download Report Card</span>
+                    <span>Report Card PDF</span>
                 </button>
             </div>
         </div>
@@ -677,14 +817,19 @@
             </div>
         </div>
 
-        <!-- Main Progress Grid: Weekly Tests, Exam Schedule & Holidays -->
+        <!-- Main Progress Grid -->
         <div class="grid lg:grid-cols-3 gap-8">
             <div class="lg:col-span-2 bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
                 <div class="px-6 py-4 bg-slate-900 text-white flex justify-between items-center">
                     <h3 class="font-bold"><i class="fas fa-chart-bar text-amber-400 mr-2"></i>Saturday Weekly Test Results & Progress</h3>
-                    <button onclick="openReportCardForActiveUser()" class="text-xs bg-amber-400 text-slate-950 font-bold px-3 py-1 rounded-full hover:bg-amber-300 transition">
-                        <i class="fas fa-file-download mr-1"></i> Report Card PDF
-                    </button>
+                    <div class="flex gap-2">
+                        <button onclick="openIdCardForActiveUser()" class="text-xs bg-blue-600 text-white font-bold px-3 py-1 rounded-full hover:bg-blue-500 transition">
+                            <i class="fas fa-id-card mr-1"></i> ID Card
+                        </button>
+                        <button onclick="openReportCardForActiveUser()" class="text-xs bg-amber-400 text-slate-950 font-bold px-3 py-1 rounded-full hover:bg-amber-300 transition">
+                            <i class="fas fa-file-download mr-1"></i> Report PDF
+                        </button>
+                    </div>
                 </div>
                 <div class="p-6">
                     <div id="studentMarksList" class="space-y-4"></div>
@@ -710,6 +855,13 @@
     </section>
 
     <script>
+        // Configurable Session Timeout (Default: 5 Minutes, switchable between 2, 5, and 10 Minutes)
+        let sessionDurationMinutes = Number(localStorage.getItem('apexSessionMinutes')) || 5;
+        let SESSION_DURATION_MS = sessionDurationMinutes * 60 * 1000;
+        const REMINDER_THRESHOLD_MS = 30 * 1000;
+        const SESSION_STORAGE_KEY = 'apexActiveSession_v1';
+        let lastActivityResetTime = 0;
+
         const defaultERPData = {
             students: [
                 {
@@ -764,9 +916,185 @@
         let activeLoggedInStudent = null;
         let pendingDeleteAction = null;
         let editingMarkRef = { roll: null, index: null };
+        let sessionIntervalId = null;
 
         function saveERP() {
             localStorage.setItem('apexERP_v3', JSON.stringify(erpData));
+        }
+
+        // ================= CONFIGURABLE SESSION + MOUSE/ACTIVITY AUTO-EXTEND ENGINE =================
+        function changeSessionDuration(mins) {
+            sessionDurationMinutes = Number(mins);
+            SESSION_DURATION_MS = sessionDurationMinutes * 60 * 1000;
+            localStorage.setItem('apexSessionMinutes', sessionDurationMinutes);
+            extendSession(true);
+        }
+
+        function createOrUpdateSession(role, studentRoll) {
+            const sessionObj = {
+                role: role,
+                roll: studentRoll || null,
+                expiresAt: Date.now() + SESSION_DURATION_MS
+            };
+            localStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(sessionObj));
+            startSessionCountdown();
+        }
+
+        function extendSession(manualClick) {
+            const raw = localStorage.getItem(SESSION_STORAGE_KEY);
+            if (!raw) return;
+            const sessionObj = JSON.parse(raw);
+            sessionObj.expiresAt = Date.now() + SESSION_DURATION_MS;
+            localStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(sessionObj));
+
+            // Flash green activity dot
+            const dot = document.getElementById('activityDot');
+            if (dot) {
+                dot.className = "w-2 h-2 rounded-full bg-emerald-400 animate-ping";
+                setTimeout(() => { dot.className = "w-2 h-2 rounded-full bg-emerald-400"; }, 600);
+            }
+
+            if (manualClick) {
+                document.getElementById('sessionWarningToast').classList.add('hidden');
+                updateTimerUI(SESSION_DURATION_MS);
+            }
+        }
+
+        // Auto-extend session on Mouse Move, Click, Scroll, or Keypress (throttled every 4 seconds)
+        function handleUserActivity() {
+            const now = Date.now();
+            if (now - lastActivityResetTime < 4000) return;
+            const raw = localStorage.getItem(SESSION_STORAGE_KEY);
+            if (!raw) return;
+            lastActivityResetTime = now;
+            extendSession(false);
+        }
+
+        ['mousemove', 'mousedown', 'keydown', 'scroll', 'touchstart'].forEach(evt => {
+            window.addEventListener(evt, handleUserActivity, { passive: true });
+        });
+
+        function startSessionCountdown() {
+            if (sessionIntervalId) clearInterval(sessionIntervalId);
+            const pill = document.getElementById('sessionTimerPill');
+            pill.classList.remove('hidden');
+            pill.classList.add('flex');
+            document.getElementById('sessionDurationSelect').value = String(sessionDurationMinutes);
+
+            tickSessionCheck();
+            sessionIntervalId = setInterval(tickSessionCheck, 1000);
+        }
+
+        function tickSessionCheck() {
+            const raw = localStorage.getItem(SESSION_STORAGE_KEY);
+            if (!raw) {
+                logout(true);
+                return;
+            }
+            const sessionObj = JSON.parse(raw);
+            const remainingMs = sessionObj.expiresAt - Date.now();
+
+            if (remainingMs <= 0) {
+                clearInterval(sessionIntervalId);
+                logout(true);
+                alert("⏰ Your login session expired due to inactivity. Please log in again.");
+                return;
+            }
+
+            updateTimerUI(remainingMs);
+
+            const toast = document.getElementById('sessionWarningToast');
+            if (remainingMs <= REMINDER_THRESHOLD_MS) {
+                const secsLeft = Math.ceil(remainingMs / 1000);
+                toast.classList.remove('hidden');
+                document.getElementById('toastCountdown').innerText = `${secsLeft}s`;
+                document.getElementById('toastSecText').innerText = secsLeft;
+            } else {
+                toast.classList.add('hidden');
+            }
+        }
+
+        function updateTimerUI(remainingMs) {
+            const totalSec = Math.max(0, Math.ceil(remainingMs / 1000));
+            const mins = String(Math.floor(totalSec / 60)).padStart(2, '0');
+            const secs = String(totalSec % 60).padStart(2, '0');
+            const display = document.getElementById('navbarTimerDisplay');
+            display.innerText = `${mins}:${secs}`;
+            display.className = totalSec <= 30
+                ? "font-mono font-bold text-red-400 animate-pulse text-xs sm:text-sm"
+                : "font-mono font-bold text-amber-400 text-xs sm:text-sm";
+        }
+
+        // Restore Active Session Automatically on Page Refresh
+        window.addEventListener('DOMContentLoaded', function () {
+            document.getElementById('sessionDurationSelect').value = String(sessionDurationMinutes);
+            const raw = localStorage.getItem(SESSION_STORAGE_KEY);
+            if (!raw) return;
+
+            try {
+                const sessionObj = JSON.parse(raw);
+                if (sessionObj.expiresAt > Date.now()) {
+                    if (sessionObj.role === 'admin') {
+                        currentRole = 'admin';
+                        showDashboard('admin', null, true);
+                    } else {
+                        const student = erpData.students.find(s => s.roll === sessionObj.roll);
+                        if (student) {
+                            currentRole = sessionObj.role;
+                            showDashboard(sessionObj.role, student, true);
+                        } else {
+                            localStorage.removeItem(SESSION_STORAGE_KEY);
+                        }
+                    }
+                } else {
+                    localStorage.removeItem(SESSION_STORAGE_KEY);
+                }
+            } catch (e) {
+                localStorage.removeItem(SESSION_STORAGE_KEY);
+            }
+        });
+
+        // Print Helper for Report Card vs Student ID Card
+        function printDocument(type) {
+            document.body.classList.remove('printing-report', 'printing-idcard');
+            if (type === 'idcard') {
+                document.body.classList.add('printing-idcard');
+            } else {
+                document.body.classList.add('printing-report');
+            }
+            window.print();
+        }
+
+        // Student ID Card Generator Functions
+        function openIdCardByRoll(rollId) {
+            const student = erpData.students.find(s => s.roll === rollId);
+            if (student) populateAndShowIdCard(student);
+        }
+
+        function openIdCardForActiveUser() {
+            if (activeLoggedInStudent) populateAndShowIdCard(activeLoggedInStudent);
+        }
+
+        function populateAndShowIdCard(student) {
+            const initials = student.name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
+            document.getElementById('idCardInitials').innerText = initials;
+            document.getElementById('idCardName').innerText = student.name;
+            document.getElementById('idCardRollBadge').innerText = `Roll ID: ${student.roll}`;
+
+            const parts = student.classBatch.split('(');
+            document.getElementById('idCardBatch').innerText = parts[0].trim();
+            document.getElementById('idCardTiming').innerText = parts[1] ? parts[1].replace(')', '').trim() : "3:30 PM – 7:30 PM";
+            document.getElementById('idCardPhone').innerText = `+91 ${student.parentPhone}`;
+            document.getElementById('idCardEmail').innerText = student.email;
+
+            const qrData = encodeURIComponent(`APEX CBSE ACADEMY | Roll: ${student.roll} | Name: ${student.name} | Batch: ${student.classBatch} | Verified by Massawar Ali Khan`);
+            document.getElementById('idCardQrImg').src = `https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=${qrData}`;
+
+            document.getElementById('idCardModal').classList.remove('hidden');
+        }
+
+        function closeIdCardModal() {
+            document.getElementById('idCardModal').classList.add('hidden');
         }
 
         // Custom Confirmation Modal Handler
@@ -922,7 +1250,7 @@
             notice.innerHTML = `✅ Account Created! Your Roll ID is <strong>${generatedRoll}</strong>. Redirecting to Dashboard...`;
 
             setTimeout(() => {
-                showDashboard(currentRole, newAccount);
+                showDashboard(currentRole, newAccount, false);
             }, 1200);
         }
 
@@ -944,7 +1272,7 @@
             if (currentRole === 'admin') {
                 const isAdmin = (id === 'admin' || id === '9337042839' || id === 'massawarali@gmail.com') && pass === 'apex2026';
                 if (isAdmin) {
-                    showDashboard('admin', null);
+                    showDashboard('admin', null, false);
                 } else {
                     errBox.innerText = "Invalid Admin Gmail/Mobile or Password!";
                     errBox.classList.remove('hidden');
@@ -954,7 +1282,7 @@
                     (s.email.toLowerCase() === id || s.parentPhone === id || s.roll.toLowerCase() === id) && s.pass === pass
                 );
                 if (student) {
-                    showDashboard('candidate', student);
+                    showDashboard('candidate', student, false);
                 } else {
                     errBox.innerText = "Account not found or wrong PIN! Click 'Create Account' above to register.";
                     errBox.classList.remove('hidden');
@@ -965,7 +1293,7 @@
                     (s.pass === pass || s.parentPhone === pass)
                 );
                 if (student) {
-                    showDashboard('parent', student);
+                    showDashboard('parent', student, false);
                 } else {
                     errBox.innerText = "Account not found! Click 'Create Account' above to register your Gmail & Mobile.";
                     errBox.classList.remove('hidden');
@@ -973,24 +1301,38 @@
             }
         }
 
-        function showDashboard(role, studentObj) {
+        function showDashboard(role, studentObj, isRestoredFromRefresh) {
             document.getElementById('loginSection').classList.add('hidden');
             document.getElementById('logoutBtn').classList.remove('hidden');
 
+            if (!isRestoredFromRefresh) {
+                createOrUpdateSession(role, studentObj ? studentObj.roll : null);
+            } else {
+                startSessionCountdown();
+            }
+
             if (role === 'admin') {
+                document.getElementById('userDashboard').classList.add('hidden');
                 document.getElementById('adminDashboard').classList.remove('hidden');
                 renderAdminDashboard();
             } else {
                 activeLoggedInStudent = studentObj;
+                document.getElementById('adminDashboard').classList.add('hidden');
                 document.getElementById('userDashboard').classList.remove('hidden');
                 renderUserDashboard(role, studentObj);
             }
         }
 
-        function logout() {
+        function logout(skipStorageClear) {
+            if (sessionIntervalId) clearInterval(sessionIntervalId);
+            localStorage.removeItem(SESSION_STORAGE_KEY);
+
             document.getElementById('adminDashboard').classList.add('hidden');
             document.getElementById('userDashboard').classList.add('hidden');
             document.getElementById('logoutBtn').classList.add('hidden');
+            document.getElementById('sessionTimerPill').classList.add('hidden');
+            document.getElementById('sessionTimerPill').classList.remove('flex');
+            document.getElementById('sessionWarningToast').classList.add('hidden');
             document.getElementById('loginSection').classList.remove('hidden');
             document.getElementById('loginPass').value = '';
             activeLoggedInStudent = null;
@@ -1020,7 +1362,10 @@
                     <td class="py-3 px-4">
                         <span class="px-2.5 py-1 rounded-full text-xs font-bold ${s.feeStatus === 'Paid' ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'}">${s.feeStatus}</span>
                     </td>
-                    <td class="py-3 px-4 text-center space-x-1">
+                    <td class="py-3 px-4 text-center space-x-1 whitespace-nowrap">
+                        <button onclick="openIdCardByRoll('${s.roll}')" title="Generate Student ID Card" class="bg-indigo-50 hover:bg-indigo-700 text-indigo-700 hover:text-white px-2.5 py-1.5 rounded-lg text-xs font-bold transition shadow-sm">
+                            <i class="fas fa-id-badge"></i> ID Card
+                        </button>
                         <button onclick="openReportCardByRoll('${s.roll}')" title="Print Report Card" class="bg-blue-50 hover:bg-blue-700 text-blue-700 hover:text-white px-2.5 py-1.5 rounded-lg text-xs font-bold transition shadow-sm">
                             <i class="fas fa-print"></i> Report
                         </button>
@@ -1059,7 +1404,6 @@
             `).join('');
         }
 
-        // Render Selected Student's Marks with Edit & Delete Buttons in Admin Panel
         function renderAdminStudentMarksList() {
             const roll = document.getElementById('markRoll').value;
             const student = erpData.students.find(s => s.roll === roll);
@@ -1088,7 +1432,6 @@
             `).join('');
         }
 
-        // Open Edit Mark Modal
         function openEditMarkModal(roll, index) {
             const student = erpData.students.find(s => s.roll === roll);
             if (!student || !student.marks[index]) return;
@@ -1126,7 +1469,6 @@
             }
         }
 
-        // Delete Student Test Mark with Confirmation Modal
         function deleteTestMark(roll, index) {
             const student = erpData.students.find(s => s.roll === roll);
             if (!student || !student.marks[index]) return;
@@ -1143,7 +1485,6 @@
             );
         }
 
-        // Printable Report Card Generator
         function openReportCardByRoll(rollId) {
             const student = erpData.students.find(s => s.roll === rollId);
             if (student) populateAndShowReportCard(student);
