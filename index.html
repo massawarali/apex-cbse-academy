@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Apex CBSE Academy | Building Strong Concepts, Shaping Bright Futures</title>
+    <title>MAKDEMY | Building Strong Concepts, Shaping Bright Futures (Class 6–10 CBSE)</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- AOS Scroll Animation CSS -->
@@ -21,16 +21,11 @@
             overflow-x: hidden;
         }
         .hero-bg {
-            background: radial-gradient(circle at top right, #1e40af, #0f172a 60%, #020617);
+            background: radial-gradient(circle at top right, #1e3a8a, #0f172a 60%, #020617);
         }
-        /* Floating & Orbital Animations */
         @keyframes floatSlow {
             0%, 100% { transform: translateY(0px); }
             50% { transform: translateY(-14px); }
-        }
-        @keyframes floatReverse {
-            0%, 100% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(12px) rotate(3deg); }
         }
         @keyframes spinOrbit {
             from { transform: rotate(0deg); }
@@ -40,75 +35,50 @@
             from { transform: rotate(360deg); }
             to { transform: rotate(0deg); }
         }
-        @keyframes marqueeRun {
-            0% { transform: translateX(0%); }
-            100% { transform: translateX(-50%); }
-        }
-        .animate-float {
-            animation: floatSlow 4s ease-in-out infinite;
-        }
-        .animate-float-delayed {
-            animation: floatReverse 5s ease-in-out infinite;
-        }
-        .orbit-ring {
-            animation: spinOrbit 22s linear infinite;
-        }
-        .orbit-item {
-            animation: spinOrbitReverse 22s linear infinite;
-        }
-        .marquee-track {
-            display: flex;
-            width: max-content;
-            animation: marqueeRun 25s linear infinite;
-        }
-        .marquee-track:hover {
-            animation-play-state: paused;
-        }
-        .card-hover {
-            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .card-hover:hover {
-            transform: translateY(-8px);
-        }
+        .animate-float { animation: floatSlow 4s ease-in-out infinite; }
+        .orbit-ring { animation: spinOrbit 26s linear infinite; }
+        .orbit-item { animation: spinOrbitReverse 26s linear infinite; }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-800">
 
     <!-- Top Announcement Bar -->
-    <div class="bg-amber-500 text-slate-900 text-xs sm:text-sm font-semibold py-2.5 px-4 text-center">
-        <i class="fas fa-bullhorn mr-2 animate-bounce"></i> Admissions Open for New CBSE Session (Class 6 to 10) | Free 7-Day Demo Classes!
+    <div class="bg-gradient-to-r from-amber-500 via-amber-400 to-amber-500 text-slate-950 text-xs sm:text-sm font-extrabold py-2.5 px-4 text-center shadow-sm">
+        <i class="fas fa-bullhorn mr-2 animate-bounce"></i> Welcome to <strong>MAKDEMY</strong> — Admissions Open for New CBSE Session (Class 6 to 10) | Free 7-Day Demo Classes!
     </div>
 
     <!-- Navbar -->
     <header class="bg-white/95 backdrop-blur-md shadow-sm sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center h-20">
-            <!-- Logo -->
+            <!-- Attractive MAKDEMY Logo -->
             <a href="#" class="flex items-center gap-3 group">
-                <div class="w-11 h-11 rounded-xl bg-blue-700 group-hover:bg-amber-500 transition-colors flex items-center justify-center text-white font-bold text-2xl shadow-md">
-                    A
+                <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-700 via-indigo-700 to-slate-900 group-hover:from-amber-500 group-hover:to-amber-600 transition-all flex items-center justify-center text-white font-black text-2xl shadow-lg border border-blue-400/30">
+                    M
                 </div>
                 <div>
-                    <span class="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight block leading-none">APEX <span class="text-blue-700">CBSE</span></span>
-                    <span class="text-[11px] font-semibold text-slate-500 uppercase tracking-widest">Academy</span>
+                    <span class="text-2xl sm:text-3xl font-black tracking-tight block leading-none">
+                        <span class="text-slate-900">MAK</span><span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-700 to-indigo-600">DEMY</span>
+                    </span>
+                    <span class="text-[10px] font-extrabold text-amber-600 uppercase tracking-widest block mt-0.5">CBSE Concept Hub • Class 6–10</span>
                 </div>
             </a>
 
             <!-- Navigation Links -->
-            <nav class="hidden md:flex space-x-7 font-medium text-slate-600 text-sm">
-                <a href="#about" class="hover:text-blue-700 transition">Why Apex</a>
+            <nav class="hidden md:flex space-x-7 font-semibold text-slate-600 text-sm">
+                <a href="#about" class="hover:text-blue-700 transition">Why Makdemy</a>
                 <a href="#founder" class="hover:text-blue-700 transition">Founder's Desk</a>
-                <a href="#batches" class="hover:text-blue-700 transition">Batches</a>
+                <a href="#batches" class="hover:text-blue-700 transition">Batches & Fees</a>
                 <a href="#timetable" class="hover:text-blue-700 transition">Timetable</a>
                 <a href="#contact" class="hover:text-blue-700 transition">Contact</a>
             </nav>
 
             <!-- Action Buttons (ERP Login + Book Demo) -->
             <div class="flex items-center gap-2.5 sm:gap-3">
-                <a href="portal.html" class="bg-slate-900 hover:bg-slate-800 text-amber-400 border border-amber-400/40 px-3.5 sm:px-4 py-2.5 rounded-lg font-bold text-xs sm:text-sm shadow-md transition flex items-center gap-1.5">
+                <a href="portal.html" class="bg-slate-900 hover:bg-slate-800 text-amber-400 border border-amber-400/40 px-3.5 sm:px-4 py-2.5 rounded-xl font-bold text-xs sm:text-sm shadow-md transition flex items-center gap-1.5">
                     <i class="fas fa-user-lock"></i>
                     <span>ERP Login</span>
                 </a>
-                <a href="#contact" class="bg-blue-700 hover:bg-blue-800 text-white px-4 sm:px-5 py-2.5 rounded-lg font-semibold text-xs sm:text-sm shadow-md transition flex items-center gap-2">
+                <a href="#contact" class="bg-blue-700 hover:bg-blue-800 text-white px-4 sm:px-5 py-2.5 rounded-xl font-semibold text-xs sm:text-sm shadow-md transition flex items-center gap-2">
                     <span class="hidden sm:inline">Book Free Demo</span>
                     <span class="sm:hidden">Demo</span>
                     <i class="fas fa-arrow-right text-xs"></i>
@@ -119,534 +89,262 @@
 
     <!-- Hero Section with Animated Running Graphic Showcase -->
     <section class="hero-bg text-white py-14 lg:py-20 relative overflow-hidden">
-        <!--Glowing Background Blobs -->
         <div class="w-96 h-96 bg-blue-600/20 rounded-full blur-3xl absolute -top-20 -left-20 pointer-events-none"></div>
         <div class="w-96 h-96 bg-amber-500/15 rounded-full blur-3xl absolute bottom-0 right-10 pointer-events-none"></div>
 
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div class="grid lg:grid-cols-12 gap-10 items-center">
-                
-                <!-- Left Hero Content (7 Cols) -->
-                <div class="lg:col-span-7" data-aos="fade-right" data-aos-duration="900">
-                    <div class="inline-flex items-center gap-2 bg-blue-900/80 border border-blue-400/30 rounded-full px-4 py-1.5 text-xs sm:text-sm font-medium text-amber-300 mb-6">
+                <!-- Left Column: Hero Text (7 Cols) -->
+                <div class="lg:col-span-7" data-aos="fade-right">
+                    <div class="inline-flex items-center gap-2 bg-blue-900/80 border border-blue-400/30 rounded-full px-4 py-1.5 text-xs sm:text-sm font-semibold text-amber-300 mb-6">
                         <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping"></span>
-                        <span>Specialized CBSE Coaching for Class 6 to 10 • Jainthgarh</span>
+                        <span>Jainthgarh's Premier CBSE Coaching Institute (Class 6 to 10)</span>
                     </div>
-                    <h1 class="text-3xl sm:text-5xl lg:text-6xl font-extrabold leading-tight mb-6">
-                        Building Strong Concepts, <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-300 to-amber-500">Shaping Bright Futures.</span>
+
+                    <h1 class="text-3xl sm:text-5xl lg:text-6xl font-black leading-tight mb-6">
+                        Welcome to <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-amber-400 to-orange-400">MAKDEMY</span> — Where Concepts Turn Into Toppers.
                     </h1>
-                    <p class="text-blue-100 text-base sm:text-lg mb-8 leading-relaxed max-w-2xl">
-                        Master NCERT, Exemplar, and Board Pattern Questions with dedicated expert faculty. Small batches of 15 students, weekly OMR/written tests, and modern analytical learning.
+
+                    <p class="text-blue-100 text-base sm:text-lg mb-8 max-w-2xl leading-relaxed">
+                        Founded by <strong>Massawar Ali Khan</strong>, <strong>MAKDEMY</strong> combines deep NCERT mastery, smart visual learning, Saturday OMR testing, and a live Digital ERP Portal for complete parent transparency.
                     </p>
-                    <div class="flex flex-wrap gap-4 mb-10">
-                        <a href="#contact" class="bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold px-7 py-4 rounded-xl shadow-lg shadow-amber-500/25 transition transform hover:scale-105 text-base flex items-center gap-2">
-                            <span>Enroll for Free 7-Day Demo</span>
+
+                    <div class="flex flex-wrap gap-4">
+                        <a href="#contact" class="bg-amber-400 hover:bg-amber-300 text-slate-950 font-extrabold px-7 py-4 rounded-xl shadow-lg transition transform hover:-translate-y-0.5 flex items-center gap-2">
+                            <span>Register for 7-Day Free Demo</span>
                             <i class="fas fa-bolt"></i>
                         </a>
-                        <a href="#timetable" class="bg-white/10 hover:bg-white/20 border border-white/25 text-white font-semibold px-7 py-4 rounded-xl transition text-base">
-                            View Class Schedule
+                        <a href="portal.html" class="bg-white/10 hover:bg-white/20 border border-white/25 text-white font-bold px-6 py-4 rounded-xl transition flex items-center gap-2">
+                            <i class="fas fa-laptop-code text-amber-400"></i>
+                            <span>Open MAKDEMY ERP Portal</span>
                         </a>
                     </div>
 
-                    <!-- Mini Quick Stats Row -->
-                    <div class="grid grid-cols-3 gap-4 pt-6 border-t border-white/10 max-w-lg">
+                    <!-- Quick Highlights -->
+                    <div class="grid grid-cols-3 gap-4 mt-10 pt-8 border-t border-white/10 text-center sm:text-left">
                         <div>
-                            <div class="text-2xl sm:text-3xl font-extrabold text-amber-400">3 Experts</div>
-                            <div class="text-xs text-blue-200">Dedicated Faculty</div>
+                            <div class="text-2xl sm:text-3xl font-black text-amber-400">Class 6–10</div>
+                            <div class="text-xs text-blue-200">Dedicated CBSE Batches</div>
                         </div>
                         <div>
-                            <div class="text-2xl sm:text-3xl font-extrabold text-white">15 Seats</div>
-                            <div class="text-xs text-blue-200">Per Classroom</div>
+                            <div class="text-2xl sm:text-3xl font-black text-emerald-400">Every Sat</div>
+                            <div class="text-xs text-blue-200">OMR + Board Pattern Tests</div>
                         </div>
                         <div>
-                            <div class="text-2xl sm:text-3xl font-extrabold text-emerald-400">Every Sat</div>
-                            <div class="text-xs text-blue-200">Live Board Test</div>
+                            <div class="text-2xl sm:text-3xl font-black text-blue-300">100% Live</div>
+                            <div class="text-xs text-blue-200">MAKDEMY Parent ERP</div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Right Animated Running Graphic Visual (5 Cols) -->
-                <div class="lg:col-span-5 relative flex items-center justify-center" data-aos="zoom-in" data-aos-duration="1000">
-                    
-                    <!-- Outer Rotating Orbital Ring with Subject Icons -->
-                    <div class="w-80 h-80 sm:w-96 sm:h-96 rounded-full border-2 border-dashed border-blue-400/30 absolute orbit-ring flex items-center justify-center pointer-events-none">
-                        <!-- Top Orbit Icon (Maths) -->
-                        <div class="w-12 h-12 rounded-2xl bg-blue-600 text-white shadow-lg flex items-center justify-center text-lg absolute -top-6 orbit-item">
-                            <i class="fas fa-square-root-alt"></i>
+                <!-- Right Column: Animated Graphic Centerpiece (5 Cols) -->
+                <div class="lg:col-span-5 flex justify-center" data-aos="zoom-in">
+                    <div class="relative flex items-center justify-center w-80 h-80 sm:w-96 sm:h-96">
+                        <div class="w-full h-full rounded-full border-2 border-dashed border-blue-400/30 absolute orbit-ring flex items-center justify-center pointer-events-none">
+                            <div class="w-12 h-12 rounded-2xl bg-blue-600 text-white shadow-lg flex items-center justify-center text-lg absolute -top-6 orbit-item"><i class="fas fa-square-root-alt"></i></div>
+                            <div class="w-12 h-12 rounded-2xl bg-amber-500 text-slate-950 shadow-lg flex items-center justify-center text-lg absolute -bottom-6 orbit-item"><i class="fas fa-atom"></i></div>
+                            <div class="w-12 h-12 rounded-2xl bg-emerald-500 text-white shadow-lg flex items-center justify-center text-lg absolute -left-6 orbit-item"><i class="fas fa-dna"></i></div>
+                            <div class="w-12 h-12 rounded-2xl bg-purple-600 text-white shadow-lg flex items-center justify-center text-lg absolute -right-6 orbit-item"><i class="fas fa-laptop-code"></i></div>
                         </div>
-                        <!-- Bottom Orbit Icon (Science) -->
-                        <div class="w-12 h-12 rounded-2xl bg-amber-500 text-slate-950 shadow-lg flex items-center justify-center text-lg absolute -bottom-6 orbit-item">
-                            <i class="fas fa-atom"></i>
-                        </div>
-                        <!-- Left Orbit Icon (Biology) -->
-                        <div class="w-12 h-12 rounded-2xl bg-emerald-500 text-white shadow-lg flex items-center justify-center text-lg absolute -left-6 orbit-item">
-                            <i class="fas fa-dna"></i>
-                        </div>
-                        <!-- Right Orbit Icon (IT/Tech) -->
-                        <div class="w-12 h-12 rounded-2xl bg-purple-600 text-white shadow-lg flex items-center justify-center text-lg absolute -right-6 orbit-item">
-                            <i class="fas fa-laptop-code"></i>
-                        </div>
-                    </div>
 
-                    <!-- Center Glass Card with Live Running Lottie Student Graphic -->
-                    <div class="bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl p-5 shadow-2xl relative z-10 w-72 sm:w-80 text-center animate-float">
-                        <div class="bg-gradient-to-b from-blue-950/80 to-slate-900/90 rounded-2xl p-3 border border-white/10">
-                            <!-- Live Running Animated Graphic (Lottie) -->
-                            <lottie-player 
-                                src="https://assets3.lottiefiles.com/packages/lf20_fcfjwiyb.json"  
-                                background="transparent"  
-                                speed="1"  
-                                style="width: 100%; height: 220px;"  
-                                loop  
-                                autoplay>
-                            </lottie-player>
-                            <div class="mt-2">
-                                <span class="bg-amber-400 text-slate-950 text-[11px] font-extrabold px-3 py-1 rounded-full uppercase tracking-wider">
-                                    Smart Visual Learning
-                                </span>
-                                <h3 class="text-white font-bold text-base mt-2">Interactive Concept Classes</h3>
-                                <p class="text-blue-200 text-xs mt-0.5">Class 6 to 10 CBSE • Maths, Science & IT</p>
+                        <div class="bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl p-5 shadow-2xl relative z-10 w-64 sm:w-72 text-center animate-float">
+                            <div class="bg-slate-950/80 rounded-2xl p-3 border border-white/10">
+                                <lottie-player src="https://assets3.lottiefiles.com/packages/lf20_fcfjwiyb.json" background="transparent" speed="1" style="width: 100%; height: 190px;" loop autoplay></lottie-player>
+                                <span class="inline-block bg-amber-400 text-slate-950 text-[11px] font-black px-3 py-0.5 rounded-full uppercase tracking-wider mt-1">MAKDEMY SMART CAMPUS</span>
+                                <p class="text-xs text-blue-200 font-medium mt-1">Maths • Science • Biology • IT</p>
                             </div>
                         </div>
                     </div>
-
-                    <!-- Floating Badge Bottom -->
-                    <div class="bg-emerald-500 text-white px-4 py-2 rounded-xl shadow-xl absolute -bottom-4 right-2 z-20 flex items-center gap-2 animate-float-delayed">
-                        <i class="fab fa-whatsapp text-xl"></i>
-                        <div class="text-left">
-                            <div class="text-[11px] font-extrabold leading-none">Same-Day Test Score</div>
-                            <div class="text-[9px] text-emerald-100">Direct on Parent's Phone</div>
-                        </div>
-                    </div>
                 </div>
-
             </div>
         </div>
     </section>
 
-    <!-- Continuous Running Graphic Marquee Banner -->
-    <div class="bg-slate-900 border-y border-slate-800 py-3.5 overflow-hidden">
-        <div class="marquee-track text-slate-200 text-xs sm:text-sm font-semibold space-x-10 px-4">
-            <span class="flex items-center gap-2"><i class="fas fa-check-circle text-amber-400"></i> 100% NCERT + Exemplar Coverage</span>
-            <span class="flex items-center gap-2"><i class="fas fa-microscope text-blue-400"></i> Practical Physics, Chemistry & Biology</span>
-            <span class="flex items-center gap-2"><i class="fas fa-calculator text-emerald-400"></i> Daily Mathematics Speed Worksheets</span>
-            <span class="flex items-center gap-2"><i class="fas fa-laptop-code text-purple-400"></i> Computer & IT Foundation by Industry Expert</span>
-            <span class="flex items-center gap-2"><i class="fas fa-award text-amber-400"></i> Every Saturday OMR & Written Board Test</span>
-            <span class="flex items-center gap-2"><i class="fas fa-user-check text-emerald-400"></i> Limited 15 Students Per Room</span>
-            <!-- Duplicate for seamless infinite loop -->
-            <span class="flex items-center gap-2"><i class="fas fa-check-circle text-amber-400"></i> 100% NCERT + Exemplar Coverage</span>
-            <span class="flex items-center gap-2"><i class="fas fa-microscope text-blue-400"></i> Practical Physics, Chemistry & Biology</span>
-            <span class="flex items-center gap-2"><i class="fas fa-calculator text-emerald-400"></i> Daily Mathematics Speed Worksheets</span>
-            <span class="flex items-center gap-2"><i class="fas fa-laptop-code text-purple-400"></i> Computer & IT Foundation by Industry Expert</span>
-            <span class="flex items-center gap-2"><i class="fas fa-award text-amber-400"></i> Every Saturday OMR & Written Board Test</span>
-        </div>
-    </div>
-
-    <!-- Why Choose Us (3 Teacher Formula) -->
+    <!-- Why MAKDEMY Section -->
     <section id="about" class="py-16 bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center max-w-3xl mx-auto mb-12" data-aos="fade-up">
-                <span class="text-blue-700 font-bold text-sm uppercase tracking-wider">Our Teaching Methodology</span>
-                <h2 class="text-2xl sm:text-4xl font-extrabold text-slate-900 mt-2">3 Expert Educators. Complete Syllabus Mastery.</h2>
-                <p class="text-slate-600 mt-3">Unlike single-teacher tuitions, Apex CBSE Academy features dedicated faculty for core areas so every subject gets deep clarity.</p>
+            <div class="text-center max-w-3xl mx-auto mb-12">
+                <span class="text-blue-700 font-extrabold text-xs uppercase tracking-widest bg-blue-50 px-3.5 py-1.5 rounded-full">Why Choose MAKDEMY</span>
+                <h2 class="text-3xl sm:text-4xl font-black text-slate-900 mt-3">Engineered for Concept Clarity & Board Excellence</h2>
+                <p class="text-slate-600 text-sm sm:text-base mt-2">MAKDEMY mein ratta lagane ke bajaye har chapter ke logic, numericals, aur NCERT exemplar par focus kiya jata hai.</p>
+            </div>
+
+            <div class="grid md:grid-cols-4 gap-6">
+                <div class="p-6 rounded-2xl bg-slate-50 border border-slate-200 hover:border-blue-500 transition shadow-sm">
+                    <div class="w-12 h-12 rounded-xl bg-blue-700 text-white flex items-center justify-center text-xl mb-4"><i class="fas fa-book-open"></i></div>
+                    <h3 class="font-extrabold text-lg text-slate-900 mb-2">NCERT + Exemplar Mastery</h3>
+                    <p class="text-xs sm:text-sm text-slate-600">Class 6 se 10 tak har subject ki line-by-line NCERT coverage aur board competency questions.</p>
+                </div>
+                <div class="p-6 rounded-2xl bg-slate-50 border border-slate-200 hover:border-amber-500 transition shadow-sm">
+                    <div class="w-12 h-12 rounded-xl bg-amber-500 text-slate-950 flex items-center justify-center text-xl mb-4"><i class="fas fa-chart-line"></i></div>
+                    <h3 class="font-extrabold text-lg text-slate-900 mb-2">Saturday OMR & Written Tests</h3>
+                    <p class="text-xs sm:text-sm text-slate-600">Har Shanivar test aur uska live result seedha MAKDEMY Parent ERP Portal par.</p>
+                </div>
+                <div class="p-6 rounded-2xl bg-slate-50 border border-slate-200 hover:border-emerald-500 transition shadow-sm">
+                    <div class="w-12 h-12 rounded-xl bg-emerald-600 text-white flex items-center justify-center text-xl mb-4"><i class="fas fa-user-check"></i></div>
+                    <h3 class="font-extrabold text-lg text-slate-900 mb-2">Dedicated Doubt Counter</h3>
+                    <p class="text-xs sm:text-sm text-slate-600">3 specialist teachers ki team jismein har roz 1-on-1 doubt clearing aur weak student care shamil hai.</p>
+                </div>
+                <div class="p-6 rounded-2xl bg-slate-50 border border-slate-200 hover:border-purple-500 transition shadow-sm">
+                    <div class="w-12 h-12 rounded-xl bg-purple-600 text-white flex items-center justify-center text-xl mb-4"><i class="fas fa-id-card"></i></div>
+                    <h3 class="font-extrabold text-lg text-slate-900 mb-2">Digital ERP, ID & Online Fees</h3>
+                    <p class="text-xs sm:text-sm text-slate-600">Online UPI/NetBanking fee payment, instant QR receipt, printable report card aur chapter notes PDF.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Founder's Desk Section -->
+    <section id="founder" class="py-16 bg-slate-900 text-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid lg:grid-cols-12 gap-10 items-center">
+                <div class="lg:col-span-5">
+                    <div class="bg-gradient-to-br from-blue-800 to-slate-800 p-6 rounded-3xl border border-white/15 shadow-2xl text-center">
+                        <div class="w-24 h-24 rounded-3xl bg-amber-400 text-slate-950 font-black text-4xl flex items-center justify-center mx-auto mb-4 shadow-lg">
+                            MAK
+                        </div>
+                        <h3 class="text-2xl font-black text-white">Massawar Ali Khan</h3>
+                        <p class="text-amber-400 text-xs font-bold uppercase tracking-widest mt-1">Founder & Director, MAKDEMY</p>
+                        <p class="text-blue-200 text-xs mt-2">IT Infrastructure & Network Specialist (6+ Years Exp.)</p>
+                        <div class="mt-5 pt-4 border-t border-white/10 flex justify-center gap-4 text-xs text-slate-300">
+                            <span><i class="fas fa-check-circle text-emerald-400 mr-1"></i>Tech-Enabled Teaching</span>
+                            <span><i class="fas fa-check-circle text-emerald-400 mr-1"></i>Personal Mentorship</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="lg:col-span-7 space-y-4">
+                    <span class="bg-amber-400 text-slate-950 text-xs font-extrabold px-3 py-1 rounded-full uppercase">Founder's Vision</span>
+                    <h2 class="text-3xl sm:text-4xl font-black leading-tight">Bringing Modern Technology & Quality CBSE Mentorship to Jainthgarh</h2>
+                    <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
+                        "MAKDEMY ka maksad sirf syllabus khatam karna nahi, balki Jainthgarh aur aas-paas ke har student ko woh smart concept clarity, IT awareness, aur disciplined test environment dena hai jo bade shehron ke top institutes mein milta hai."
+                    </p>
+                    <div class="pt-2">
+                        <a href="portal.html" class="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-500 text-white font-bold px-5 py-3 rounded-xl text-xs sm:text-sm shadow-lg transition">
+                            <i class="fas fa-external-link-alt"></i> Explore MAKDEMY Digital ERP Portal
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Batches & Fee Structure Section -->
+    <section id="batches" class="py-16 bg-slate-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-12">
+                <span class="text-blue-700 font-extrabold text-xs uppercase tracking-widest bg-blue-100 px-3.5 py-1.5 rounded-full">MAKDEMY Batches & Monthly Fee</span>
+                <h2 class="text-3xl sm:text-4xl font-black text-slate-900 mt-3">Structured Shifts for Class 6 to 10</h2>
             </div>
 
             <div class="grid md:grid-cols-3 gap-8">
-                <!-- Pillar 1 -->
-                <div class="bg-slate-50 border border-slate-200/80 rounded-2xl p-7 card-hover shadow-sm" data-aos="fade-up" data-aos-delay="100">
-                    <div class="w-14 h-14 bg-blue-100 text-blue-700 rounded-xl flex items-center justify-center text-2xl mb-5 animate-float">
-                        <i class="fas fa-square-root-alt"></i>
+                <div class="bg-white rounded-3xl p-6 shadow-sm border border-slate-200 flex flex-col justify-between">
+                    <div>
+                        <span class="bg-blue-100 text-blue-800 text-xs font-extrabold px-3 py-1 rounded-full">Shift 1 • 3:30 PM – 5:30 PM</span>
+                        <h3 class="text-2xl font-black text-slate-900 mt-3">Class 6 & 7 Foundation</h3>
+                        <div class="text-3xl font-black text-blue-700 mt-2">₹800 <span class="text-xs font-normal text-slate-500">/ month</span></div>
+                        <ul class="mt-4 space-y-2 text-xs sm:text-sm text-slate-600">
+                            <li><i class="fas fa-check text-emerald-600 mr-2"></i>Maths, Science, Bio/IT & English/SST</li>
+                            <li><i class="fas fa-check text-emerald-600 mr-2"></i>Mental Maths & Diagram Practice</li>
+                            <li><i class="fas fa-check text-emerald-600 mr-2"></i>Weekly Saturday OMR Test</li>
+                        </ul>
                     </div>
-                    <h3 class="text-xl font-bold text-slate-900 mb-2">Mathematics Wing</h3>
-                    <p class="text-slate-600 text-sm leading-relaxed">
-                        Step-by-step concept clarity, NCERT exercises, RD Sharma/Exemplar practice, and speed-building worksheets.
-                    </p>
+                    <a href="portal.html" class="mt-6 block text-center bg-slate-900 hover:bg-blue-700 text-white font-bold py-3 rounded-xl text-xs sm:text-sm transition">Enroll / Pay Online</a>
                 </div>
 
-                <!-- Pillar 2 -->
-                <div class="bg-slate-50 border border-slate-200/80 rounded-2xl p-7 card-hover shadow-sm" data-aos="fade-up" data-aos-delay="200">
-                    <div class="w-14 h-14 bg-amber-100 text-amber-600 rounded-xl flex items-center justify-center text-2xl mb-5 animate-float-delayed">
-                        <i class="fas fa-atom"></i>
+                <div class="bg-white rounded-3xl p-6 shadow-md border-2 border-blue-600 flex flex-col justify-between">
+                    <div>
+                        <span class="bg-amber-400 text-slate-950 text-xs font-extrabold px-3 py-1 rounded-full">Shift 1 • 3:30 PM – 5:30 PM</span>
+                        <h3 class="text-2xl font-black text-slate-900 mt-3">Class 8 Pre-Board</h3>
+                        <div class="text-3xl font-black text-blue-700 mt-2">₹1,000 <span class="text-xs font-normal text-slate-500">/ month</span></div>
+                        <ul class="mt-4 space-y-2 text-xs sm:text-sm text-slate-600">
+                            <li><i class="fas fa-check text-emerald-600 mr-2"></i>Complete NCERT + Exemplar Foundation</li>
+                            <li><i class="fas fa-check text-emerald-600 mr-2"></i>Dedicated Wednesday Doubt Counter</li>
+                            <li><i class="fas fa-check text-emerald-600 mr-2"></i>Chapter Notes & Worksheet PDFs</li>
+                        </ul>
                     </div>
-                    <h3 class="text-xl font-bold text-slate-900 mb-2">Physics & Chemistry Wing</h3>
-                    <p class="text-slate-600 text-sm leading-relaxed">
-                        Practical logic, chemical equations, numerical problem solving, and assertion-reasoning mastery for CBSE exams.
-                    </p>
+                    <a href="portal.html" class="mt-6 block text-center bg-blue-700 hover:bg-blue-800 text-white font-bold py-3 rounded-xl text-xs sm:text-sm transition">Enroll / Pay Online</a>
                 </div>
 
-                <!-- Pillar 3 -->
-                <div class="bg-slate-50 border border-slate-200/80 rounded-2xl p-7 card-hover shadow-sm" data-aos="fade-up" data-aos-delay="300">
-                    <div class="w-14 h-14 bg-emerald-100 text-emerald-600 rounded-xl flex items-center justify-center text-2xl mb-5 animate-float">
-                        <i class="fas fa-laptop-code"></i>
+                <div class="bg-white rounded-3xl p-6 shadow-sm border border-slate-200 flex flex-col justify-between">
+                    <div>
+                        <span class="bg-emerald-100 text-emerald-800 text-xs font-extrabold px-3 py-1 rounded-full">Shift 2 • 5:30 PM – 7:30 PM</span>
+                        <h3 class="text-2xl font-black text-slate-900 mt-3">Class 9 & 10 Board Target</h3>
+                        <div class="text-3xl font-black text-blue-700 mt-2">₹1,200 <span class="text-xs font-normal text-slate-500">/ month</span></div>
+                        <ul class="mt-4 space-y-2 text-xs sm:text-sm text-slate-600">
+                            <li><i class="fas fa-check text-emerald-600 mr-2"></i>Intensive Maths, Physics, Chem & Bio/IT</li>
+                            <li><i class="fas fa-check text-emerald-600 mr-2"></i>10-Year CBSE PYQ & Case-Study Drills</li>
+                            <li><i class="fas fa-check text-emerald-600 mr-2"></i>Saturday Board Pattern Test & Report Card</li>
+                        </ul>
                     </div>
-                    <h3 class="text-xl font-bold text-slate-900 mb-2">Biology / IT Doubt Desk</h3>
-                    <p class="text-slate-600 text-sm leading-relaxed">
-                        Diagram practice, computer & IT fundamentals, structured answer writing, 1-on-1 doubt clearing, and Saturday test evaluation.
-                    </p>
+                    <a href="portal.html" class="mt-6 block text-center bg-slate-900 hover:bg-blue-700 text-white font-bold py-3 rounded-xl text-xs sm:text-sm transition">Enroll / Pay Online</a>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Founder's Message (Massawar Ali Khan) with Animated Tech Graphic -->
-    <section id="founder" class="py-16 bg-gradient-to-br from-slate-900 via-blue-950 to-slate-900 text-white relative overflow-hidden">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-            <div class="grid lg:grid-cols-12 gap-10 items-center">
-                <!-- Founder Profile Card with Animated Graphic -->
-                <div class="lg:col-span-5" data-aos="fade-right">
-                    <div class="bg-white/10 backdrop-blur-md border border-white/20 rounded-3xl p-7 text-center relative shadow-2xl">
-                        <!-- Animated Tech Mentor Graphic -->
-                        <div class="w-40 h-40 mx-auto -mt-4 mb-2">
-                            <lottie-player 
-                                src="https://assets9.lottiefiles.com/packages/lf20_w51pcehl.json"  
-                                background="transparent"  
-                                speed="1"  
-                                style="width: 100%; height: 100%;"  
-                                loop  
-                                autoplay>
-                            </lottie-player>
-                        </div>
-                        <span class="bg-amber-400/20 text-amber-300 border border-amber-400/30 text-xs font-bold px-3.5 py-1 rounded-full uppercase tracking-wider">
-                            Founder & Mentor
-                        </span>
-                        <h3 class="text-2xl sm:text-3xl font-extrabold text-white mt-3">Massawar Ali Khan</h3>
-                        <p class="text-blue-300 font-medium text-sm mt-1">
-                            <i class="fas fa-network-wired mr-1.5 text-amber-400"></i>Over 6+ Years of Industry IT Expertise
-                        </p>
-
-                        <div class="grid grid-cols-2 gap-3 mt-6 pt-6 border-t border-white/15 text-left">
-                            <div class="bg-slate-900/60 p-3 rounded-xl">
-                                <div class="text-amber-400 font-bold text-sm"><i class="fas fa-microchip mr-1"></i> Tech-Driven</div>
-                                <div class="text-[11px] text-slate-300 mt-0.5">Modern IT & Analytical Pedagogy</div>
-                            </div>
-                            <div class="bg-slate-900/60 p-3 rounded-xl">
-                                <div class="text-emerald-400 font-bold text-sm"><i class="fas fa-chart-line mr-1"></i> Result Oriented</div>
-                                <div class="text-[11px] text-slate-300 mt-0.5">Weekly Tracking & Mentorship</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Strong Founder's Message -->
-                <div class="lg:col-span-7" data-aos="fade-left">
-                    <div class="inline-flex items-center gap-2 text-amber-400 font-bold text-sm uppercase tracking-wider mb-2">
-                        <i class="fas fa-quote-left text-xl"></i> From The Founder's Desk
-                    </div>
-                    <h2 class="text-2xl sm:text-4xl font-extrabold leading-tight mb-6">
-                        "We Don't Just Prepare Students for Exams; We Prepare Them for the Future."
-                    </h2>
-                    <div class="space-y-4 text-blue-100 text-sm sm:text-base leading-relaxed">
-                        <p>
-                            Having spent <strong>over 6 years as an IT Specialist</strong> solving real-world enterprise challenges, I have seen firsthand what separates top achievers from the rest: <strong>crystal-clear fundamentals, logical problem-solving, and technological confidence.</strong>
-                        </p>
-                        <p>
-                            At <strong>Apex CBSE Academy</strong>, our mission is to end the culture of fear and rote memorization in Mathematics, Science, and IT. When a student in Class 6 to 10 truly understands the <em>'Why'</em> and <em>'How'</em> behind every NCERT concept, high board scores become a natural byproduct.
-                        </p>
-                        <p class="font-semibold text-white bg-blue-900/50 border-l-4 border-amber-400 p-4 rounded-r-xl">
-                            "Every child in Jainthgarh deserves quality mentorship, disciplined weekly testing, and personal care. Give us your child's curiosity, and we will build their confidence."
-                        </p>
-                    </div>
-                    <div class="mt-6 flex items-center gap-4">
-                        <div>
-                            <div class="font-bold text-white text-lg">— Massawar Ali Khan</div>
-                            <div class="text-xs text-amber-400">Founder, Apex CBSE Academy | IT Expert (6+ Yrs Exp.)</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Courses & Batches -->
-    <section id="batches" class="py-16 bg-slate-100">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center max-w-3xl mx-auto mb-12" data-aos="fade-up">
-                <span class="text-blue-700 font-bold text-sm uppercase tracking-wider">Structured Learning</span>
-                <h2 class="text-2xl sm:text-4xl font-extrabold text-slate-900 mt-2">Our Dedicated CBSE Batches</h2>
-            </div>
-
-            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <!-- Batch 1 -->
-                <div class="bg-white rounded-2xl p-6 shadow-sm border-t-4 border-blue-600 flex flex-col justify-between card-hover" data-aos="fade-up" data-aos-delay="50">
-                    <div>
-                        <span class="bg-blue-50 text-blue-700 text-xs font-bold px-3 py-1 rounded-full">Shift 1 • Room 1</span>
-                        <h3 class="text-xl font-extrabold text-slate-900 mt-4">Class 6 & 7</h3>
-                        <p class="text-xs text-slate-500 font-medium mb-4">Junior Foundation Batch</p>
-                        <ul class="text-sm text-slate-600 space-y-2.5 mb-6">
-                            <li><i class="fas fa-check text-blue-600 mr-2"></i>Strong NCERT Basics</li>
-                            <li><i class="fas fa-check text-blue-600 mr-2"></i>Mental Maths & Logic</li>
-                            <li><i class="fas fa-check text-blue-600 mr-2"></i>Science Diagrams & Terms</li>
-                            <li><i class="fas fa-check text-blue-600 mr-2"></i>Computer/IT & English Support</li>
-                        </ul>
-                    </div>
-                    <div class="pt-4 border-t border-slate-100 text-sm font-bold text-slate-800">
-                        <i class="far fa-clock text-blue-600 mr-1"></i> 3:30 PM – 5:30 PM
-                    </div>
-                </div>
-
-                <!-- Batch 2 -->
-                <div class="bg-white rounded-2xl p-6 shadow-sm border-t-4 border-indigo-600 flex flex-col justify-between card-hover" data-aos="fade-up" data-aos-delay="150">
-                    <div>
-                        <span class="bg-indigo-50 text-indigo-700 text-xs font-bold px-3 py-1 rounded-full">Shift 1 • Room 2</span>
-                        <h3 class="text-xl font-extrabold text-slate-900 mt-4">Class 8</h3>
-                        <p class="text-xs text-slate-500 font-medium mb-4">Pre-Board Foundation Batch</p>
-                        <ul class="text-sm text-slate-600 space-y-2.5 mb-6">
-                            <li><i class="fas fa-check text-indigo-600 mr-2"></i>Complete NCERT Mastery</li>
-                            <li><i class="fas fa-check text-indigo-600 mr-2"></i>High-School Bridge Concepts</li>
-                            <li><i class="fas fa-check text-indigo-600 mr-2"></i>Weekly Worksheet Practice</li>
-                            <li><i class="fas fa-check text-indigo-600 mr-2"></i>Dedicated Doubt Counter</li>
-                        </ul>
-                    </div>
-                    <div class="pt-4 border-t border-slate-100 text-sm font-bold text-slate-800">
-                        <i class="far fa-clock text-indigo-600 mr-1"></i> 3:30 PM – 5:30 PM
-                    </div>
-                </div>
-
-                <!-- Batch 3 -->
-                <div class="bg-white rounded-2xl p-6 shadow-sm border-t-4 border-amber-500 flex flex-col justify-between card-hover" data-aos="fade-up" data-aos-delay="250">
-                    <div>
-                        <span class="bg-amber-50 text-amber-700 text-xs font-bold px-3 py-1 rounded-full">Shift 2 • Room 1</span>
-                        <h3 class="text-xl font-extrabold text-slate-900 mt-4">Class 9</h3>
-                        <p class="text-xs text-slate-500 font-medium mb-4">Core High-School Batch</p>
-                        <ul class="text-sm text-slate-600 space-y-2.5 mb-6">
-                            <li><i class="fas fa-check text-amber-600 mr-2"></i>NCERT + Exemplar Focus</li>
-                            <li><i class="fas fa-check text-amber-600 mr-2"></i>Physics & Chem Numericals</li>
-                            <li><i class="fas fa-check text-amber-600 mr-2"></i>Case-Study Question Prep</li>
-                            <li><i class="fas fa-check text-amber-600 mr-2"></i>Saturday Board-Pattern Test</li>
-                        </ul>
-                    </div>
-                    <div class="pt-4 border-t border-slate-100 text-sm font-bold text-slate-800">
-                        <i class="far fa-clock text-amber-600 mr-1"></i> 5:30 PM – 7:30 PM
-                    </div>
-                </div>
-
-                <!-- Batch 4 -->
-                <div class="bg-white rounded-2xl p-6 shadow-sm border-t-4 border-emerald-600 flex flex-col justify-between card-hover" data-aos="fade-up" data-aos-delay="350">
-                    <div>
-                        <span class="bg-emerald-50 text-emerald-700 text-xs font-bold px-3 py-1 rounded-full">Shift 2 • Room 2</span>
-                        <h3 class="text-xl font-extrabold text-slate-900 mt-4">Class 10</h3>
-                        <p class="text-xs text-slate-500 font-medium mb-4">CBSE Board Target Batch</p>
-                        <ul class="text-sm text-slate-600 space-y-2.5 mb-6">
-                            <li><i class="fas fa-check text-emerald-600 mr-2"></i>10-Year PYQ & Sample Papers</li>
-                            <li><i class="fas fa-check text-emerald-600 mr-2"></i>Competency-Based Questions</li>
-                            <li><i class="fas fa-check text-emerald-600 mr-2"></i>Answer Presentation Skills</li>
-                            <li><i class="fas fa-check text-emerald-600 mr-2"></i>1-on-1 Performance Tracking</li>
-                        </ul>
-                    </div>
-                    <div class="pt-4 border-t border-slate-100 text-sm font-bold text-slate-800">
-                        <i class="far fa-clock text-emerald-600 mr-1"></i> 5:30 PM – 7:30 PM
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Weekly Timetable Section -->
+    <!-- Master Timetable Section -->
     <section id="timetable" class="py-16 bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center max-w-3xl mx-auto mb-10" data-aos="fade-up">
-                <span class="text-blue-700 font-bold text-sm uppercase tracking-wider">Systematic Schedule</span>
-                <h2 class="text-2xl sm:text-4xl font-extrabold text-slate-900 mt-2">Weekly Class & Test Timetable</h2>
-                <p class="text-slate-600 mt-2 text-sm sm:text-base">Every 2-hour shift is split into two focused 1-hour subject sessions, followed by Saturday Tests.</p>
+            <div class="text-center max-w-3xl mx-auto mb-10">
+                <span class="text-blue-700 font-extrabold text-xs uppercase tracking-widest bg-blue-50 px-3.5 py-1.5 rounded-full">Weekly Schedule</span>
+                <h2 class="text-3xl font-black text-slate-900 mt-2">MAKDEMY Master Timetable (Monday – Saturday)</h2>
+                <p class="text-xs sm:text-sm text-slate-500 mt-1">Shift 1 (Class 6–8): 3:30 PM – 5:30 PM | Shift 2 (Class 9–10): 5:30 PM – 7:30 PM</p>
             </div>
 
-            <!-- Shift 1 Table -->
-            <div class="mb-10" data-aos="fade-up">
-                <div class="bg-blue-900 text-white px-6 py-3.5 rounded-t-xl flex flex-wrap justify-between items-center gap-2">
-                    <h3 class="font-bold text-lg"><i class="fas fa-sun text-amber-400 mr-2"></i>Shift 1: 3:30 PM – 5:30 PM (Junior & Middle Wing)</h3>
-                    <span class="text-xs bg-blue-800 px-3 py-1 rounded-full">Room 1: Class 6–7 | Room 2: Class 8</span>
-                </div>
-                <div class="overflow-x-auto border border-slate-200 rounded-b-xl shadow-sm">
-                    <table class="w-full text-left border-collapse text-sm">
-                        <thead>
-                            <tr class="bg-slate-100 text-slate-700 border-b border-slate-200">
-                                <th class="py-3.5 px-4 font-bold">Day</th>
-                                <th class="py-3.5 px-4 font-bold">Slot 1 (3:30 – 4:30 PM)</th>
-                                <th class="py-3.5 px-4 font-bold">Slot 2 (4:30 – 5:30 PM)</th>
-                                <th class="py-3.5 px-4 font-bold">Support & Doubt Desk</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-slate-200">
-                            <tr>
-                                <td class="py-3 px-4 font-semibold text-slate-900">Monday</td>
-                                <td class="py-3 px-4">R1: Maths | R2: Science</td>
-                                <td class="py-3 px-4">R1: Science | R2: Maths</td>
-                                <td class="py-3 px-4 text-slate-600">Worksheet & Weak Student Care</td>
-                            </tr>
-                            <tr class="bg-slate-50/60">
-                                <td class="py-3 px-4 font-semibold text-slate-900">Tuesday</td>
-                                <td class="py-3 px-4">R1: Maths | R2: Bio/IT</td>
-                                <td class="py-3 px-4">R1: Bio/IT | R2: Maths</td>
-                                <td class="py-3 px-4 text-slate-600">Concept Notes & Assignment Check</td>
-                            </tr>
-                            <tr>
-                                <td class="py-3 px-4 font-semibold text-slate-900">Wednesday</td>
-                                <td class="py-3 px-4">R1: Science | R2: Maths</td>
-                                <td class="py-3 px-4">R1: Maths | R2: Science</td>
-                                <td class="py-3 px-4 text-slate-600">Class 8 Dedicated Doubt Desk</td>
-                            </tr>
-                            <tr class="bg-slate-50/60">
-                                <td class="py-3 px-4 font-semibold text-slate-900">Thursday</td>
-                                <td class="py-3 px-4">R1: SST/Eng | R2: Science</td>
-                                <td class="py-3 px-4">R1: Science | R2: SST/Eng</td>
-                                <td class="py-3 px-4 text-slate-600">NCERT Back-Exercise Verification</td>
-                            </tr>
-                            <tr>
-                                <td class="py-3 px-4 font-semibold text-slate-900">Friday</td>
-                                <td class="py-3 px-4">R1: Maths Practice | R2: Sci Rev</td>
-                                <td class="py-3 px-4">R1: Doubt Class | R2: Maths Practice</td>
-                                <td class="py-3 px-4 text-slate-600">Weekly Test Paper Preparation</td>
-                            </tr>
-                            <tr class="bg-amber-50/70 font-medium">
-                                <td class="py-3 px-4 font-bold text-amber-900">Saturday</td>
-                                <td class="py-3 px-4 text-amber-900">Weekly OMR/Written Test</td>
-                                <td class="py-3 px-4 text-amber-900">Live Paper Discussion & Quiz</td>
-                                <td class="py-3 px-4 text-amber-800">Same-Day Marks Sent on WhatsApp</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <!-- Shift 2 Table -->
-            <div data-aos="fade-up">
-                <div class="bg-slate-900 text-white px-6 py-3.5 rounded-t-xl flex flex-wrap justify-between items-center gap-2">
-                    <h3 class="font-bold text-lg"><i class="fas fa-graduation-cap text-amber-400 mr-2"></i>Shift 2: 5:30 PM – 7:30 PM (Senior & Board Wing)</h3>
-                    <span class="text-xs bg-slate-800 px-3 py-1 rounded-full">Room 1: Class 9 | Room 2: Class 10</span>
-                </div>
-                <div class="overflow-x-auto border border-slate-200 rounded-b-xl shadow-sm">
-                    <table class="w-full text-left border-collapse text-sm">
-                        <thead>
-                            <tr class="bg-slate-100 text-slate-700 border-b border-slate-200">
-                                <th class="py-3.5 px-4 font-bold">Day</th>
-                                <th class="py-3.5 px-4 font-bold">Slot 1 (5:30 – 6:30 PM)</th>
-                                <th class="py-3.5 px-4 font-bold">Slot 2 (6:30 – 7:30 PM)</th>
-                                <th class="py-3.5 px-4 font-bold">Board Prep & Support</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-slate-200">
-                            <tr>
-                                <td class="py-3 px-4 font-semibold text-slate-900">Monday</td>
-                                <td class="py-3 px-4">R1: Maths | R2: Physics/Chem</td>
-                                <td class="py-3 px-4">R1: Physics/Chem | R2: Maths</td>
-                                <td class="py-3 px-4 text-slate-600">Class 10 PYQ & Case-Study Sheets</td>
-                            </tr>
-                            <tr class="bg-slate-50/60">
-                                <td class="py-3 px-4 font-semibold text-slate-900">Tuesday</td>
-                                <td class="py-3 px-4">R1: Maths | R2: Bio/IT</td>
-                                <td class="py-3 px-4">R1: Bio/IT | R2: Maths</td>
-                                <td class="py-3 px-4 text-slate-600">Numericals & Formula Drill</td>
-                            </tr>
-                            <tr>
-                                <td class="py-3 px-4 font-semibold text-slate-900">Wednesday</td>
-                                <td class="py-3 px-4">R1: Physics/Chem | R2: Maths</td>
-                                <td class="py-3 px-4">R1: Maths | R2: Physics/Chem</td>
-                                <td class="py-3 px-4 text-slate-600">1-on-1 Board Doubt Counter</td>
-                            </tr>
-                            <tr class="bg-slate-50/60">
-                                <td class="py-3 px-4 font-semibold text-slate-900">Thursday</td>
-                                <td class="py-3 px-4">R1: SST/Eng | R2: Physics/Chem</td>
-                                <td class="py-3 px-4">R1: Physics/Chem | R2: SST/Eng</td>
-                                <td class="py-3 px-4 text-slate-600">Board Answer Writing Check</td>
-                            </tr>
-                            <tr>
-                                <td class="py-3 px-4 font-semibold text-slate-900">Friday</td>
-                                <td class="py-3 px-4">R1: Maths Exemplar | R2: Sci Num.</td>
-                                <td class="py-3 px-4">R1: Sci Revision | R2: Maths Exemplar</td>
-                                <td class="py-3 px-4 text-slate-600">Attendance & Parent Call Update</td>
-                            </tr>
-                            <tr class="bg-amber-50/70 font-medium">
-                                <td class="py-3 px-4 font-bold text-amber-900">Saturday</td>
-                                <td class="py-3 px-4 text-amber-900">CBSE Board Pattern Test</td>
-                                <td class="py-3 px-4 text-amber-900">Instant Copy Check & Analysis</td>
-                                <td class="py-3 px-4 text-amber-800">Evening Scorecard to Parents</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+            <div class="overflow-x-auto border border-slate-200 rounded-2xl shadow-sm">
+                <table class="w-full text-left border-collapse text-xs sm:text-sm">
+                    <thead>
+                        <tr class="bg-slate-900 text-white">
+                            <th class="py-3.5 px-4">Day</th>
+                            <th class="py-3.5 px-4">Shift 1 (3:30–5:30 PM) • Cl 6–8</th>
+                            <th class="py-3.5 px-4">Shift 2 (5:30–7:30 PM) • Cl 9–10</th>
+                            <th class="py-3.5 px-4">Special Academic Focus</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-200">
+                        <tr><td class="py-3 px-4 font-bold">Monday–Wednesday</td><td class="py-3 px-4">Maths + Science (Phy/Chem/Bio)</td><td class="py-3 px-4">Maths + Science (Phy/Chem/Bio)</td><td class="py-3 px-4 text-blue-700 font-semibold">Core NCERT & Numericals</td></tr>
+                        <tr class="bg-slate-50"><td class="py-3 px-4 font-bold">Thursday–Friday</td><td class="py-3 px-4">Science + English/SST + IT</td><td class="py-3 px-4">Exemplar + PYQ + English/SST</td><td class="py-3 px-4 text-emerald-700 font-semibold">1-on-1 Doubt Desk & Speed Drill</td></tr>
+                        <tr class="bg-amber-50 font-bold text-amber-950"><td class="py-3 px-4">Saturday</td><td class="py-3 px-4">Weekly OMR & Written Test</td><td class="py-3 px-4">CBSE Board Pattern Test</td><td class="py-3 px-4">Live Portal Scorecard & Paper Discussion</td></tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     </section>
 
-    <!-- Contact & Quick Admission Form -->
+    <!-- Contact & Demo Registration Section -->
     <section id="contact" class="py-16 bg-slate-900 text-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid lg:grid-cols-2 gap-12 items-center">
-                <div data-aos="fade-right">
-                    <span class="text-amber-400 font-bold text-sm uppercase tracking-wider">Admissions Open</span>
-                    <h2 class="text-3xl sm:text-4xl font-extrabold mt-2 mb-4">Book Your Child's Free 7-Day Demo Class Today</h2>
-                    <p class="text-slate-300 mb-8 leading-relaxed">
-                        Experience our teaching quality first-hand. Limited to 15 seats per room to ensure individual focus on every child.
+                <div>
+                    <span class="bg-amber-400 text-slate-950 text-xs font-extrabold px-3 py-1 rounded-full uppercase">Visit MAKDEMY Today</span>
+                    <h2 class="text-3xl sm:text-4xl font-black mt-3">Book Your Child's Free 7-Day Demo Class</h2>
+                    <p class="text-slate-300 text-sm mt-3 leading-relaxed">
+                        Have questions about admissions, batch timings, or our Digital Parent ERP? Reach out directly to Founder Massawar Ali Khan.
                     </p>
-
-                    <div class="space-y-5">
-                        <div class="flex items-start gap-4">
-                            <div class="w-11 h-11 rounded-lg bg-blue-600/30 border border-blue-500/40 flex items-center justify-center text-amber-400 shrink-0">
-                                <i class="fas fa-user-tie"></i>
-                            </div>
-                            <div>
-                                <h4 class="font-bold text-white">Founder & Director</h4>
-                                <p class="text-slate-300 text-sm">Massawar Ali Khan (6+ Years IT Specialist)</p>
-                            </div>
-                        </div>
-
-                        <div class="flex items-start gap-4">
-                            <div class="w-11 h-11 rounded-lg bg-blue-600/30 border border-blue-500/40 flex items-center justify-center text-amber-400 shrink-0">
-                                <i class="fas fa-map-marker-alt"></i>
-                            </div>
-                            <div>
-                                <h4 class="font-bold text-white">Center Address</h4>
-                                <p class="text-slate-300 text-sm">In front of IQRA SCHOOL, JAINTHGARH</p>
-                            </div>
-                        </div>
-
-                        <div class="flex items-start gap-4">
-                            <div class="w-11 h-11 rounded-lg bg-blue-600/30 border border-blue-500/40 flex items-center justify-center text-amber-400 shrink-0">
-                                <i class="fas fa-phone-alt"></i>
-                            </div>
-                            <div>
-                                <h4 class="font-bold text-white">Call / WhatsApp Inquiry</h4>
-                                <p class="text-slate-300 text-sm">+91 9337042839 (3:00 PM – 8:00 PM)</p>
-                            </div>
-                        </div>
+                    <div class="mt-6 space-y-3 text-sm">
+                        <p><i class="fas fa-map-marker-alt text-amber-400 w-6"></i> <strong>Location:</strong> In front of IQRA School, Jainthgarh</p>
+                        <p><i class="fas fa-phone-alt text-amber-400 w-6"></i> <strong>Helpline / WhatsApp:</strong> +91 9337042839</p>
+                        <p><i class="fas fa-envelope text-amber-400 w-6"></i> <strong>Email:</strong> massawarali@gmail.com</p>
                     </div>
                 </div>
 
-                <!-- WhatsApp Direct Lead Form -->
-                <div class="bg-white text-slate-800 rounded-2xl p-6 sm:p-8 shadow-2xl" data-aos="zoom-in">
-                    <h3 class="text-2xl font-extrabold text-slate-900 mb-2">Quick Inquiry Form</h3>
-                    <p class="text-slate-500 text-sm mb-6">Fill out the details below to send an instant inquiry on WhatsApp.</p>
-
-                    <form id="demoForm" onsubmit="sendToWhatsApp(event)" class="space-y-4">
-                        <div>
-                            <label class="block text-xs font-bold uppercase text-slate-600 mb-1">Student's Full Name *</label>
-                            <input type="text" id="studentName" required placeholder="Enter student name" class="w-full px-4 py-3 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-600 text-sm">
+                <div class="bg-white text-slate-900 p-6 sm:p-8 rounded-3xl shadow-2xl">
+                    <h3 class="text-xl font-extrabold mb-4">Quick Admission / Demo Inquiry</h3>
+                    <form action="https://formsubmit.co/massawarali@gmail.com" method="POST" class="space-y-3.5 text-sm">
+                        <input type="hidden" name="_subject" value="New MAKDEMY Admission / Demo Inquiry!">
+                        <input type="text" name="Student_Name" required placeholder="Student's Full Name *" class="w-full px-4 py-3 rounded-xl border border-slate-300">
+                        <div class="grid grid-cols-2 gap-3">
+                            <select name="Class" required class="w-full px-3.5 py-3 rounded-xl border border-slate-300 bg-white">
+                                <option value="Class 6">Class 6</option>
+                                <option value="Class 7">Class 7</option>
+                                <option value="Class 8">Class 8</option>
+                                <option value="Class 9">Class 9</option>
+                                <option value="Class 10">Class 10</option>
+                            </select>
+                            <input type="tel" name="Parent_Mobile" required placeholder="10-Digit Mobile No. *" class="w-full px-3.5 py-3 rounded-xl border border-slate-300">
                         </div>
-
-                        <div class="grid grid-cols-2 gap-4">
-                            <div>
-                                <label class="block text-xs font-bold uppercase text-slate-600 mb-1">Select Class *</label>
-                                <select id="studentClass" required class="w-full px-4 py-3 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-600 text-sm bg-white">
-                                    <option value="Class 6">Class 6 (3:30 - 5:30 PM)</option>
-                                    <option value="Class 7">Class 7 (3:30 - 5:30 PM)</option>
-                                    <option value="Class 8">Class 8 (3:30 - 5:30 PM)</option>
-                                    <option value="Class 9">Class 9 (5:30 - 7:30 PM)</option>
-                                    <option value="Class 10">Class 10 (5:30 - 7:30 PM)</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label class="block text-xs font-bold uppercase text-slate-600 mb-1">Parent's Mobile *</label>
-                                <input type="tel" id="parentPhone" required placeholder="10-digit mobile number" class="w-full px-4 py-3 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-600 text-sm">
-                            </div>
-                        </div>
-
-                        <div>
-                            <label class="block text-xs font-bold uppercase text-slate-600 mb-1">School Name (Optional)</label>
-                            <input type="text" id="schoolName" placeholder="Current CBSE School Name" class="w-full px-4 py-3 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-600 text-sm">
-                        </div>
-
-                        <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3.5 rounded-xl shadow-lg transition transform hover:scale-[1.02] flex items-center justify-center gap-2 text-base">
-                            <i class="fab fa-whatsapp text-xl"></i> Book Demo via WhatsApp
+                        <button type="submit" class="w-full bg-blue-700 hover:bg-blue-800 text-white font-extrabold py-3.5 rounded-xl shadow-lg transition">
+                            Submit Inquiry to MAKDEMY
                         </button>
                     </form>
                 </div>
@@ -655,36 +353,14 @@
     </section>
 
     <!-- Footer -->
-    <footer class="bg-slate-950 text-slate-400 py-8 text-center text-sm border-t border-slate-800">
+    <footer class="bg-slate-950 text-slate-400 py-8 text-center text-xs border-t border-white/10">
         <div class="max-w-7xl mx-auto px-4">
-            <p class="font-bold text-white text-base mb-1">Apex CBSE Academy</p>
-            <p class="text-xs text-slate-500 mb-2">Founded by Massawar Ali Khan | In front of IQRA School, Jainthgarh</p>
-            <p class="text-xs text-slate-600">&copy; 2026 Apex CBSE Academy. All Rights Reserved.</p>
+            <p class="font-bold text-white text-sm">MAKDEMY — Building Strong Concepts, Shaping Bright Futures</p>
+            <p class="mt-1">Founded by Massawar Ali Khan • In front of IQRA School, Jainthgarh • Helpline: +91 9337042839</p>
         </div>
     </footer>
 
-    <!-- AOS Animation Script -->
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    <script>
-        AOS.init({
-            once: true,
-            offset: 60
-        });
-
-        function sendToWhatsApp(event) {
-            event.preventDefault();
-            const coachingWhatsAppNumber = "919337042839";
-
-            const name = document.getElementById('studentName').value;
-            const studentClass = document.getElementById('studentClass').value;
-            const phone = document.getElementById('parentPhone').value;
-            const school = document.getElementById('schoolName').value || "Not mentioned";
-
-            const message = `Hello *Massawar Sir (Apex CBSE Academy)*!%0A%0AI want to book a *Free 7-Day Demo Class*:%0A*Student Name:* ${name}%0A*Class:* ${studentClass}%0A*Parent Mobile:* ${phone}%0A*School:* ${school}`;
-
-            const whatsappURL = `https://wa.me/${coachingWhatsAppNumber}?text=${message}`;
-            window.open(whatsappURL, '_blank');
-        }
-    </script>
+    <script>AOS.init({ duration: 800, once: true });</script>
 </body>
 </html>
