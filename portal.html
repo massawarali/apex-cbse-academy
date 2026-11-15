@@ -394,6 +394,107 @@
         </div>
     </div>
 
+    <!-- ================= EDIT CANDIDATE PROFILE MODAL (ADMIN) ================= -->
+    <div id="editCandidateModal" class="hidden fixed inset-0 z-50 bg-slate-950/60 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto no-print">
+        <div class="bg-white rounded-3xl max-w-lg w-full p-6 shadow-2xl border border-slate-200 my-8 modal-animate">
+            <div class="flex justify-between items-center mb-4 pb-3 border-b border-slate-100">
+                <h3 class="text-lg font-extrabold text-slate-900">
+                    <i class="fas fa-user-edit text-amber-500 mr-1.5"></i> Edit Candidate Profile & Details
+                </h3>
+                <button type="button" onclick="closeEditCandidateModal()" class="text-slate-400 hover:text-slate-700 text-lg">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <form onsubmit="saveEditedCandidate(event)" class="space-y-3 text-sm">
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-[11px] font-bold uppercase text-slate-500 mb-1">Roll ID *</label>
+                        <input type="text" id="editCandRoll" required class="w-full px-3.5 py-2 rounded-lg border border-slate-300 font-bold text-blue-700 uppercase">
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-bold uppercase text-slate-500 mb-1">Student Full Name *</label>
+                        <input type="text" id="editCandName" required class="w-full px-3.5 py-2 rounded-lg border border-slate-300 font-semibold">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-[11px] font-bold uppercase text-slate-500 mb-1">Registered Gmail ID *</label>
+                        <input type="email" id="editCandEmail" required class="w-full px-3.5 py-2 rounded-lg border border-slate-300">
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-bold uppercase text-slate-500 mb-1">Mobile No. (10-Digit) *</label>
+                        <input type="tel" id="editCandPhone" required class="w-full px-3.5 py-2 rounded-lg border border-slate-300">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-[11px] font-bold uppercase text-slate-500 mb-1">Batch & Shift *</label>
+                        <select id="editCandBatch" required class="w-full px-3 py-2 rounded-lg border border-slate-300 bg-white">
+                            <option value="Class 6 & 7 (Shift 1: 3:30 - 5:30 PM)">Class 6 & 7 (Shift 1)</option>
+                            <option value="Class 8 (Shift 1: 3:30 - 5:30 PM)">Class 8 (Shift 1)</option>
+                            <option value="Class 9 (Shift 2: 5:30 - 7:30 PM)">Class 9 (Shift 2)</option>
+                            <option value="Class 10 (Shift 2: 5:30 - 7:30 PM)">Class 10 (Shift 2)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-bold uppercase text-slate-500 mb-1">Login PIN / Password *</label>
+                        <input type="text" id="editCandPin" required class="w-full px-3.5 py-2 rounded-lg border border-slate-300 font-mono">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-3 gap-2.5">
+                    <div>
+                        <label class="block text-[11px] font-bold uppercase text-slate-500 mb-1">Monthly Fee (₹)</label>
+                        <input type="number" id="editCandFeeAmt" required class="w-full px-3 py-2 rounded-lg border border-slate-300">
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-bold uppercase text-slate-500 mb-1">Fee Status</label>
+                        <select id="editCandFeeStatus" class="w-full px-2.5 py-2 rounded-lg border border-slate-300 bg-white">
+                            <option value="Paid">Paid</option>
+                            <option value="Pending">Pending</option>
+                            <option value="Verification Pending">Verification Pending</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-bold uppercase text-slate-500 mb-1">Attendance %</label>
+                        <input type="number" id="editCandAtt" min="0" max="100" required class="w-full px-3 py-2 rounded-lg border border-slate-300">
+                    </div>
+                </div>
+
+                <!-- Photo Change / Remove inside Edit Modal -->
+                <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-200 flex items-center justify-between gap-3">
+                    <div class="flex items-center gap-3">
+                        <div class="w-11 h-11 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center overflow-hidden border border-blue-200 shrink-0">
+                            <img id="editCandPhotoPreview" src="" alt="" class="hidden w-full h-full object-cover">
+                            <i id="editCandPhotoIcon" class="fas fa-camera"></i>
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-bold text-slate-700">Update Student Photo</label>
+                            <input type="file" id="editCandPhotoInput" accept="image/*" onchange="handlePhotoUpload(this, 'editCand')" class="text-[11px] text-slate-500 file:mr-2 file:py-0.5 file:px-2.5 file:rounded file:border-0 file:bg-blue-700 file:text-white file:font-bold cursor-pointer mt-0.5">
+                        </div>
+                    </div>
+                    <button type="button" onclick="removeEditCandPhoto()" class="text-[11px] text-red-600 hover:underline font-bold px-2">Remove Photo</button>
+                </div>
+
+                <div>
+                    <label class="block text-[11px] font-bold uppercase text-slate-500 mb-1">Mentor / Teacher's Remark</label>
+                    <input type="text" id="editCandRemark" class="w-full px-3.5 py-2 rounded-lg border border-slate-300">
+                </div>
+
+                <div class="grid grid-cols-2 gap-3 pt-3">
+                    <button type="button" onclick="closeEditCandidateModal()" class="py-2.5 rounded-xl border border-slate-300 font-bold text-slate-700 hover:bg-slate-100">
+                        Cancel
+                    </button>
+                    <button type="submit" class="py-2.5 rounded-xl bg-blue-700 hover:bg-blue-800 font-bold text-white shadow-md">
+                        <i class="fas fa-save mr-1"></i> Save Changes
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <!-- ================= EDIT TEST MARK MODAL (ADMIN) ================= -->
     <div id="editMarkModal" class="hidden fixed inset-0 z-50 bg-slate-950/60 backdrop-blur-sm flex items-center justify-center p-4 no-print">
         <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl border border-slate-200 modal-animate">
@@ -950,7 +1051,7 @@
             <div>
                 <span class="bg-amber-400 text-slate-950 text-xs font-extrabold px-3 py-1 rounded-full uppercase">MAKDEMY Full Admin Control</span>
                 <h1 class="text-2xl sm:text-3xl font-extrabold mt-2">MAKDEMY Founder & Admin Panel — Massawar Ali Khan</h1>
-                <p class="text-blue-200 text-xs sm:text-sm">Register students with passport photos, approve fee receipts, upload Chapter Notes, and manage records.</p>
+                <p class="text-blue-200 text-xs sm:text-sm">Register students with passport photos, edit candidate profiles, approve fee receipts, and upload Notes.</p>
             </div>
             <button onclick="resetDefaultData()" class="bg-white/10 hover:bg-white/20 border border-white/20 text-xs font-semibold px-4 py-2.5 rounded-xl">
                 <i class="fas fa-sync-alt mr-1"></i> Reset System Data
@@ -1021,7 +1122,7 @@
                         <input type="number" id="regFeeAmount" required placeholder="Fee ₹ (1200)" class="px-3 py-2.5 rounded-lg border border-slate-300">
                     </div>
 
-                    <!-- NEW: Student Passport Photo Upload Box with Live Preview -->
+                    <!-- Student Passport Photo Upload Box with Live Preview -->
                     <div class="bg-slate-50 p-3 rounded-xl border border-dashed border-blue-300 flex items-center justify-between gap-3">
                         <div class="flex items-center gap-3">
                             <div class="w-12 h-12 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center overflow-hidden border border-blue-200 shrink-0 shadow-sm">
@@ -1182,7 +1283,6 @@
                                 <option value="Net Banking">Net Banking</option>
                             </select>
                         </div>
-                        <!-- Update Photo for Existing Student -->
                         <div class="flex items-center gap-2 bg-slate-50 px-3 py-1.5 rounded-lg border border-slate-200 text-xs">
                             <i class="fas fa-camera text-blue-600"></i>
                             <span class="font-semibold text-slate-600 shrink-0">Change Photo:</span>
@@ -1211,7 +1311,7 @@
                             <th class="py-3 px-4">Gmail & Mobile</th>
                             <th class="py-3 px-4">PIN</th>
                             <th class="py-3 px-4">Fee & Receipt Status</th>
-                            <th class="py-3 px-4 text-center">Actions (ID / Receipt / Report / Delete)</th>
+                            <th class="py-3 px-4 text-center">Actions (ID / Receipt / Report / Edit / Delete)</th>
                         </tr>
                     </thead>
                     <tbody id="adminStudentTable" class="divide-y divide-slate-200"></tbody>
@@ -1224,7 +1324,6 @@
     <section id="userDashboard" class="hidden flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 no-print">
         <div class="bg-gradient-to-r from-blue-800 to-indigo-900 text-white rounded-2xl p-6 mb-6 shadow-lg flex flex-wrap justify-between items-center gap-4">
             <div class="flex items-center gap-4">
-                <!-- Student Avatar / Uploaded Photo on Dashboard Banner -->
                 <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-white/15 border-2 border-amber-400 overflow-hidden flex items-center justify-center shrink-0 shadow-lg">
                     <img id="userDashboardPhoto" src="" alt="Student" class="hidden w-full h-full object-cover">
                     <span id="userDashboardInitials" class="text-2xl sm:text-3xl font-black text-amber-300">AS</span>
@@ -1388,10 +1487,12 @@
         let lastActivityResetTime = 0;
         let selectedMaterialSubjectFilter = 'ALL';
 
-        // Temporary holders for compressed Base64 student photos
+        // Temporary holders for compressed Base64 student photos & candidate editing
         let tempAdminRegPhotoData = "";
         let tempSelfSignupPhotoData = "";
         let tempMetaUpdatePhotoData = "";
+        let editingCandidateOriginalRoll = null;
+        let tempEditCandPhotoData = "";
 
         const defaultERPData = {
             gatewayConfig: {
@@ -1542,7 +1643,6 @@
             reader.onload = function (e) {
                 const img = new Image();
                 img.onload = function () {
-                    // Auto-compress to 220x220 square passport photo so localStorage never overflows
                     const canvas = document.createElement('canvas');
                     const SIZE = 220;
                     canvas.width = SIZE;
@@ -1574,6 +1674,13 @@
                         icon.classList.add('hidden');
                     } else if (targetContext === 'metaUpdate') {
                         tempMetaUpdatePhotoData = compressedDataUrl;
+                    } else if (targetContext === 'editCand') {
+                        tempEditCandPhotoData = compressedDataUrl;
+                        const prev = document.getElementById('editCandPhotoPreview');
+                        const icon = document.getElementById('editCandPhotoIcon');
+                        prev.src = compressedDataUrl;
+                        prev.classList.remove('hidden');
+                        icon.classList.add('hidden');
                     }
                 };
                 img.src = e.target.result;
@@ -1594,6 +1701,99 @@
                 document.getElementById('selfPhotoPreview').classList.add('hidden');
                 document.getElementById('selfPhotoIcon').classList.remove('hidden');
             }
+        }
+
+        // ================= EDIT CANDIDATE PROFILE FUNCTIONS (ADMIN) =================
+        function openEditCandidateModal(rollId) {
+            const student = erpData.students.find(s => s.roll === rollId);
+            if (!student) return;
+
+            editingCandidateOriginalRoll = rollId;
+            tempEditCandPhotoData = student.photo || "";
+
+            document.getElementById('editCandRoll').value = student.roll;
+            document.getElementById('editCandName').value = student.name;
+            document.getElementById('editCandEmail').value = student.email;
+            document.getElementById('editCandPhone').value = student.parentPhone;
+            document.getElementById('editCandBatch').value = student.classBatch;
+            document.getElementById('editCandPin').value = student.pass;
+            document.getElementById('editCandFeeAmt').value = student.feeAmount || 1200;
+            document.getElementById('editCandFeeStatus').value = student.feeStatus || "Pending";
+            document.getElementById('editCandAtt').value = student.attendance || 100;
+            document.getElementById('editCandRemark').value = student.remark || "";
+            document.getElementById('editCandPhotoInput').value = "";
+
+            const prev = document.getElementById('editCandPhotoPreview');
+            const icon = document.getElementById('editCandPhotoIcon');
+            if (student.photo) {
+                prev.src = student.photo;
+                prev.classList.remove('hidden');
+                icon.classList.add('hidden');
+            } else {
+                prev.classList.add('hidden');
+                icon.classList.remove('hidden');
+            }
+
+            document.getElementById('editCandidateModal').classList.remove('hidden');
+        }
+
+        function removeEditCandPhoto() {
+            tempEditCandPhotoData = "";
+            document.getElementById('editCandPhotoInput').value = "";
+            document.getElementById('editCandPhotoPreview').classList.add('hidden');
+            document.getElementById('editCandPhotoIcon').classList.remove('hidden');
+        }
+
+        function closeEditCandidateModal() {
+            document.getElementById('editCandidateModal').classList.add('hidden');
+            editingCandidateOriginalRoll = null;
+        }
+
+        function saveEditedCandidate(e) {
+            e.preventDefault();
+            const student = erpData.students.find(s => s.roll === editingCandidateOriginalRoll);
+            if (!student) return;
+
+            const newRoll = document.getElementById('editCandRoll').value.trim().toUpperCase();
+            if (newRoll !== editingCandidateOriginalRoll && erpData.students.some(s => s.roll === newRoll)) {
+                alert("⚠️ Another candidate already has Roll ID: " + newRoll);
+                return;
+            }
+
+            const newName = document.getElementById('editCandName').value.trim();
+
+            // Sync Roll ID & Name in Generated Receipts Log if changed
+            erpData.generatedReceipts.forEach(r => {
+                if (r.roll === editingCandidateOriginalRoll) {
+                    r.roll = newRoll;
+                    r.studentName = newName;
+                }
+            });
+
+            student.roll = newRoll;
+            student.name = newName;
+            student.email = document.getElementById('editCandEmail').value.trim().toLowerCase();
+            student.parentPhone = document.getElementById('editCandPhone').value.trim();
+            student.classBatch = document.getElementById('editCandBatch').value;
+            student.pass = document.getElementById('editCandPin').value.trim();
+            student.feeAmount = Number(document.getElementById('editCandFeeAmt').value) || 1200;
+            student.attendance = Number(document.getElementById('editCandAtt').value) || 100;
+            student.remark = document.getElementById('editCandRemark').value.trim();
+            student.photo = tempEditCandPhotoData;
+
+            const newStatus = document.getElementById('editCandFeeStatus').value;
+            if (newStatus === 'Paid' && !student.receiptGenerated) {
+                issueOfficialReceipt(student, 'Admin Verified (UPI/Cash)', 'ADM' + Math.floor(10000000 + Math.random() * 90000000), 'Admin Portal');
+            } else if (newStatus !== 'Paid') {
+                student.feeStatus = newStatus;
+                student.receiptGenerated = false;
+            } else {
+                student.feeStatus = 'Paid';
+            }
+
+            saveERP();
+            renderAdminDashboard();
+            closeEditCandidateModal();
         }
 
         // ================= CHAPTER-WISE NOTES & WORKSHEET PDF ENGINE =================
@@ -2545,6 +2745,9 @@
                         `}
                         <button onclick="openReportCardByRoll('${s.roll}')" title="Print Report Card" class="bg-blue-50 hover:bg-blue-700 text-blue-700 hover:text-white px-2.5 py-1.5 rounded-lg text-xs font-bold transition shadow-sm">
                             <i class="fas fa-print"></i> Report
+                        </button>
+                        <button onclick="openEditCandidateModal('${s.roll}')" title="Edit Candidate Details" class="bg-amber-50 hover:bg-amber-500 text-amber-700 hover:text-slate-950 px-2.5 py-1.5 rounded-lg text-xs font-bold transition shadow-sm">
+                            <i class="fas fa-user-edit"></i> Edit
                         </button>
                         <button onclick="deleteStudent('${s.roll}')" title="Delete Candidate" class="bg-red-50 hover:bg-red-600 text-red-600 hover:text-white px-2.5 py-1.5 rounded-lg text-xs font-bold transition shadow-sm">
                             <i class="fas fa-trash-alt"></i>
