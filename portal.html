@@ -52,7 +52,7 @@
         }
         .modal-animate { animation: modalPop 0.2s ease-out forwards; }
 
-        /* Print Styling for Both Report Card & Student ID Card */
+        /* Print Styling for Report Card, Student ID Card & Fee Receipt */
         @media print {
             body * { visibility: hidden; }
             body.printing-report #printableReportCard,
@@ -82,6 +82,20 @@
                 -webkit-print-color-adjust: exact;
                 print-color-adjust: exact;
             }
+            body.printing-receipt #printableFeeReceipt,
+            body.printing-receipt #printableFeeReceipt * {
+                visibility: visible;
+            }
+            body.printing-receipt #printableFeeReceipt {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                box-shadow: none !important;
+                border: 2px solid #0f172a !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
             .no-print { display: none !important; }
         }
     </style>
@@ -99,13 +113,12 @@
                 </div>
             </a>
             <div class="flex items-center gap-2 sm:gap-3">
-                <!-- Live Session Countdown + Duration Selector (2m / 5m / 10m) + Auto-Extend Indicator -->
+                <!-- Live Session Countdown + Duration Selector (2m / 5m / 10m) -->
                 <div id="sessionTimerPill" class="hidden items-center gap-1.5 sm:gap-2 bg-slate-900 text-white px-2.5 sm:px-3 py-1.5 rounded-xl text-xs font-semibold shadow-sm border border-slate-700">
                     <span id="activityDot" title="Auto-Extend Active on Mouse/Keyboard Activity" class="w-2 h-2 rounded-full bg-emerald-400"></span>
                     <i class="far fa-clock text-amber-400"></i>
                     <span id="navbarTimerDisplay" class="font-mono font-bold text-amber-400 text-xs sm:text-sm">05:00</span>
                     
-                    <!-- Duration Selector (2m / 5m / 10m) -->
                     <select id="sessionDurationSelect" onchange="changeSessionDuration(this.value)" title="Select Idle Session Timeout" class="bg-slate-800 text-blue-200 border border-slate-600 rounded px-1.5 py-0.5 text-[10px] font-bold focus:outline-none cursor-pointer">
                         <option value="2">2 Min</option>
                         <option value="5" selected>5 Min</option>
@@ -212,12 +225,112 @@
         </div>
     </div>
 
+    <!-- ================= PRINTABLE FEE RECEIPT GENERATOR MODAL ================= -->
+    <div id="feeReceiptModal" class="hidden fixed inset-0 z-50 bg-slate-950/75 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
+        <div class="bg-white rounded-3xl max-w-xl w-full p-6 sm:p-8 shadow-2xl border-2 border-slate-900 my-8 modal-animate" id="printableFeeReceipt">
+            <!-- Receipt Top Header -->
+            <div class="flex justify-between items-start border-b-2 border-slate-900 pb-4 mb-5">
+                <div class="flex items-center gap-3">
+                    <div class="w-12 h-12 rounded-xl bg-emerald-600 text-white flex items-center justify-center font-extrabold text-2xl shadow">A</div>
+                    <div>
+                        <h2 class="text-xl font-extrabold text-slate-900 leading-none">APEX CBSE ACADEMY</h2>
+                        <p class="text-xs text-slate-600 font-medium mt-1">In front of IQRA School, Jainthgarh | +91 9337042839</p>
+                        <span class="inline-block bg-emerald-100 text-emerald-800 text-[10px] font-extrabold px-2.5 py-0.5 rounded-full uppercase tracking-wider mt-1">
+                            Official Tuition Fee Receipt
+                        </span>
+                    </div>
+                </div>
+                <div class="text-right text-xs">
+                    <div class="font-extrabold text-slate-900" id="recNumber">Receipt #: APEX-2026-101</div>
+                    <div class="text-slate-500 mt-0.5" id="recDate">Date: 15/11/2026</div>
+                    <div id="recStatusStamp" class="inline-block mt-1.5 px-3 py-0.5 rounded-full font-extrabold text-[11px] uppercase bg-emerald-600 text-white">
+                        PAID
+                    </div>
+                </div>
+            </div>
+
+            <!-- Student Details Grid -->
+            <div class="grid grid-cols-2 gap-3 bg-slate-50 p-4 rounded-2xl border border-slate-200 text-xs mb-5">
+                <div>
+                    <span class="text-slate-400 font-bold uppercase block">Student Name</span>
+                    <strong id="recStudentName" class="text-slate-900 text-sm">Aarav Sharma</strong>
+                </div>
+                <div>
+                    <span class="text-slate-400 font-bold uppercase block">Roll ID</span>
+                    <strong id="recStudentRoll" class="text-blue-700 text-sm">APEX101</strong>
+                </div>
+                <div>
+                    <span class="text-slate-400 font-bold uppercase block">Class & Batch</span>
+                    <strong id="recStudentBatch" class="text-slate-800">Class 10 (Shift 2)</strong>
+                </div>
+                <div>
+                    <span class="text-slate-400 font-bold uppercase block">Registered Mobile & Mode</span>
+                    <strong id="recStudentPhoneMode" class="text-slate-800">9876543210 • UPI / Cash</strong>
+                </div>
+            </div>
+
+            <!-- Fee Breakdown Table -->
+            <div class="border border-slate-300 rounded-xl overflow-hidden mb-5">
+                <table class="w-full text-left border-collapse text-xs sm:text-sm">
+                    <thead>
+                        <tr class="bg-slate-900 text-white">
+                            <th class="py-2.5 px-4">Description</th>
+                            <th class="py-2.5 px-4 text-center">Session / Cycle</th>
+                            <th class="py-2.5 px-4 text-right">Amount (₹)</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-200">
+                        <tr>
+                            <td class="py-3 px-4 font-semibold text-slate-900">
+                                CBSE Coaching Tuition Fee (Maths, Science, Bio & IT)
+                            </td>
+                            <td class="py-3 px-4 text-center text-slate-600">Monthly Installment</td>
+                            <td id="recBaseAmount" class="py-3 px-4 text-right font-bold text-slate-900">₹1,200</td>
+                        </tr>
+                        <tr class="bg-slate-50">
+                            <td class="py-2.5 px-4 text-slate-600">Weekly Saturday OMR Test & Study Material</td>
+                            <td class="py-2.5 px-4 text-center text-emerald-700 font-semibold">Included</td>
+                            <td class="py-2.5 px-4 text-right font-semibold text-emerald-700">₹0</td>
+                        </tr>
+                        <tr class="bg-amber-50 font-extrabold text-slate-900">
+                            <td class="py-3 px-4" colspan="2">TOTAL FEE AMOUNT</td>
+                            <td id="recTotalAmount" class="py-3 px-4 text-right text-base text-blue-800">₹1,200</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- QR & Authorized Signature -->
+            <div class="flex justify-between items-center pt-4 border-t border-slate-200 text-xs">
+                <div class="flex items-center gap-2.5">
+                    <img id="recQrImg" src="" alt="QR" class="w-12 h-12 rounded-lg border border-slate-200 p-0.5">
+                    <div>
+                        <div class="font-extrabold text-slate-800 text-[11px]">Computer Generated Receipt</div>
+                        <div class="text-[10px] text-slate-500">Verified by Apex ERP Portal</div>
+                    </div>
+                </div>
+                <div class="text-right">
+                    <div class="font-extrabold text-slate-900 italic font-serif text-sm">Massawar Ali Khan</div>
+                    <div class="text-[10px] text-blue-700 font-bold uppercase">Founder & Director, Apex CBSE Academy</div>
+                </div>
+            </div>
+
+            <!-- Modal Buttons -->
+            <div class="flex justify-end gap-3 mt-6 pt-4 border-t border-slate-200 no-print">
+                <button type="button" onclick="closeFeeReceiptModal()" class="px-5 py-2.5 rounded-xl border border-slate-300 text-xs sm:text-sm font-bold text-slate-700 hover:bg-slate-100">
+                    Close
+                </button>
+                <button type="button" onclick="printDocument('receipt')" class="px-6 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-xs sm:text-sm font-bold text-white shadow-lg flex items-center gap-2">
+                    <i class="fas fa-print"></i> Print / Save Fee Receipt PDF
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- ================= PRINTABLE STUDENT ID CARD GENERATOR MODAL ================= -->
     <div id="idCardModal" class="hidden fixed inset-0 z-50 bg-slate-950/75 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
         <div class="flex flex-col items-center my-6">
-            <!-- Actual Printable ID Card -->
             <div id="printableIdCard" class="w-[330px] bg-white rounded-3xl overflow-hidden shadow-2xl border-2 border-blue-900 modal-animate">
-                <!-- ID Top Header -->
                 <div class="bg-gradient-to-br from-slate-900 via-blue-900 to-blue-700 text-white p-5 text-center relative">
                     <div class="w-11 h-11 rounded-xl bg-amber-400 text-slate-950 font-extrabold text-2xl flex items-center justify-center mx-auto mb-2 shadow-md">
                         A
@@ -229,7 +342,6 @@
                     </span>
                 </div>
 
-                <!-- Avatar & Student Name -->
                 <div class="px-6 pt-5 pb-4 text-center">
                     <div class="w-20 h-20 rounded-2xl bg-gradient-to-tr from-blue-700 to-indigo-500 text-white font-extrabold text-3xl flex items-center justify-center mx-auto shadow-md border-4 border-blue-100" id="idCardInitials">
                         AS
@@ -239,7 +351,6 @@
                         Roll ID: APEX101
                     </span>
 
-                    <!-- ID Details Table -->
                     <div class="mt-4 bg-slate-50 rounded-2xl p-3.5 border border-slate-200 text-left text-xs space-y-2">
                         <div class="flex justify-between border-b border-slate-200/70 pb-1.5">
                             <span class="text-slate-400 font-bold uppercase">Class & Batch:</span>
@@ -259,7 +370,6 @@
                         </div>
                     </div>
 
-                    <!-- QR Code & Director Sign -->
                     <div class="mt-4 pt-3 border-t border-slate-200 flex items-center justify-between">
                         <div class="flex items-center gap-2 text-left">
                             <img id="idCardQrImg" src="" alt="QR" class="w-12 h-12 rounded-lg border border-slate-200 p-0.5">
@@ -275,13 +385,11 @@
                     </div>
                 </div>
 
-                <!-- ID Bottom Footer -->
                 <div class="bg-slate-900 text-white py-2 px-4 text-center text-[10px] font-semibold">
                     <i class="fas fa-phone-alt text-amber-400 mr-1"></i> Center Helpline: +91 9337042839
                 </div>
             </div>
 
-            <!-- Action Buttons Below ID Card -->
             <div class="flex gap-3 mt-5 no-print">
                 <button type="button" onclick="closeIdCardModal()" class="px-5 py-2.5 rounded-xl bg-white text-slate-800 font-bold text-xs sm:text-sm shadow hover:bg-slate-100">
                     Close
@@ -403,7 +511,7 @@
                         Track Every Test, <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-300 to-amber-500">Master Every Concept.</span>
                     </h1>
                     <p class="text-blue-100 text-sm sm:text-base mb-8 max-w-xl">
-                        Welcome to Apex CBSE Academy's live Student & Parent ERP. Create your account or sign in to view Saturday OMR test scores, digital Student ID Cards, and printable report cards.
+                        Welcome to Apex CBSE Academy's live Student & Parent ERP. Create your account or sign in to view Saturday OMR test scores, digital Student ID Cards, Fee Receipts, and printable report cards.
                     </p>
 
                     <div class="relative flex items-center justify-center my-4 w-full max-w-md mx-auto lg:mx-0">
@@ -427,7 +535,7 @@
                                 <i class="fas fa-id-badge"></i>
                             </div>
                             <div class="text-left">
-                                <div class="text-[11px] font-extrabold leading-tight">Digital Student ID</div>
+                                <div class="text-[11px] font-extrabold leading-tight">Digital ID & Receipt</div>
                                 <div class="text-[10px] text-slate-500">Instant QR Verification</div>
                             </div>
                         </div>
@@ -610,11 +718,10 @@
         <div class="bg-slate-950/90 border-t border-white/10 py-3 overflow-hidden relative z-10">
             <div class="marquee-track text-slate-300 text-xs font-semibold space-x-10 px-4">
                 <span class="flex items-center gap-2"><i class="fas fa-bolt text-amber-400"></i> Real-Time Saturday Test Scorecards</span>
-                <span class="flex items-center gap-2"><i class="fas fa-id-card text-blue-400"></i> Instant Printable Student ID Cards with QR</span>
-                <span class="flex items-center gap-2"><i class="fas fa-file-pdf text-emerald-400"></i> Official Printable Progress Report Cards</span>
+                <span class="flex items-center gap-2"><i class="fas fa-receipt text-emerald-400"></i> Digital Tuition Fee Receipts with QR</span>
+                <span class="flex items-center gap-2"><i class="fas fa-id-card text-blue-400"></i> Instant Printable Student ID Cards</span>
+                <span class="flex items-center gap-2"><i class="fas fa-file-pdf text-amber-300"></i> Official Printable Progress Report Cards</span>
                 <span class="flex items-center gap-2"><i class="fas fa-user-shield text-purple-400"></i> Direct Founder Mentorship by Massawar Ali Khan</span>
-                <span class="flex items-center gap-2"><i class="fas fa-bolt text-amber-400"></i> Real-Time Saturday Test Scorecards</span>
-                <span class="flex items-center gap-2"><i class="fas fa-id-card text-blue-400"></i> Instant Printable Student ID Cards with QR</span>
             </div>
         </div>
     </main>
@@ -625,7 +732,7 @@
             <div>
                 <span class="bg-amber-400 text-slate-950 text-xs font-extrabold px-3 py-1 rounded-full uppercase">Full Admin Control</span>
                 <h1 class="text-2xl sm:text-3xl font-extrabold mt-2">Founder & Admin Panel — Massawar Ali Khan</h1>
-                <p class="text-blue-200 text-xs sm:text-sm">Manage students, edit/delete weekly test marks, and print Student ID Cards & Report Cards.</p>
+                <p class="text-blue-200 text-xs sm:text-sm">Manage students, edit/delete weekly test marks, and print Student ID Cards, Fee Receipts & Report Cards.</p>
             </div>
             <button onclick="resetDefaultData()" class="bg-white/10 hover:bg-white/20 border border-white/20 text-xs font-semibold px-4 py-2.5 rounded-xl">
                 <i class="fas fa-sync-alt mr-1"></i> Reset System Data
@@ -647,15 +754,16 @@
                         <input type="email" id="regEmail" required placeholder="Student/Parent Gmail ID" class="w-full px-3.5 py-2.5 rounded-lg border border-slate-300">
                         <input type="tel" id="regPhone" required placeholder="10-Digit Mobile No." class="w-full px-3.5 py-2.5 rounded-lg border border-slate-300">
                     </div>
-                    <div class="grid grid-cols-2 gap-3">
-                        <select id="regBatch" required class="w-full px-3.5 py-2.5 rounded-lg border border-slate-300 bg-white">
+                    <div class="grid grid-cols-3 gap-2">
+                        <select id="regBatch" required class="col-span-2 px-3 py-2.5 rounded-lg border border-slate-300 bg-white">
                             <option value="Class 6 & 7 (Shift 1: 3:30 - 5:30 PM)">Class 6 & 7 (Shift 1)</option>
                             <option value="Class 8 (Shift 1: 3:30 - 5:30 PM)">Class 8 (Shift 1)</option>
                             <option value="Class 9 (Shift 2: 5:30 - 7:30 PM)">Class 9 (Shift 2)</option>
                             <option value="Class 10 (Shift 2: 5:30 - 7:30 PM)">Class 10 (Shift 2)</option>
                         </select>
-                        <input type="text" id="regPin" required placeholder="Set Login PIN (e.g. 1234)" class="w-full px-3.5 py-2.5 rounded-lg border border-slate-300">
+                        <input type="number" id="regFeeAmount" required placeholder="Fee ₹ (1200)" class="px-3 py-2.5 rounded-lg border border-slate-300">
                     </div>
+                    <input type="text" id="regPin" required placeholder="Set Login PIN (e.g. 1234)" class="w-full px-3.5 py-2.5 rounded-lg border border-slate-300">
                     <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 rounded-xl">Add Student to Database</button>
                 </form>
             </div>
@@ -685,7 +793,7 @@
             </div>
         </div>
 
-        <!-- Row 2: Exam Schedule, Holidays & Attendance -->
+        <!-- Row 2: Exam Schedule, Holidays & Attendance/Fee Manager -->
         <div class="grid lg:grid-cols-2 gap-8">
             <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
                 <h3 class="font-extrabold text-lg text-slate-900 mb-4 flex items-center gap-2">
@@ -723,20 +831,25 @@
                 </div>
 
                 <div class="pt-3 border-t border-slate-200">
-                    <h4 class="font-bold text-sm text-slate-800 mb-2">Update Attendance, Fee & Parent Remark</h4>
+                    <h4 class="font-bold text-sm text-slate-800 mb-2">Update Attendance, Monthly Fee & Parent Remark</h4>
                     <form onsubmit="updateStudentMeta(event)" class="space-y-2.5 text-sm">
                         <div class="grid grid-cols-3 gap-2">
                             <select id="metaRoll" required class="col-span-2 px-3 py-2 rounded-lg border border-slate-300 bg-white"></select>
                             <input type="number" id="metaAtt" required min="1" max="100" placeholder="Att. %" class="px-3 py-2 rounded-lg border border-slate-300">
                         </div>
                         <div class="grid grid-cols-3 gap-2">
+                            <input type="number" id="metaFeeAmount" placeholder="Fee ₹ (e.g. 1200)" class="px-3 py-2 rounded-lg border border-slate-300">
                             <select id="metaFee" class="px-3 py-2 rounded-lg border border-slate-300 bg-white">
                                 <option value="Paid">Fee: Paid</option>
                                 <option value="Pending">Fee: Pending</option>
                             </select>
-                            <input type="text" id="metaRemark" placeholder="Teacher's Remark for Parent" class="col-span-2 px-3 py-2 rounded-lg border border-slate-300">
+                            <select id="metaPayMode" class="px-3 py-2 rounded-lg border border-slate-300 bg-white">
+                                <option value="UPI / Online">UPI / Online</option>
+                                <option value="Cash Desk">Cash Desk</option>
+                            </select>
                         </div>
-                        <button type="submit" class="w-full bg-slate-800 hover:bg-slate-900 text-white font-semibold py-2 rounded-xl">Save Student Status</button>
+                        <input type="text" id="metaRemark" placeholder="Teacher's Remark for Parent" class="w-full px-3 py-2 rounded-lg border border-slate-300">
+                        <button type="submit" class="w-full bg-slate-800 hover:bg-slate-900 text-white font-semibold py-2 rounded-xl">Save Fee & Student Status</button>
                     </form>
                 </div>
             </div>
@@ -755,11 +868,11 @@
                             <th class="py-3 px-4">Roll ID</th>
                             <th class="py-3 px-4">Student Name</th>
                             <th class="py-3 px-4">Batch</th>
-                            <th class="py-3 px-4">Registered Gmail ID</th>
+                            <th class="py-3 px-4">Gmail ID</th>
                             <th class="py-3 px-4">Mobile No.</th>
                             <th class="py-3 px-4">PIN</th>
-                            <th class="py-3 px-4">Fee</th>
-                            <th class="py-3 px-4 text-center">Actions (ID / Report / Delete)</th>
+                            <th class="py-3 px-4">Fee Status</th>
+                            <th class="py-3 px-4 text-center">Actions (ID / Receipt / Report / Delete)</th>
                         </tr>
                     </thead>
                     <tbody id="adminStudentTable" class="divide-y divide-slate-200"></tbody>
@@ -776,7 +889,7 @@
                 <h1 id="userNameHeading" class="text-2xl sm:text-3xl font-extrabold mt-2">Student Name</h1>
                 <p id="userBatchSub" class="text-blue-200 text-xs sm:text-sm"></p>
             </div>
-            <div class="flex flex-wrap items-center gap-2.5 sm:gap-3">
+            <div class="flex flex-wrap items-center gap-2 sm:gap-2.5">
                 <div class="bg-white/10 px-3.5 py-2 rounded-xl text-center">
                     <div id="userAttStat" class="text-xl font-extrabold text-amber-400">100%</div>
                     <div class="text-[10px] text-blue-100">Attendance</div>
@@ -785,15 +898,17 @@
                     <div id="userAvgStat" class="text-xl font-extrabold text-emerald-400">0%</div>
                     <div class="text-[10px] text-blue-100">Avg. Score</div>
                 </div>
-                <!-- Student ID Card Generator Button -->
-                <button onclick="openIdCardForActiveUser()" class="bg-white hover:bg-blue-50 text-blue-900 font-extrabold text-xs sm:text-sm px-4 py-3 rounded-xl shadow-lg transition flex items-center gap-2">
+                <button onclick="openIdCardForActiveUser()" class="bg-white hover:bg-blue-50 text-blue-900 font-extrabold text-xs px-3.5 py-3 rounded-xl shadow-lg transition flex items-center gap-1.5">
                     <i class="fas fa-id-badge text-blue-700"></i>
-                    <span>Student ID Card</span>
+                    <span>ID Card</span>
                 </button>
-                <!-- Printable Progress Report Card Button -->
-                <button onclick="openReportCardForActiveUser()" class="bg-amber-400 hover:bg-amber-300 text-slate-950 font-extrabold text-xs sm:text-sm px-4 py-3 rounded-xl shadow-lg transition flex items-center gap-2">
+                <button onclick="openFeeReceiptForActiveUser()" class="bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-extrabold text-xs px-3.5 py-3 rounded-xl shadow-lg transition flex items-center gap-1.5">
+                    <i class="fas fa-receipt"></i>
+                    <span>Fee Receipt</span>
+                </button>
+                <button onclick="openReportCardForActiveUser()" class="bg-amber-400 hover:bg-amber-300 text-slate-950 font-extrabold text-xs px-3.5 py-3 rounded-xl shadow-lg transition flex items-center gap-1.5">
                     <i class="fas fa-print"></i>
-                    <span>Report Card PDF</span>
+                    <span>Report Card</span>
                 </button>
             </div>
         </div>
@@ -804,15 +919,22 @@
                 <i class="fas fa-user-check text-amber-600"></i> Complete Parent Monitoring Report (Full Progress Access)
             </h3>
             <div class="grid md:grid-cols-3 gap-4 text-sm">
-                <div class="bg-white p-4 rounded-xl border border-amber-200">
-                    <span class="text-xs font-bold uppercase text-slate-400">Fee & Dues Status</span>
-                    <div id="parentFeeBadge" class="text-lg font-extrabold text-emerald-600 mt-1">Paid</div>
-                    <p class="text-xs text-slate-500 mt-1">Session 2026–27 Installment</p>
+                <div class="bg-white p-4 rounded-xl border border-amber-200 flex flex-col justify-between">
+                    <div>
+                        <span class="text-xs font-bold uppercase text-slate-400">Monthly Fee & Dues Status</span>
+                        <div class="flex items-baseline gap-2 mt-1">
+                            <span id="parentFeeBadge" class="text-lg font-extrabold text-emerald-600">Paid</span>
+                            <span id="parentFeeAmountText" class="text-sm font-bold text-slate-700">(₹1,200/mo)</span>
+                        </div>
+                    </div>
+                    <button onclick="openFeeReceiptForActiveUser()" class="mt-3 w-full bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold py-2 px-3 rounded-lg transition flex items-center justify-center gap-1.5">
+                        <i class="fas fa-file-invoice-dollar"></i> Download Fee Receipt PDF
+                    </button>
                 </div>
                 <div class="bg-white p-4 rounded-xl border border-amber-200 md:col-span-2">
                     <span class="text-xs font-bold uppercase text-slate-400">Founder / Mentor's Remark (Massawar Sir)</span>
                     <div id="parentRemarkText" class="text-sm font-semibold text-slate-800 mt-1"></div>
-                    <p class="text-xs text-slate-500 mt-1">Direct Helpline: +91 9337042839</p>
+                    <p class="text-xs text-slate-500 mt-2">Direct Helpline: +91 9337042839</p>
                 </div>
             </div>
         </div>
@@ -820,14 +942,17 @@
         <!-- Main Progress Grid -->
         <div class="grid lg:grid-cols-3 gap-8">
             <div class="lg:col-span-2 bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
-                <div class="px-6 py-4 bg-slate-900 text-white flex justify-between items-center">
+                <div class="px-6 py-4 bg-slate-900 text-white flex flex-wrap justify-between items-center gap-2">
                     <h3 class="font-bold"><i class="fas fa-chart-bar text-amber-400 mr-2"></i>Saturday Weekly Test Results & Progress</h3>
-                    <div class="flex gap-2">
-                        <button onclick="openIdCardForActiveUser()" class="text-xs bg-blue-600 text-white font-bold px-3 py-1 rounded-full hover:bg-blue-500 transition">
-                            <i class="fas fa-id-card mr-1"></i> ID Card
+                    <div class="flex gap-1.5">
+                        <button onclick="openIdCardForActiveUser()" class="text-xs bg-blue-600 text-white font-bold px-2.5 py-1 rounded-full hover:bg-blue-500 transition">
+                            <i class="fas fa-id-card mr-1"></i> ID
                         </button>
-                        <button onclick="openReportCardForActiveUser()" class="text-xs bg-amber-400 text-slate-950 font-bold px-3 py-1 rounded-full hover:bg-amber-300 transition">
-                            <i class="fas fa-file-download mr-1"></i> Report PDF
+                        <button onclick="openFeeReceiptForActiveUser()" class="text-xs bg-emerald-500 text-slate-950 font-bold px-2.5 py-1 rounded-full hover:bg-emerald-400 transition">
+                            <i class="fas fa-receipt mr-1"></i> Receipt
+                        </button>
+                        <button onclick="openReportCardForActiveUser()" class="text-xs bg-amber-400 text-slate-950 font-bold px-2.5 py-1 rounded-full hover:bg-amber-300 transition">
+                            <i class="fas fa-file-download mr-1"></i> Report
                         </button>
                     </div>
                 </div>
@@ -855,7 +980,6 @@
     </section>
 
     <script>
-        // Configurable Session Timeout (Default: 5 Minutes, switchable between 2, 5, and 10 Minutes)
         let sessionDurationMinutes = Number(localStorage.getItem('apexSessionMinutes')) || 5;
         let SESSION_DURATION_MS = sessionDurationMinutes * 60 * 1000;
         const REMINDER_THRESHOLD_MS = 30 * 1000;
@@ -872,7 +996,9 @@
                     name: "Aarav Sharma",
                     classBatch: "Class 10 (Shift 2: 5:30 - 7:30 PM)",
                     attendance: 94,
+                    feeAmount: 1200,
                     feeStatus: "Paid",
+                    payMode: "UPI / Online",
                     source: "Admin",
                     remark: "Strong in Maths & IT concepts. Needs slight speed improvement in Physics numericals.",
                     marks: [
@@ -889,7 +1015,9 @@
                     name: "Zoya Khan",
                     classBatch: "Class 8 (Shift 1: 3:30 - 5:30 PM)",
                     attendance: 89,
+                    feeAmount: 1000,
                     feeStatus: "Pending",
+                    payMode: "Cash Desk",
                     source: "Admin",
                     remark: "Very regular with NCERT homework. Scored highest in Friday Mental Maths quiz.",
                     marks: [
@@ -947,7 +1075,6 @@
             sessionObj.expiresAt = Date.now() + SESSION_DURATION_MS;
             localStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(sessionObj));
 
-            // Flash green activity dot
             const dot = document.getElementById('activityDot');
             if (dot) {
                 dot.className = "w-2 h-2 rounded-full bg-emerald-400 animate-ping";
@@ -960,7 +1087,6 @@
             }
         }
 
-        // Auto-extend session on Mouse Move, Click, Scroll, or Keypress (throttled every 4 seconds)
         function handleUserActivity() {
             const now = Date.now();
             if (now - lastActivityResetTime < 4000) return;
@@ -1025,7 +1151,6 @@
                 : "font-mono font-bold text-amber-400 text-xs sm:text-sm";
         }
 
-        // Restore Active Session Automatically on Page Refresh
         window.addEventListener('DOMContentLoaded', function () {
             document.getElementById('sessionDurationSelect').value = String(sessionDurationMinutes);
             const raw = localStorage.getItem(SESSION_STORAGE_KEY);
@@ -1054,18 +1179,61 @@
             }
         });
 
-        // Print Helper for Report Card vs Student ID Card
+        // Print Helper for Report Card, Student ID Card & Fee Receipt
         function printDocument(type) {
-            document.body.classList.remove('printing-report', 'printing-idcard');
+            document.body.classList.remove('printing-report', 'printing-idcard', 'printing-receipt');
             if (type === 'idcard') {
                 document.body.classList.add('printing-idcard');
+            } else if (type === 'receipt') {
+                document.body.classList.add('printing-receipt');
             } else {
                 document.body.classList.add('printing-report');
             }
             window.print();
         }
 
-        // Student ID Card Generator Functions
+        // ================= FEE RECEIPT GENERATOR FUNCTIONS =================
+        function openFeeReceiptByRoll(rollId) {
+            const student = erpData.students.find(s => s.roll === rollId);
+            if (student) populateAndShowFeeReceipt(student);
+        }
+
+        function openFeeReceiptForActiveUser() {
+            if (activeLoggedInStudent) populateAndShowFeeReceipt(activeLoggedInStudent);
+        }
+
+        function populateAndShowFeeReceipt(student) {
+            const feeVal = student.feeAmount || (student.classBatch.includes('Class 6') ? 800 : student.classBatch.includes('Class 8') ? 1000 : 1200);
+            const modeVal = student.payMode || "UPI / Cash";
+            const dateStr = new Date().toLocaleDateString('en-IN');
+
+            document.getElementById('recNumber').innerText = `Receipt #: APEX-2026-${student.roll.replace('APEX', '')}`;
+            document.getElementById('recDate').innerText = `Date: ${dateStr}`;
+
+            const stamp = document.getElementById('recStatusStamp');
+            stamp.innerText = student.feeStatus === 'Paid' ? 'PAID IN FULL' : 'PAYMENT PENDING';
+            stamp.className = student.feeStatus === 'Paid'
+                ? "inline-block mt-1.5 px-3 py-0.5 rounded-full font-extrabold text-[11px] uppercase bg-emerald-600 text-white"
+                : "inline-block mt-1.5 px-3 py-0.5 rounded-full font-extrabold text-[11px] uppercase bg-amber-500 text-slate-950";
+
+            document.getElementById('recStudentName').innerText = student.name;
+            document.getElementById('recStudentRoll').innerText = student.roll;
+            document.getElementById('recStudentBatch').innerText = student.classBatch.split('(')[0].trim();
+            document.getElementById('recStudentPhoneMode').innerText = `${student.parentPhone} • ${modeVal}`;
+            document.getElementById('recBaseAmount').innerText = `₹${Number(feeVal).toLocaleString('en-IN')}`;
+            document.getElementById('recTotalAmount').innerText = `₹${Number(feeVal).toLocaleString('en-IN')}`;
+
+            const qrText = encodeURIComponent(`APEX FEE RECEIPT | Roll: ${student.roll} | Name: ${student.name} | Amount: Rs.${feeVal} | Status: ${student.feeStatus} | Date: ${dateStr}`);
+            document.getElementById('recQrImg').src = `https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=${qrText}`;
+
+            document.getElementById('feeReceiptModal').classList.remove('hidden');
+        }
+
+        function closeFeeReceiptModal() {
+            document.getElementById('feeReceiptModal').classList.add('hidden');
+        }
+
+        // ================= STUDENT ID CARD GENERATOR FUNCTIONS =================
         function openIdCardByRoll(rollId) {
             const student = erpData.students.find(s => s.roll === rollId);
             if (student) populateAndShowIdCard(student);
@@ -1227,6 +1395,7 @@
 
             const nextNumber = 101 + erpData.students.length;
             const generatedRoll = "APEX" + nextNumber;
+            const defaultFee = batch.includes('Class 6') ? 800 : batch.includes('Class 8') ? 1000 : 1200;
 
             const newAccount = {
                 roll: generatedRoll,
@@ -1236,7 +1405,9 @@
                 classBatch: batch,
                 pass: pin,
                 attendance: 100,
+                feeAmount: defaultFee,
                 feeStatus: "Pending",
+                payMode: "UPI / Online",
                 source: currentRole === 'parent' ? "Parent Sign-Up" : "Candidate Sign-Up",
                 remark: "Welcome to Apex CBSE Academy! Account created via Online ERP Portal.",
                 marks: []
@@ -1351,7 +1522,9 @@
             document.getElementById('totalStudentCount').innerText = `Total Registered: ${erpData.students.length}`;
 
             const tbody = document.getElementById('adminStudentTable');
-            tbody.innerHTML = erpData.students.map(s => `
+            tbody.innerHTML = erpData.students.map(s => {
+                const feeVal = s.feeAmount || 1200;
+                return `
                 <tr class="hover:bg-slate-50 transition">
                     <td class="py-3 px-4 font-bold text-blue-700">${s.roll}</td>
                     <td class="py-3 px-4 font-semibold text-slate-900">${s.name}</td>
@@ -1360,21 +1533,26 @@
                     <td class="py-3 px-4 text-slate-700 font-medium">${s.parentPhone}</td>
                     <td class="py-3 px-4 font-mono text-xs text-slate-500">${s.pass}</td>
                     <td class="py-3 px-4">
-                        <span class="px-2.5 py-1 rounded-full text-xs font-bold ${s.feeStatus === 'Paid' ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'}">${s.feeStatus}</span>
+                        <span class="px-2.5 py-1 rounded-full text-xs font-bold ${s.feeStatus === 'Paid' ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'}">
+                            ${s.feeStatus} (₹${feeVal})
+                        </span>
                     </td>
                     <td class="py-3 px-4 text-center space-x-1 whitespace-nowrap">
-                        <button onclick="openIdCardByRoll('${s.roll}')" title="Generate Student ID Card" class="bg-indigo-50 hover:bg-indigo-700 text-indigo-700 hover:text-white px-2.5 py-1.5 rounded-lg text-xs font-bold transition shadow-sm">
-                            <i class="fas fa-id-badge"></i> ID Card
+                        <button onclick="openIdCardByRoll('${s.roll}')" title="Student ID Card" class="bg-indigo-50 hover:bg-indigo-700 text-indigo-700 hover:text-white px-2.5 py-1.5 rounded-lg text-xs font-bold transition shadow-sm">
+                            <i class="fas fa-id-badge"></i> ID
+                        </button>
+                        <button onclick="openFeeReceiptByRoll('${s.roll}')" title="Print Fee Receipt" class="bg-emerald-50 hover:bg-emerald-600 text-emerald-700 hover:text-white px-2.5 py-1.5 rounded-lg text-xs font-bold transition shadow-sm">
+                            <i class="fas fa-receipt"></i> Receipt
                         </button>
                         <button onclick="openReportCardByRoll('${s.roll}')" title="Print Report Card" class="bg-blue-50 hover:bg-blue-700 text-blue-700 hover:text-white px-2.5 py-1.5 rounded-lg text-xs font-bold transition shadow-sm">
                             <i class="fas fa-print"></i> Report
                         </button>
                         <button onclick="deleteStudent('${s.roll}')" title="Delete Candidate" class="bg-red-50 hover:bg-red-600 text-red-600 hover:text-white px-2.5 py-1.5 rounded-lg text-xs font-bold transition shadow-sm">
-                            <i class="fas fa-trash-alt"></i> Delete
+                            <i class="fas fa-trash-alt"></i>
                         </button>
                     </td>
                 </tr>
-            `).join('');
+            `}).join('');
 
             renderAdminStudentMarksList();
 
@@ -1585,9 +1763,11 @@
                 email: document.getElementById('regEmail').value.trim().toLowerCase(),
                 parentPhone: document.getElementById('regPhone').value.trim(),
                 classBatch: document.getElementById('regBatch').value,
+                feeAmount: Number(document.getElementById('regFeeAmount').value) || 1200,
                 pass: document.getElementById('regPin').value.trim(),
                 attendance: 100,
                 feeStatus: "Paid",
+                payMode: "Cash Desk",
                 source: "Admin Desk",
                 remark: "Newly enrolled student at Apex CBSE Academy.",
                 marks: []
@@ -1650,13 +1830,16 @@
             const student = erpData.students.find(s => s.roll === roll);
             if (student) {
                 student.attendance = Number(document.getElementById('metaAtt').value);
+                const feeAmt = document.getElementById('metaFeeAmount').value;
+                if (feeAmt) student.feeAmount = Number(feeAmt);
                 student.feeStatus = document.getElementById('metaFee').value;
+                student.payMode = document.getElementById('metaPayMode').value;
                 const rem = document.getElementById('metaRemark').value.trim();
                 if (rem) student.remark = rem;
                 saveERP();
                 renderAdminDashboard();
                 e.target.reset();
-                alert(`Updated profile for ${student.name}!`);
+                alert(`Updated Fee & Attendance status for ${student.name}!`);
             }
         }
 
@@ -1676,10 +1859,12 @@
             if (role === 'parent') {
                 parentBox.classList.remove('hidden');
                 const feeEl = document.getElementById('parentFeeBadge');
+                const feeVal = student.feeAmount || 1200;
                 feeEl.innerText = student.feeStatus;
                 feeEl.className = student.feeStatus === 'Paid'
-                    ? "text-lg font-extrabold text-emerald-600 mt-1"
-                    : "text-lg font-extrabold text-amber-600 mt-1";
+                    ? "text-lg font-extrabold text-emerald-600"
+                    : "text-lg font-extrabold text-amber-600";
+                document.getElementById('parentFeeAmountText').innerText = `(₹${feeVal}/mo • ${student.payMode || 'UPI/Cash'})`;
                 document.getElementById('parentRemarkText').innerText = `"${student.remark}"`;
             } else {
                 parentBox.classList.add('hidden');
