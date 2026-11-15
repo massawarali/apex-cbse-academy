@@ -12,28 +12,57 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- AOS Scroll Animation CSS -->
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <!-- Lottie Animated Graphics Player -->
+    <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+
     <style>
         body {
             font-family: 'Poppins', sans-serif;
             overflow-x: hidden;
         }
         .hero-bg {
-            background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 50%, #1d4ed8 100%);
+            background: radial-gradient(circle at top right, #1e40af, #0f172a 60%, #020617);
         }
-        /* Custom Floating & Pulse Animations */
+        /* Floating & Orbital Animations */
         @keyframes floatSlow {
             0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-12px); }
+            50% { transform: translateY(-14px); }
         }
         @keyframes floatReverse {
             0%, 100% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(10px) rotate(4deg); }
+            50% { transform: translateY(12px) rotate(3deg); }
+        }
+        @keyframes spinOrbit {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        @keyframes spinOrbitReverse {
+            from { transform: rotate(360deg); }
+            to { transform: rotate(0deg); }
+        }
+        @keyframes marqueeRun {
+            0% { transform: translateX(0%); }
+            100% { transform: translateX(-50%); }
         }
         .animate-float {
             animation: floatSlow 4s ease-in-out infinite;
         }
         .animate-float-delayed {
             animation: floatReverse 5s ease-in-out infinite;
+        }
+        .orbit-ring {
+            animation: spinOrbit 22s linear infinite;
+        }
+        .orbit-item {
+            animation: spinOrbitReverse 22s linear infinite;
+        }
+        .marquee-track {
+            display: flex;
+            width: max-content;
+            animation: marqueeRun 25s linear infinite;
+        }
+        .marquee-track:hover {
+            animation-play-state: paused;
         }
         .card-hover {
             transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
@@ -81,94 +110,130 @@
         </div>
     </header>
 
-    <!-- Hero Section with Animated Study Visuals -->
-    <section class="hero-bg text-white py-16 lg:py-24 relative overflow-hidden">
-        <!-- Floating Background Study Icons -->
-        <i class="fas fa-atom text-white/5 text-8xl absolute top-10 left-10 animate-float pointer-events-none"></i>
-        <i class="fas fa-square-root-alt text-white/5 text-7xl absolute bottom-12 left-1/3 animate-float-delayed pointer-events-none"></i>
-        <i class="fas fa-laptop-code text-white/5 text-8xl absolute top-16 right-12 animate-float pointer-events-none"></i>
+    <!-- Hero Section with Animated Running Graphic Showcase -->
+    <section class="hero-bg text-white py-14 lg:py-20 relative overflow-hidden">
+        <!--Glowing Background Blobs -->
+        <div class="w-96 h-96 bg-blue-600/20 rounded-full blur-3xl absolute -top-20 -left-20 pointer-events-none"></div>
+        <div class="w-96 h-96 bg-amber-500/15 rounded-full blur-3xl absolute bottom-0 right-10 pointer-events-none"></div>
 
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-            <div class="grid lg:grid-cols-2 gap-12 items-center">
-                <!-- Left Hero Content -->
-                <div data-aos="fade-right" data-aos-duration="900">
-                    <div class="inline-flex items-center gap-2 bg-blue-800/70 border border-blue-400/30 rounded-full px-4 py-1.5 text-xs sm:text-sm font-medium text-amber-300 mb-6">
-                        <i class="fas fa-star animate-spin" style="animation-duration: 6s;"></i> Specialized CBSE Coaching for Class 6 to 10
+            <div class="grid lg:grid-cols-12 gap-10 items-center">
+                
+                <!-- Left Hero Content (7 Cols) -->
+                <div class="lg:col-span-7" data-aos="fade-right" data-aos-duration="900">
+                    <div class="inline-flex items-center gap-2 bg-blue-900/80 border border-blue-400/30 rounded-full px-4 py-1.5 text-xs sm:text-sm font-medium text-amber-300 mb-6">
+                        <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping"></span>
+                        <span>Specialized CBSE Coaching for Class 6 to 10 • Jainthgarh</span>
                     </div>
-                    <h1 class="text-3xl sm:text-5xl font-extrabold leading-tight mb-6">
-                        Building Strong Concepts, <span class="text-amber-400">Shaping Bright Futures.</span>
+                    <h1 class="text-3xl sm:text-5xl lg:text-6xl font-extrabold leading-tight mb-6">
+                        Building Strong Concepts, <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-300 to-amber-500">Shaping Bright Futures.</span>
                     </h1>
-                    <p class="text-blue-100 text-base sm:text-lg mb-8 leading-relaxed">
-                        Master NCERT, Exemplar, and Board Pattern Questions with dedicated expert faculty. Small batches of 15 students, weekly tests, and modern analytical learning.
+                    <p class="text-blue-100 text-base sm:text-lg mb-8 leading-relaxed max-w-2xl">
+                        Master NCERT, Exemplar, and Board Pattern Questions with dedicated expert faculty. Small batches of 15 students, weekly OMR/written tests, and modern analytical learning.
                     </p>
-                    <div class="flex flex-wrap gap-4">
-                        <a href="#contact" class="bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold px-7 py-3.5 rounded-xl shadow-lg transition transform hover:scale-105 text-base">
-                            Enroll for Free Demo
+                    <div class="flex flex-wrap gap-4 mb-10">
+                        <a href="#contact" class="bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold px-7 py-4 rounded-xl shadow-lg shadow-amber-500/25 transition transform hover:scale-105 text-base flex items-center gap-2">
+                            <span>Enroll for Free 7-Day Demo</span>
+                            <i class="fas fa-bolt"></i>
                         </a>
-                        <a href="#timetable" class="bg-white/10 hover:bg-white/20 border border-white/25 text-white font-semibold px-7 py-3.5 rounded-xl transition text-base">
+                        <a href="#timetable" class="bg-white/10 hover:bg-white/20 border border-white/25 text-white font-semibold px-7 py-4 rounded-xl transition text-base">
                             View Class Schedule
                         </a>
                     </div>
-                </div>
 
-                <!-- Right Animated Student & Study Hub Visual -->
-                <div class="relative" data-aos="zoom-in" data-aos-duration="1000">
-                    <!-- Floating Animated Badges -->
-                    <div class="hidden sm:flex items-center gap-3 bg-white text-slate-900 px-4 py-2.5 rounded-2xl shadow-xl absolute -top-6 -left-6 z-20 animate-float">
-                        <div class="w-10 h-10 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center font-bold text-lg">
-                            <i class="fas fa-brain"></i>
+                    <!-- Mini Quick Stats Row -->
+                    <div class="grid grid-cols-3 gap-4 pt-6 border-t border-white/10 max-w-lg">
+                        <div>
+                            <div class="text-2xl sm:text-3xl font-extrabold text-amber-400">3 Experts</div>
+                            <div class="text-xs text-blue-200">Dedicated Faculty</div>
                         </div>
                         <div>
-                            <div class="text-xs font-extrabold text-slate-900">Smart Concept Learning</div>
-                            <div class="text-[11px] text-slate-500">Zero Rote Memorization</div>
+                            <div class="text-2xl sm:text-3xl font-extrabold text-white">15 Seats</div>
+                            <div class="text-xs text-blue-200">Per Classroom</div>
                         </div>
-                    </div>
-
-                    <div class="hidden sm:flex items-center gap-3 bg-emerald-500 text-white px-4 py-2.5 rounded-2xl shadow-xl absolute -bottom-5 -right-4 z-20 animate-float-delayed">
-                        <i class="fab fa-whatsapp text-2xl"></i>
                         <div>
-                            <div class="text-xs font-bold">Instant Parent Updates</div>
-                            <div class="text-[10px] text-emerald-100">Every Saturday Test Report</div>
-                        </div>
-                    </div>
-
-                    <!-- Interactive Student Card & Stats -->
-                    <div class="bg-white/10 backdrop-blur-md border border-white/20 rounded-3xl p-6 sm:p-8 shadow-2xl relative overflow-hidden">
-                        <!-- Top Animated Student Banner -->
-                        <div class="flex items-center gap-4 bg-slate-900/60 border border-white/10 p-4 rounded-2xl mb-6">
-                            <div class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-amber-400 to-amber-300 text-slate-950 flex items-center justify-center text-2xl font-extrabold shrink-0 animate-pulse">
-                                <i class="fas fa-user-graduate"></i>
-                            </div>
-                            <div>
-                                <span class="text-xs font-bold uppercase tracking-wider text-amber-400 block">Interactive Classroom</span>
-                                <h3 class="text-base sm:text-lg font-bold text-white">Focused Batches at Jainthgarh</h3>
-                                <p class="text-xs text-blue-200">Maths • Science • Biology • IT & Doubt Desk</p>
-                            </div>
-                        </div>
-
-                        <div class="grid grid-cols-2 gap-4">
-                            <div class="bg-slate-900/50 p-4 rounded-xl border border-white/5 hover:border-amber-400/40 transition">
-                                <div class="text-3xl font-extrabold text-white mb-1">3</div>
-                                <div class="text-xs sm:text-sm text-blue-200">Dedicated Subject Specialist Teachers</div>
-                            </div>
-                            <div class="bg-slate-900/50 p-4 rounded-xl border border-white/5 hover:border-amber-400/40 transition">
-                                <div class="text-3xl font-extrabold text-amber-400 mb-1">15</div>
-                                <div class="text-xs sm:text-sm text-blue-200">Max Students Per Room for Personal Care</div>
-                            </div>
-                            <div class="bg-slate-900/50 p-4 rounded-xl border border-white/5 hover:border-amber-400/40 transition">
-                                <div class="text-3xl font-extrabold text-emerald-400 mb-1">Every Sat</div>
-                                <div class="text-xs sm:text-sm text-blue-200">OMR/Board Pattern Weekly Tests</div>
-                            </div>
-                            <div class="bg-slate-900/50 p-4 rounded-xl border border-white/5 hover:border-amber-400/40 transition">
-                                <div class="text-3xl font-extrabold text-white mb-1">100%</div>
-                                <div class="text-xs sm:text-sm text-blue-200">NCERT + Case-Study & IT Literacy</div>
-                            </div>
+                            <div class="text-2xl sm:text-3xl font-extrabold text-emerald-400">Every Sat</div>
+                            <div class="text-xs text-blue-200">Live Board Test</div>
                         </div>
                     </div>
                 </div>
+
+                <!-- Right Animated Running Graphic Visual (5 Cols) -->
+                <div class="lg:col-span-5 relative flex items-center justify-center" data-aos="zoom-in" data-aos-duration="1000">
+                    
+                    <!-- Outer Rotating Orbital Ring with Subject Icons -->
+                    <div class="w-80 h-80 sm:w-96 sm:h-96 rounded-full border-2 border-dashed border-blue-400/30 absolute orbit-ring flex items-center justify-center pointer-events-none">
+                        <!-- Top Orbit Icon (Maths) -->
+                        <div class="w-12 h-12 rounded-2xl bg-blue-600 text-white shadow-lg flex items-center justify-center text-lg absolute -top-6 orbit-item">
+                            <i class="fas fa-square-root-alt"></i>
+                        </div>
+                        <!-- Bottom Orbit Icon (Science) -->
+                        <div class="w-12 h-12 rounded-2xl bg-amber-500 text-slate-950 shadow-lg flex items-center justify-center text-lg absolute -bottom-6 orbit-item">
+                            <i class="fas fa-atom"></i>
+                        </div>
+                        <!-- Left Orbit Icon (Biology) -->
+                        <div class="w-12 h-12 rounded-2xl bg-emerald-500 text-white shadow-lg flex items-center justify-center text-lg absolute -left-6 orbit-item">
+                            <i class="fas fa-dna"></i>
+                        </div>
+                        <!-- Right Orbit Icon (IT/Tech) -->
+                        <div class="w-12 h-12 rounded-2xl bg-purple-600 text-white shadow-lg flex items-center justify-center text-lg absolute -right-6 orbit-item">
+                            <i class="fas fa-laptop-code"></i>
+                        </div>
+                    </div>
+
+                    <!-- Center Glass Card with Live Running Lottie Student Graphic -->
+                    <div class="bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl p-5 shadow-2xl relative z-10 w-72 sm:w-80 text-center animate-float">
+                        <div class="bg-gradient-to-b from-blue-950/80 to-slate-900/90 rounded-2xl p-3 border border-white/10">
+                            <!-- Live Running Animated Graphic (Lottie) -->
+                            <lottie-player 
+                                src="https://assets3.lottiefiles.com/packages/lf20_fcfjwiyb.json"  
+                                background="transparent"  
+                                speed="1"  
+                                style="width: 100%; height: 220px;"  
+                                loop  
+                                autoplay>
+                            </lottie-player>
+                            <div class="mt-2">
+                                <span class="bg-amber-400 text-slate-950 text-[11px] font-extrabold px-3 py-1 rounded-full uppercase tracking-wider">
+                                    Smart Visual Learning
+                                </span>
+                                <h3 class="text-white font-bold text-base mt-2">Interactive Concept Classes</h3>
+                                <p class="text-blue-200 text-xs mt-0.5">Class 6 to 10 CBSE • Maths, Science & IT</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Floating Badge Bottom -->
+                    <div class="bg-emerald-500 text-white px-4 py-2 rounded-xl shadow-xl absolute -bottom-4 right-2 z-20 flex items-center gap-2 animate-float-delayed">
+                        <i class="fab fa-whatsapp text-xl"></i>
+                        <div class="text-left">
+                            <div class="text-[11px] font-extrabold leading-none">Same-Day Test Score</div>
+                            <div class="text-[9px] text-emerald-100">Direct on Parent's Phone</div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
     </section>
+
+    <!-- Continuous Running Graphic Marquee Banner -->
+    <div class="bg-slate-900 border-y border-slate-800 py-3.5 overflow-hidden">
+        <div class="marquee-track text-slate-200 text-xs sm:text-sm font-semibold space-x-10 px-4">
+            <span class="flex items-center gap-2"><i class="fas fa-check-circle text-amber-400"></i> 100% NCERT + Exemplar Coverage</span>
+            <span class="flex items-center gap-2"><i class="fas fa-microscope text-blue-400"></i> Practical Physics, Chemistry & Biology</span>
+            <span class="flex items-center gap-2"><i class="fas fa-calculator text-emerald-400"></i> Daily Mathematics Speed Worksheets</span>
+            <span class="flex items-center gap-2"><i class="fas fa-laptop-code text-purple-400"></i> Computer & IT Foundation by Industry Expert</span>
+            <span class="flex items-center gap-2"><i class="fas fa-award text-amber-400"></i> Every Saturday OMR & Written Board Test</span>
+            <span class="flex items-center gap-2"><i class="fas fa-user-check text-emerald-400"></i> Limited 15 Students Per Room</span>
+            <!-- Duplicate for seamless infinite loop -->
+            <span class="flex items-center gap-2"><i class="fas fa-check-circle text-amber-400"></i> 100% NCERT + Exemplar Coverage</span>
+            <span class="flex items-center gap-2"><i class="fas fa-microscope text-blue-400"></i> Practical Physics, Chemistry & Biology</span>
+            <span class="flex items-center gap-2"><i class="fas fa-calculator text-emerald-400"></i> Daily Mathematics Speed Worksheets</span>
+            <span class="flex items-center gap-2"><i class="fas fa-laptop-code text-purple-400"></i> Computer & IT Foundation by Industry Expert</span>
+            <span class="flex items-center gap-2"><i class="fas fa-award text-amber-400"></i> Every Saturday OMR & Written Board Test</span>
+        </div>
+    </div>
 
     <!-- Why Choose Us (3 Teacher Formula) -->
     <section id="about" class="py-16 bg-white">
@@ -216,15 +281,23 @@
         </div>
     </section>
 
-    <!-- NEW SECTION: Founder's Message (Massawar Ali Khan) -->
+    <!-- Founder's Message (Massawar Ali Khan) with Animated Tech Graphic -->
     <section id="founder" class="py-16 bg-gradient-to-br from-slate-900 via-blue-950 to-slate-900 text-white relative overflow-hidden">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div class="grid lg:grid-cols-12 gap-10 items-center">
-                <!-- Founder Profile Card -->
+                <!-- Founder Profile Card with Animated Graphic -->
                 <div class="lg:col-span-5" data-aos="fade-right">
-                    <div class="bg-white/10 backdrop-blur-md border border-white/20 rounded-3xl p-8 text-center relative shadow-2xl">
-                        <div class="w-24 h-24 rounded-2xl bg-gradient-to-br from-amber-400 to-amber-600 text-slate-950 font-extrabold text-4xl flex items-center justify-center mx-auto mb-5 shadow-lg animate-float">
-                            MAK
+                    <div class="bg-white/10 backdrop-blur-md border border-white/20 rounded-3xl p-7 text-center relative shadow-2xl">
+                        <!-- Animated Tech Mentor Graphic -->
+                        <div class="w-40 h-40 mx-auto -mt-4 mb-2">
+                            <lottie-player 
+                                src="https://assets9.lottiefiles.com/packages/lf20_w51pcehl.json"  
+                                background="transparent"  
+                                speed="1"  
+                                style="width: 100%; height: 100%;"  
+                                loop  
+                                autoplay>
+                            </lottie-player>
                         </div>
                         <span class="bg-amber-400/20 text-amber-300 border border-amber-400/30 text-xs font-bold px-3.5 py-1 rounded-full uppercase tracking-wider">
                             Founder & Mentor
@@ -257,10 +330,10 @@
                     </h2>
                     <div class="space-y-4 text-blue-100 text-sm sm:text-base leading-relaxed">
                         <p>
-                            Having spent **over 6 years as an IT Specialist** solving real-world enterprise challenges, I have seen firsthand what separates top achievers from the rest: **crystal-clear fundamentals, logical problem-solving, and technological confidence.**
+                            Having spent <strong>over 6 years as an IT Specialist</strong> solving real-world enterprise challenges, I have seen firsthand what separates top achievers from the rest: <strong>crystal-clear fundamentals, logical problem-solving, and technological confidence.</strong>
                         </p>
                         <p>
-                            At **Apex CBSE Academy**, our mission is to end the culture of fear and rote memorization in Mathematics, Science, and IT. When a student in Class 6 to 10 truly understands the *'Why'* and *'How'* behind every NCERT concept, high board scores become a natural byproduct.
+                            At <strong>Apex CBSE Academy</strong>, our mission is to end the culture of fear and rote memorization in Mathematics, Science, and IT. When a student in Class 6 to 10 truly understands the <em>'Why'</em> and <em>'How'</em> behind every NCERT concept, high board scores become a natural byproduct.
                         </p>
                         <p class="font-semibold text-white bg-blue-900/50 border-l-4 border-amber-400 p-4 rounded-r-xl">
                             "Every child in Jainthgarh deserves quality mentorship, disciplined weekly testing, and personal care. Give us your child's curiosity, and we will build their confidence."
@@ -593,7 +666,6 @@
 
         function sendToWhatsApp(event) {
             event.preventDefault();
-            // '91' country code ke saath aapka WhatsApp number
             const coachingWhatsAppNumber = "919337042839";
 
             const name = document.getElementById('studentName').value;
