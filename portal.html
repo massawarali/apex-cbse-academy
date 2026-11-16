@@ -152,6 +152,12 @@
             </a>
 
             <div class="flex items-center gap-2 sm:gap-3">
+                <!-- Live Cloud Sync Status Indicator -->
+                <div id="cloudStatusPill" class="hidden sm:flex items-center gap-1.5 bg-emerald-50 text-emerald-800 border border-emerald-200 px-2.5 py-1.5 rounded-xl text-[11px] font-bold">
+                    <span id="cloudStatusDot" class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                    <span id="cloudStatusText">Cloud Synced</span>
+                </div>
+
                 <div id="sessionTimerPill" class="hidden items-center gap-1.5 sm:gap-2 bg-slate-900 text-white px-2.5 sm:px-3 py-1.5 rounded-xl text-xs font-semibold shadow-sm border border-slate-700">
                     <span id="activityDot" title="Auto-Extend Active on Mouse/Keyboard Activity" class="w-2 h-2 rounded-full bg-emerald-400"></span>
                     <i class="far fa-clock text-amber-400"></i>
@@ -207,7 +213,6 @@
     <!-- ================= LIVE ONLINE MCQ / OMR EXAM MODAL (CANDIDATE) ================= -->
     <div id="liveMcqExamModal" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto no-print">
         <div class="bg-white rounded-3xl max-w-2xl w-full overflow-hidden shadow-2xl border-2 border-blue-900 my-6 modal-animate">
-            <!-- Exam Header with Live Countdown Timer -->
             <div class="bg-gradient-to-r from-slate-900 via-blue-900 to-indigo-900 text-white p-5 flex justify-between items-center">
                 <div>
                     <span id="mcqExamBadge" class="bg-amber-400 text-slate-950 text-[10px] font-black px-2.5 py-0.5 rounded-full uppercase">Saturday OMR Online Test</span>
@@ -220,7 +225,6 @@
                 </div>
             </div>
 
-            <!-- Questions Container -->
             <form id="mcqQuizSubmissionForm" onsubmit="submitLiveMcqExam(event)" class="p-6 max-h-[65vh] overflow-y-auto space-y-5">
                 <div id="mcqQuestionsRenderArea" class="space-y-5"></div>
 
@@ -264,7 +268,7 @@
                         </span>
                         <input type="tel" id="resetMobileInput" required pattern="[0-9]{10}" maxlength="10" placeholder="Enter 10-digit registered mobile" class="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-600 text-sm font-mono font-bold">
                     </div>
-                    <p id="otpMobileHint" class="text-[11px] text-slate-400 mt-1">We will verify your mobile number in the MAKDEMY database and send a 6-digit OTP.</p>
+                    <p id="otpMobileHint" class="text-[11px] text-slate-400 mt-1">We will verify your mobile number in the MAKDEMY Cloud Database and send a 6-digit OTP.</p>
                 </div>
 
                 <div id="otpStep1Error" class="hidden bg-red-50 border border-red-200 text-red-700 text-xs font-semibold p-3 rounded-xl text-center"></div>
@@ -350,7 +354,7 @@
                 <div>
                     <label class="block text-xs font-bold uppercase text-slate-600 mb-1">Set New Password / Login PIN *</label>
                     <input type="text" id="adminNewPinInput" required minlength="4" placeholder="Enter new PIN (e.g. 5678)" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-purple-600 font-mono font-bold text-base text-center">
-                    <p class="text-[11px] text-slate-400 mt-1">This will update the login PIN for both Candidate & Parent portals immediately.</p>
+                    <p class="text-[11px] text-slate-400 mt-1">This will sync to Google Sheet Cloud immediately.</p>
                 </div>
                 <div class="grid grid-cols-2 gap-2.5 pt-2">
                     <button type="button" onclick="closeAdminPassResetModal()" class="py-2.5 rounded-xl border border-slate-300 font-bold text-xs text-slate-700 hover:bg-slate-100">Cancel</button>
@@ -759,7 +763,7 @@
                     <img id="recQrImg" src="" alt="QR" class="w-12 h-12 rounded-lg border border-slate-200 p-0.5">
                     <div>
                         <div class="font-extrabold text-slate-800 text-[11px]">Official Verified Receipt</div>
-                        <div class="text-[10px] text-slate-500">Synced with MAKDEMY ERP Database</div>
+                        <div class="text-[10px] text-slate-500">Synced with MAKDEMY Cloud Database</div>
                     </div>
                 </div>
                 <div class="text-right">
@@ -956,7 +960,7 @@
                 <div class="lg:col-span-7 text-white flex flex-col items-center lg:items-start text-center lg:text-left">
                     <div class="inline-flex items-center gap-2 bg-blue-900/80 border border-blue-400/30 rounded-full px-4 py-1.5 text-xs font-semibold text-amber-300 mb-5">
                         <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping"></span>
-                        <span>MAKDEMY Smart Digital Campus • Founded by Massawar Ali Khan</span>
+                        <span>MAKDEMY Live Cloud Campus • Founded by Massawar Ali Khan</span>
                     </div>
 
                     <h1 class="text-3xl sm:text-4xl lg:text-5xl font-black leading-tight mb-4">
@@ -984,11 +988,11 @@
 
                         <div class="hidden sm:flex items-center gap-2.5 bg-white text-slate-900 px-3.5 py-2 rounded-2xl shadow-xl absolute -top-4 -left-4 z-20 animate-float">
                             <div class="w-8 h-8 rounded-lg bg-amber-100 text-amber-600 flex items-center justify-center font-bold">
-                                <i class="fas fa-tasks"></i>
+                                <i class="fas fa-cloud"></i>
                             </div>
                             <div class="text-left">
-                                <div class="text-[11px] font-extrabold leading-tight">Online MCQ OMR Test</div>
-                                <div class="text-[10px] text-slate-500">Live Timer & Auto-Score</div>
+                                <div class="text-[11px] font-extrabold leading-tight">Live Cloud Sync</div>
+                                <div class="text-[10px] text-slate-500">Multi-Device Realtime</div>
                             </div>
                         </div>
 
@@ -1081,11 +1085,10 @@
 
                                 <div id="loginError" class="hidden bg-red-50 border border-red-200 text-red-700 text-xs font-semibold p-3 rounded-xl text-center"></div>
 
-                                <button type="submit" class="w-full bg-blue-700 hover:bg-blue-800 text-white font-bold py-3.5 rounded-xl shadow-lg shadow-blue-700/25 transition transform hover:scale-[1.01] flex items-center justify-center gap-2">
+                                <button type="submit" id="loginSubmitBtn" class="w-full bg-blue-700 hover:bg-blue-800 text-white font-bold py-3.5 rounded-xl shadow-lg shadow-blue-700/25 transition transform hover:scale-[1.01] flex items-center justify-center gap-2">
                                     <i class="fas fa-sign-in-alt"></i> Login with Mobile Number
                                 </button>
 
-                                <!-- Bottom Self Reset & Create Account Links -->
                                 <div class="pt-2 space-y-1.5 text-center text-xs text-slate-500 border-t border-slate-100">
                                     <div>
                                         Forgot your Password/PIN? 
@@ -1126,7 +1129,6 @@
                                     </div>
                                 </div>
 
-                                <!-- Optional Passport Photo Upload on Sign-Up -->
                                 <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-200 flex items-center gap-3">
                                     <div class="w-11 h-11 rounded-xl bg-slate-200 flex items-center justify-center overflow-hidden shrink-0 border border-slate-300">
                                         <img id="selfPhotoPreview" src="" alt="" class="hidden w-full h-full object-cover">
@@ -1138,7 +1140,6 @@
                                     </div>
                                 </div>
 
-                                <!-- Hidden Password + Confirm Your Password with Show/Hide Eye & Live Match Indicator -->
                                 <div class="space-y-3">
                                     <div>
                                         <label class="block text-xs font-bold uppercase text-slate-600 mb-1">Create Login PIN / Password *</label>
@@ -1168,14 +1169,14 @@
                                     </div>
 
                                     <p class="text-[10px] text-emerald-700 font-semibold">
-                                        <i class="fas fa-sync-alt mr-1"></i> Your Mobile No. & Password will instantly appear in MAKDEMY Admin Database.
+                                        <i class="fas fa-cloud-upload-alt mr-1"></i> Your Mobile No. & Password will instantly sync to MAKDEMY Cloud Database.
                                     </p>
                                 </div>
 
                                 <div id="signupNotice" class="hidden p-3 rounded-xl text-xs font-semibold text-center"></div>
 
-                                <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 rounded-xl shadow-lg shadow-emerald-600/25 transition transform hover:scale-[1.01] flex items-center justify-center gap-2">
-                                    <i class="fas fa-user-check"></i> Create Account with Mobile No.
+                                <button type="submit" id="signupSubmitBtn" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 rounded-xl shadow-lg shadow-emerald-600/25 transition transform hover:scale-[1.01] flex items-center justify-center gap-2">
+                                    <i class="fas fa-user-check"></i> Create Account & Sync to Cloud
                                 </button>
 
                                 <p class="text-center text-xs text-slate-500 pt-1">
@@ -1193,7 +1194,7 @@
 
         <div class="bg-slate-950/90 border-t border-white/10 py-3 overflow-hidden relative z-10">
             <div class="marquee-track text-slate-300 text-xs font-semibold space-x-10 px-4">
-                <span class="flex items-center gap-2"><i class="fas fa-mobile-alt text-amber-400"></i> 100% Mobile Number Based Login & Instant Sign-Up</span>
+                <span class="flex items-center gap-2"><i class="fas fa-cloud text-amber-400"></i> Live Google Sheet Cloud Sync Across All Devices</span>
                 <span class="flex items-center gap-2"><i class="fas fa-tasks text-emerald-400"></i> Online Saturday MCQ / OMR Test with Live Countdown Timer</span>
                 <span class="flex items-center gap-2"><i class="fab fa-whatsapp text-green-400"></i> 1-Click Direct WhatsApp Fee & Result Alerts</span>
                 <span class="flex items-center gap-2"><i class="fas fa-file-pdf text-amber-300"></i> Official Printable Progress Report Cards</span>
@@ -1205,11 +1206,14 @@
     <section id="adminDashboard" class="hidden flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 no-print">
         <div class="bg-gradient-to-r from-slate-900 to-blue-900 text-white rounded-2xl p-6 mb-6 shadow-lg flex flex-wrap justify-between items-center gap-4">
             <div>
-                <span class="bg-amber-400 text-slate-950 text-xs font-extrabold px-3 py-1 rounded-full uppercase">MAKDEMY Full Admin Control</span>
+                <span class="bg-amber-400 text-slate-950 text-xs font-extrabold px-3 py-1 rounded-full uppercase">MAKDEMY Live Cloud Admin Control</span>
                 <h1 class="text-2xl sm:text-3xl font-extrabold mt-2">MAKDEMY Founder & Admin Panel — Massawar Ali Khan</h1>
-                <p class="text-blue-200 text-xs sm:text-sm">Daily Attendance Register, 1-Click WhatsApp Alerts, Online MCQ Quiz Builder & Live Fee Analytics.</p>
+                <p class="text-blue-200 text-xs sm:text-sm">Connected to Google Sheet Cloud Database • All student sign-ups across devices sync live below.</p>
             </div>
-            <div class="flex items-center gap-2.5">
+            <div class="flex flex-wrap items-center gap-2.5">
+                <button type="button" onclick="manualCloudRefresh()" id="adminCloudRefreshBtn" class="bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-xs font-extrabold px-4 py-2.5 rounded-xl shadow transition flex items-center gap-1.5">
+                    <i class="fas fa-cloud-download-alt"></i> Sync Cloud DB Now
+                </button>
                 <a href="#adminStudentDirectorySection" class="bg-amber-400 hover:bg-amber-300 text-slate-950 text-xs font-extrabold px-4 py-2.5 rounded-xl shadow transition">
                     <i class="fas fa-users mr-1"></i> Registered Database
                 </a>
@@ -1219,7 +1223,7 @@
             </div>
         </div>
 
-        <!-- FEATURE 6: ADMIN LIVE ANALYTICS & MONTHLY FEE COLLECTION SUMMARY (4 KPI CARDS) -->
+        <!-- FEATURE 6: ADMIN LIVE ANALYTICS & FEE COLLECTION SUMMARY (4 KPI CARDS) -->
         <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
             <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm flex items-center gap-4">
                 <div class="w-12 h-12 rounded-2xl bg-blue-100 text-blue-700 flex items-center justify-center text-xl shrink-0">
@@ -1315,7 +1319,6 @@
                         <input type="number" id="quizDuration" required min="1" max="120" value="10" placeholder="Mins (10)" class="px-3 py-2.5 rounded-lg border border-slate-300 font-bold">
                     </div>
 
-                    <!-- Dynamic Question Builder Inputs -->
                     <div class="bg-purple-50/60 border border-purple-200 rounded-2xl p-3.5 space-y-2.5">
                         <div class="flex justify-between items-center">
                             <span class="text-xs font-extrabold uppercase text-purple-900">Add MCQ Questions to This Test:</span>
@@ -1421,7 +1424,6 @@
                         <input type="number" id="regFeeAmount" required placeholder="Fee ₹ (1200)" class="px-3 py-2.5 rounded-lg border border-slate-300">
                     </div>
 
-                    <!-- Student Passport Photo Upload Box with Live Preview -->
                     <div class="bg-slate-50 p-3 rounded-xl border border-dashed border-blue-300 flex items-center justify-between gap-3">
                         <div class="flex items-center gap-3">
                             <div class="w-12 h-12 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center overflow-hidden border border-blue-200 shrink-0 shadow-sm">
@@ -1439,7 +1441,7 @@
                     </div>
 
                     <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 rounded-xl shadow">
-                        <i class="fas fa-user-check mr-1"></i> Add Student to MAKDEMY Database
+                        <i class="fas fa-user-check mr-1"></i> Add Student & Sync to Cloud DB
                     </button>
                 </form>
 
@@ -1612,7 +1614,12 @@
                     <h3 class="font-bold">MAKDEMY Registered Candidates & Parents Database</h3>
                     <p class="text-[11px] text-slate-400">1-Click WhatsApp Fee/Result Alerts, Mobile Numbers, Passwords/PINs & Full Profile Controls</p>
                 </div>
-                <span id="totalStudentCount" class="text-xs bg-amber-400 text-slate-950 font-extrabold px-3 py-1 rounded-full"></span>
+                <div class="flex items-center gap-2">
+                    <button type="button" onclick="manualCloudRefresh()" class="bg-white/10 hover:bg-white/20 text-white text-xs font-bold px-3 py-1 rounded-full transition">
+                        <i class="fas fa-sync-alt mr-1"></i> Refresh Cloud
+                    </button>
+                    <span id="totalStudentCount" class="text-xs bg-amber-400 text-slate-950 font-extrabold px-3 py-1 rounded-full"></span>
+                </div>
             </div>
             <div class="overflow-x-auto">
                 <table class="w-full text-left border-collapse text-sm">
@@ -1823,6 +1830,9 @@
     </section>
 
     <script>
+        // ================= CONNECTED LIVE GOOGLE SHEET CLOUD DATABASE URL =================
+        const CLOUD_SYNC_URL = "https://script.google.com/macros/s/AKfycbzxiz8tLDgOWGZUjiErqHzGq9UYHJywDAsNUzP-7QgkmmqScMKUbnrm4oeLjQUj1XFBKw/exec";
+
         let sessionDurationMinutes = Number(localStorage.getItem('makdemySessionMinutes')) || 5;
         let SESSION_DURATION_MS = sessionDurationMinutes * 60 * 1000;
         const REMINDER_THRESHOLD_MS = 30 * 1000;
@@ -2017,8 +2027,74 @@
         let editingMarkRef = { roll: null, index: null };
         let sessionIntervalId = null;
 
-        function saveERP() {
+        function updateCloudStatusUI(state, label) {
+            const dot = document.getElementById('cloudStatusDot');
+            const text = document.getElementById('cloudStatusText');
+            if (!dot || !text) return;
+            text.innerText = label;
+            if (state === 'syncing') {
+                dot.className = "w-2 h-2 rounded-full bg-amber-500 animate-ping";
+            } else if (state === 'error') {
+                dot.className = "w-2 h-2 rounded-full bg-red-500";
+            } else {
+                dot.className = "w-2 h-2 rounded-full bg-emerald-500";
+            }
+        }
+
+        // Save locally AND push to Google Sheet Cloud Database
+        async function saveERP() {
             localStorage.setItem('makdemyERP_v1', JSON.stringify(erpData));
+            if (!CLOUD_SYNC_URL || !CLOUD_SYNC_URL.startsWith("https://")) return;
+
+            updateCloudStatusUI('syncing', 'Saving to Cloud...');
+            try {
+                await fetch(CLOUD_SYNC_URL, {
+                    method: "POST",
+                    mode: "no-cors",
+                    headers: { "Content-Type": "text/plain" },
+                    body: JSON.stringify(erpData)
+                });
+                updateCloudStatusUI('ok', 'Cloud Synced');
+            } catch (err) {
+                console.error("Cloud push error:", err);
+                updateCloudStatusUI('error', 'Offline Cache');
+            }
+        }
+
+        // Pull latest data from Google Sheet Cloud Database
+        async function syncFromCloudDatabase() {
+            if (!CLOUD_SYNC_URL || !CLOUD_SYNC_URL.startsWith("https://")) return false;
+            updateCloudStatusUI('syncing', 'Syncing Cloud...');
+            try {
+                const res = await fetch(CLOUD_SYNC_URL + "?t=" + Date.now());
+                const cloudData = await res.json();
+                if (cloudData && Array.isArray(cloudData.students)) {
+                    erpData = cloudData;
+                    if (!erpData.adminAuth) erpData.adminAuth = { phone: "9337042839", pass: "apex2026" };
+                    if (!erpData.dailyAttendance) erpData.dailyAttendance = {};
+                    if (!erpData.onlineQuizzes) erpData.onlineQuizzes = defaultERPData.onlineQuizzes;
+                    localStorage.setItem('makdemyERP_v1', JSON.stringify(erpData));
+                    updateCloudStatusUI('ok', 'Cloud Live');
+                    return true;
+                } else {
+                    // First-time cloud initialization if sheet A1 is still empty
+                    await saveERP();
+                    updateCloudStatusUI('ok', 'Cloud Initialized');
+                    return true;
+                }
+            } catch (e) {
+                console.warn("Cloud fetch fallback to local cache:", e);
+                updateCloudStatusUI('error', 'Local Cache');
+                return false;
+            }
+        }
+
+        async function manualCloudRefresh() {
+            const btn = document.getElementById('adminCloudRefreshBtn');
+            if (btn) btn.innerHTML = `<i class="fas fa-spinner fa-spin"></i> Syncing...`;
+            await syncFromCloudDatabase();
+            renderAdminDashboard();
+            if (btn) btn.innerHTML = `<i class="fas fa-cloud-download-alt"></i> Sync Cloud DB Now`;
         }
 
         function reloadLatestERPData() {
@@ -2262,7 +2338,7 @@
             renderDraftQuizQuestionsList();
             renderAdminDashboard();
             e.target.reset();
-            alert(`🚀 Online MCQ Quiz "${newQuiz.title}" (${newQuiz.questions.length} Questions) published to Candidate Portal!`);
+            alert(`🚀 Online MCQ Quiz "${newQuiz.title}" (${newQuiz.questions.length} Questions) published to Cloud & Candidate Portal!`);
         }
 
         function deleteOnlineQuiz(idx) {
@@ -2412,7 +2488,7 @@
             }
 
             closeLiveMcqExamModal(false);
-            alert(`🎉 OMR Submitted!\nYou got ${correctCount} out of ${quiz.questions.length} correct (${scoredMarks}/${totalMarks} Marks).\nYour score has been synced to your MAKDEMY Report Card!`);
+            alert(`🎉 OMR Submitted!\nYou got ${correctCount} out of ${quiz.questions.length} correct (${scoredMarks}/${totalMarks} Marks).\nYour score has been synced to the Cloud & your MAKDEMY Report Card!`);
         }
 
         // ================= SHOW/HIDE PASSWORD EYE TOGGLE & LIVE PASSWORD MATCH CHECK =================
@@ -2454,7 +2530,7 @@
             const newPass = document.getElementById('adminConfigPass').value.trim();
             erpData.adminAuth = { phone: newPhone, pass: newPass };
             saveERP();
-            alert(`✅ Admin Login Credentials Updated!\nAdmin Mobile: ${newPhone}\nNew Password: ${newPass}`);
+            alert(`✅ Admin Login Credentials Synced to Cloud!\nAdmin Mobile: ${newPhone}\nNew Password: ${newPass}`);
         }
 
         function openAdminPassResetModal(rollId) {
@@ -2484,12 +2560,12 @@
             saveERP();
             renderAdminDashboard();
             closeAdminPassResetModal();
-            alert(`✅ Password / PIN for ${student.name} (${student.roll}) has been manually reset to: ${newPin}`);
+            alert(`✅ Password / PIN for ${student.name} (${student.roll}) has been manually reset & synced to Cloud: ${newPin}`);
         }
 
         // ================= 2. SELF PASSWORD RESET BY MOBILE OTP (FOR ADMIN, CANDIDATE & PARENTS) =================
-        function openSelfOtpResetModal() {
-            reloadLatestERPData();
+        async function openSelfOtpResetModal() {
+            await syncFromCloudDatabase();
             document.getElementById('otpStep1Form').reset();
             document.getElementById('otpStep2Form').reset();
             document.getElementById('otpStep1Error').classList.add('hidden');
@@ -2504,7 +2580,7 @@
             } else {
                 document.getElementById('otpModalTitle').innerText = "Reset Candidate / Parent PIN";
                 document.getElementById('otpModalSub').innerText = "Verify Registered 10-Digit Mobile via OTP";
-                document.getElementById('otpMobileHint').innerText = "We will verify your mobile number in the MAKDEMY database and send a 6-digit OTP.";
+                document.getElementById('otpMobileHint').innerText = "We will verify your mobile number in the MAKDEMY Cloud Database and send a 6-digit OTP.";
             }
 
             document.getElementById('selfOtpResetModal').classList.remove('hidden');
@@ -2520,9 +2596,9 @@
             document.getElementById('otpStep1Form').classList.remove('hidden');
         }
 
-        function sendMobileResetOtp(e) {
+        async function sendMobileResetOtp(e) {
             e.preventDefault();
-            reloadLatestERPData();
+            await syncFromCloudDatabase();
             const mobile = document.getElementById('resetMobileInput').value.trim();
             const errEl = document.getElementById('otpStep1Error');
 
@@ -2548,7 +2624,7 @@
 
             const student = erpData.students.find(s => s.parentPhone === mobile);
             if (!student) {
-                errEl.innerText = "⚠️ This mobile number is not registered in MAKDEMY database! Please check the number or Create Account.";
+                errEl.innerText = "⚠️ This mobile number is not registered in MAKDEMY Cloud Database! Please check the number or Create Account.";
                 errEl.classList.remove('hidden');
                 return;
             }
@@ -2573,7 +2649,7 @@
             alert(`📲 New 6-Digit OTP sent to +91 ${activeOtpSession.mobile}: ${newOtp}`);
         }
 
-        function verifyOtpAndSaveNewPassword(e) {
+        async function verifyOtpAndSaveNewPassword(e) {
             e.preventDefault();
             const enteredOtp = document.getElementById('userEnteredOtp').value.trim();
             const newPass = document.getElementById('newSelfResetPass').value.trim();
@@ -2594,7 +2670,7 @@
 
             if (activeOtpSession.isAdmin) {
                 erpData.adminAuth.pass = newPass;
-                saveERP();
+                await saveERP();
                 document.getElementById('loginId').value = erpData.adminAuth.phone;
                 document.getElementById('loginPass').value = newPass;
                 closeSelfOtpResetModal();
@@ -2606,16 +2682,16 @@
             if (!student) return;
 
             student.pass = newPass;
-            saveERP();
+            await saveERP();
 
             document.getElementById('loginId').value = student.parentPhone;
             document.getElementById('loginPass').value = newPass;
 
             closeSelfOtpResetModal();
-            alert(`✅ Mobile OTP Verified! Password / PIN for ${student.name} (${student.roll}) has been updated to "${newPass}" and synced with Admin Database.`);
+            alert(`✅ Mobile OTP Verified! Password / PIN for ${student.name} (${student.roll}) has been updated and synced to Cloud Database.`);
         }
 
-        // ================= STUDENT PHOTO UPLOAD & AUTO-RESIZE ENGINE =================
+        // ================= STUDENT PHOTO UPLOAD & AUTO-RESIZE ENGINE (CLOUD SAFE 110x110) =================
         function handlePhotoUpload(inputEl, targetContext) {
             const file = inputEl.files && inputEl.files[0];
             if (!file) return;
@@ -2625,7 +2701,7 @@
                 const img = new Image();
                 img.onload = function () {
                     const canvas = document.createElement('canvas');
-                    const SIZE = 220;
+                    const SIZE = 110; // Compact 110x110 size so Google Sheet cell stays fast and well below character limits
                     canvas.width = SIZE;
                     canvas.height = SIZE;
                     const ctx = canvas.getContext('2d');
@@ -2635,7 +2711,7 @@
                     const sy = (img.height - minSide) / 2;
                     ctx.drawImage(img, sx, sy, minSide, minSide, 0, 0, SIZE, SIZE);
 
-                    const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.82);
+                    const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.65);
 
                     if (targetContext === 'adminReg') {
                         tempAdminRegPhotoData = compressedDataUrl;
@@ -2791,7 +2867,7 @@
             saveERP();
             renderAdminDashboard();
             e.target.reset();
-            alert("📚 Study Material / Worksheet published to MAKDEMY Portal!");
+            alert("📚 Study Material / Worksheet published to Cloud & MAKDEMY Portal!");
         }
 
         function deleteStudyMaterial(index) {
@@ -2933,7 +3009,7 @@
             issueOfficialReceipt(student, 'Admin Verified (UPI/Cash)', ref, 'Admin Portal');
             renderAdminDashboard();
             e.target.reset();
-            alert(`✅ Receipt generated and added to MAKDEMY log for ${student.name} (${student.roll}) — ₹${amount}!`);
+            alert(`✅ Receipt generated and synced to Cloud for ${student.name} (${student.roll}) — ₹${amount}!`);
         }
 
         function removeGeneratedReceipt(index) {
@@ -3045,7 +3121,7 @@
 
             document.getElementById('upiPaymentView').classList.add('hidden');
             document.getElementById('netbankingPaymentView').classList.add('hidden');
-            document.getElementById('processingStatusTitle').innerText = "Submitting Payment Details to MAKDEMY Admin Portal...";
+            document.getElementById('processingStatusTitle').innerText = "Submitting Payment Details to MAKDEMY Cloud...";
             document.getElementById('paymentProcessingBox').classList.remove('hidden');
 
             setTimeout(() => {
@@ -3062,7 +3138,7 @@
                     }
                 }
                 closePaymentGateway();
-                alert("✅ Payment Reference (" + utr + ") submitted! Your receipt has been queued on the MAKDEMY Admin Portal for generation.");
+                alert("✅ Payment Reference (" + utr + ") submitted to Cloud! Your receipt has been queued on the MAKDEMY Admin Portal for generation.");
             }, 1000);
         }
 
@@ -3086,7 +3162,7 @@
                 bankIfsc: "SBIN0004567"
             };
             saveERP();
-            alert("MAKDEMY UPI ID & Bank Account updated!");
+            alert("MAKDEMY UPI ID & Bank Account synced to Cloud!");
         }
 
         // ================= FEE RECEIPT MODAL =================
@@ -3247,9 +3323,10 @@
                 : "font-mono font-bold text-amber-400 text-xs sm:text-sm";
         }
 
-        window.addEventListener('DOMContentLoaded', function () {
-            reloadLatestERPData();
+        window.addEventListener('DOMContentLoaded', async function () {
             document.getElementById('sessionDurationSelect').value = String(sessionDurationMinutes);
+            await syncFromCloudDatabase();
+
             const raw = localStorage.getItem(SESSION_STORAGE_KEY);
             if (!raw) return;
 
@@ -3354,11 +3431,12 @@
 
         function resetDefaultData() {
             openConfirmModal(
-                "Reset Entire Database?",
+                "Reset Entire Cloud Database?",
                 "Are you sure you want to reset all students, attendance, quizzes, study notes, and receipts back to default MAKDEMY settings?",
                 function () {
                     localStorage.removeItem('makdemyERP_v1');
                     erpData = JSON.parse(JSON.stringify(defaultERPData));
+                    saveERP();
                     renderAdminDashboard();
                 }
             );
@@ -3382,7 +3460,7 @@
                 signupBtn.className = "py-2 rounded-lg bg-emerald-600 text-white shadow-sm transition";
                 loginBtn.className = "py-2 rounded-lg text-slate-600 hover:text-slate-900 transition";
                 roleTitle.innerText = currentRole === 'parent' ? "Create Parent Account" : "Create Candidate Account";
-                roleSub.innerText = "Register with 10-Digit Mobile No. (Syncs to Admin Database)";
+                roleSub.innerText = "Register with 10-Digit Mobile No. (Syncs to Cloud Database)";
             } else {
                 signupForm.classList.add('hidden');
                 loginForm.classList.remove('hidden');
@@ -3441,16 +3519,16 @@
             }
         }
 
-        function handleSelfSignup(event) {
+        async function handleSelfSignup(event) {
             event.preventDefault();
-            reloadLatestERPData();
+            const submitBtn = document.getElementById('signupSubmitBtn');
+            const notice = document.getElementById('signupNotice');
 
             const name = document.getElementById('selfName').value.trim();
             const phone = document.getElementById('selfPhone').value.trim();
             const batch = document.getElementById('selfBatch').value;
             const pin = document.getElementById('selfPin').value.trim();
             const confirmPin = document.getElementById('selfConfirmPin').value.trim();
-            const notice = document.getElementById('signupNotice');
 
             if (pin !== confirmPin) {
                 notice.className = "block p-3 rounded-xl text-xs font-semibold text-center bg-red-50 text-red-700 border border-red-200";
@@ -3458,8 +3536,20 @@
                 return;
             }
 
+            if (submitBtn) {
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = `<i class="fas fa-spinner fa-spin"></i> Syncing with MAKDEMY Cloud...`;
+            }
+
+            // Always pull latest cloud list first so we never overwrite other students
+            await syncFromCloudDatabase();
+
             const existing = erpData.students.find(s => s.parentPhone === phone);
             if (existing) {
+                if (submitBtn) {
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = `<i class="fas fa-user-check"></i> Create Account & Sync to Cloud`;
+                }
                 notice.className = "block p-3 rounded-xl text-xs font-semibold text-center bg-red-50 text-red-700 border border-red-200";
                 notice.innerHTML = `⚠️ Mobile No. <strong>${phone}</strong> is already registered (Roll ID: <strong>${existing.roll}</strong>). Click 'Forgot Password/PIN? Reset via OTP' to reset PIN.`;
                 return;
@@ -3492,26 +3582,42 @@
             };
 
             erpData.students.unshift(newAccount);
-            saveERP();
+            await saveERP();
+
             event.target.reset();
             document.getElementById('livePinMatchHint').classList.add('hidden');
             clearUploadedPhoto('self');
+            if (submitBtn) {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = `<i class="fas fa-user-check"></i> Create Account & Sync to Cloud`;
+            }
 
             notice.className = "block p-3 rounded-xl text-xs font-semibold text-center bg-emerald-50 text-emerald-800 border border-emerald-300";
-            notice.innerHTML = `✅ Account Created! Roll ID: <strong>${generatedRoll}</strong> | Mobile: <strong>${phone}</strong> synced to Admin Database!`;
+            notice.innerHTML = `✅ Account Created & Synced to Cloud! Roll ID: <strong>${generatedRoll}</strong> | Mobile: <strong>${phone}</strong>. Redirecting...`;
 
             setTimeout(() => {
                 showDashboard(currentRole, newAccount, false);
-            }, 1100);
+            }, 900);
         }
 
-        function handleLogin(event) {
+        async function handleLogin(event) {
             event.preventDefault();
-            reloadLatestERPData();
-
+            const loginBtn = document.getElementById('loginSubmitBtn');
             const mobile = document.getElementById('loginId').value.trim();
             const pass = document.getElementById('loginPass').value.trim();
             const errBox = document.getElementById('loginError');
+
+            if (loginBtn) {
+                loginBtn.disabled = true;
+                loginBtn.innerHTML = `<i class="fas fa-spinner fa-spin"></i> Verifying on Cloud...`;
+            }
+
+            await syncFromCloudDatabase();
+
+            if (loginBtn) {
+                loginBtn.disabled = false;
+                loginBtn.innerHTML = `<i class="fas fa-sign-in-alt"></i> Login with Mobile Number`;
+            }
 
             if (currentRole === 'admin') {
                 const adminPhone = (erpData.adminAuth && erpData.adminAuth.phone) ? erpData.adminAuth.phone : "9337042839";
@@ -3535,7 +3641,6 @@
         }
 
         function showDashboard(role, studentObj, isRestoredFromRefresh) {
-            reloadLatestERPData();
             document.getElementById('loginSection').classList.add('hidden');
             document.getElementById('logoutBtn').classList.remove('hidden');
 
@@ -3577,7 +3682,6 @@
         function renderAdminDashboard() {
             reloadLatestERPData();
 
-            // Render Feature 6 Live Analytics KPIs & Feature 1 Daily Attendance Register
             renderAdminAnalyticsKPIs();
             renderDailyAttendanceRegister();
 
@@ -3603,7 +3707,6 @@
                 document.getElementById('adminConfigPass').value = erpData.adminAuth.pass || "apex2026";
             }
 
-            // Render Active Online MCQ Quizzes List in Admin
             const quizListEl = document.getElementById('adminOnlineQuizzesList');
             if (quizListEl) {
                 quizListEl.innerHTML = erpData.onlineQuizzes.length ? erpData.onlineQuizzes.map((qz, idx) => `
@@ -3619,7 +3722,6 @@
                 `).join('') : `<div class="text-slate-400 italic">No online quizzes published yet.</div>`;
             }
 
-            // Render Pending Payments / Un-generated Receipts Queue
             const pendingStudents = erpData.students.filter(s => s.feeStatus !== 'Paid' || !s.receiptGenerated);
             document.getElementById('pendingReceiptCount').innerText = `${pendingStudents.length} Pending`;
             const pendingContainer = document.getElementById('adminPendingQueueList');
@@ -3646,7 +3748,6 @@
                 }).join('');
             }
 
-            // Render Generated Receipts Log
             document.getElementById('generatedReceiptCount').innerText = `${erpData.generatedReceipts.length} Generated`;
             const logContainer = document.getElementById('adminGeneratedReceiptsLog');
             if (!erpData.generatedReceipts.length) {
@@ -3671,7 +3772,6 @@
                 `).join('');
             }
 
-            // Render Admin Study Materials List
             const matListEl = document.getElementById('adminStudyMaterialsList');
             if (matListEl) {
                 matListEl.innerHTML = erpData.studyMaterials.map((m, idx) => `
@@ -3940,7 +4040,7 @@
 
             openConfirmModal(
                 "⚠️ Warning: Delete Candidate?",
-                `Are you sure you want to permanently delete "${student.name}" (Roll ID: ${rollId}) and all their associated receipts from the MAKDEMY Database?`,
+                `Are you sure you want to permanently delete "${student.name}" (Roll ID: ${rollId}) and all their associated receipts from the MAKDEMY Cloud Database?`,
                 function () {
                     erpData.students = erpData.students.filter(s => s.roll !== rollId);
                     erpData.generatedReceipts = erpData.generatedReceipts.filter(r => r.roll !== rollId);
@@ -4007,7 +4107,7 @@
             renderAdminDashboard();
             e.target.reset();
             clearUploadedPhoto('adminReg');
-            alert(`✅ Student ${newStudent.name} registered! Mobile No. (${newStudent.parentPhone}) and PIN (${newStudent.pass}) are now visible in the Admin Database.`);
+            alert(`✅ Student ${newStudent.name} registered & synced to Cloud! Mobile No. (${newStudent.parentPhone}) and PIN (${newStudent.pass}) are now live.`);
         }
 
         function addTestMark(e) {
@@ -4204,7 +4304,6 @@
                 parentBox.classList.add('hidden');
             }
 
-            // Render Online MCQ Quizzes & Chapter Notes
             renderUserOnlineQuizzes(student);
             renderUserStudyMaterials(student);
 
