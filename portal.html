@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MAKDEMY | Smart Digital ERP, Notes & Online Fee Portal</title>
+    <title>MAKDEMY | Smart Digital ERP, Online MCQ Test & Fee Portal</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Google Fonts -->
@@ -204,6 +204,38 @@
         </div>
     </div>
 
+    <!-- ================= LIVE ONLINE MCQ / OMR EXAM MODAL (CANDIDATE) ================= -->
+    <div id="liveMcqExamModal" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto no-print">
+        <div class="bg-white rounded-3xl max-w-2xl w-full overflow-hidden shadow-2xl border-2 border-blue-900 my-6 modal-animate">
+            <!-- Exam Header with Live Countdown Timer -->
+            <div class="bg-gradient-to-r from-slate-900 via-blue-900 to-indigo-900 text-white p-5 flex justify-between items-center">
+                <div>
+                    <span id="mcqExamBadge" class="bg-amber-400 text-slate-950 text-[10px] font-black px-2.5 py-0.5 rounded-full uppercase">Saturday OMR Online Test</span>
+                    <h3 id="mcqExamTitle" class="text-lg font-extrabold mt-1">Maths & Science Weekly Quiz</h3>
+                    <p id="mcqExamSub" class="text-xs text-blue-200">Auto-grading • Score syncs directly to your Report Card</p>
+                </div>
+                <div class="bg-slate-950/80 border border-amber-400/50 px-4 py-2 rounded-2xl text-center shrink-0">
+                    <span class="text-[9px] text-amber-300 uppercase font-bold block">Time Left</span>
+                    <strong id="mcqTimerDisplay" class="font-mono text-xl font-black text-amber-400">10:00</strong>
+                </div>
+            </div>
+
+            <!-- Questions Container -->
+            <form id="mcqQuizSubmissionForm" onsubmit="submitLiveMcqExam(event)" class="p-6 max-h-[65vh] overflow-y-auto space-y-5">
+                <div id="mcqQuestionsRenderArea" class="space-y-5"></div>
+
+                <div class="pt-4 border-t border-slate-200 flex justify-between items-center gap-3">
+                    <button type="button" onclick="closeLiveMcqExamModal(true)" class="px-4 py-2.5 rounded-xl border border-slate-300 text-xs font-bold text-slate-600 hover:bg-slate-100">
+                        Quit Test
+                    </button>
+                    <button type="submit" class="px-6 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs sm:text-sm shadow-lg flex items-center gap-2">
+                        <i class="fas fa-check-circle"></i> Submit OMR & Sync Score to Report Card
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <!-- ================= ADMIN, CANDIDATE & PARENT SELF PASSWORD RESET MODAL (BY MOBILE OTP) ================= -->
     <div id="selfOtpResetModal" class="hidden fixed inset-0 z-50 bg-slate-950/75 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto no-print">
         <div class="bg-white rounded-3xl max-w-md w-full p-6 sm:p-7 shadow-2xl border border-slate-200 modal-animate">
@@ -244,7 +276,6 @@
 
             <!-- STEP 2: Verify OTP & Set New Password/PIN -->
             <form id="otpStep2Form" onsubmit="verifyOtpAndSaveNewPassword(event)" class="hidden space-y-3.5 text-sm">
-                <!-- Simulated SMS Banner with Live OTP Code -->
                 <div class="bg-emerald-50 border-2 border-emerald-300 rounded-2xl p-3.5 text-xs">
                     <div class="flex justify-between items-center">
                         <span class="font-extrabold text-emerald-900 uppercase"><i class="fas fa-comment-sms mr-1"></i> MAKDEMY SMS OTP Sent!</span>
@@ -412,7 +443,6 @@
             </div>
 
             <div class="p-6">
-                <!-- TAB 1: UPI QR & APPS -->
                 <div id="upiPaymentView" class="space-y-4">
                     <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4 text-center">
                         <span class="inline-block bg-emerald-100 text-emerald-800 text-[10px] font-extrabold px-2.5 py-0.5 rounded-full uppercase mb-2">
@@ -447,7 +477,6 @@
                     </form>
                 </div>
 
-                <!-- TAB 2: NET BANKING & NEFT/IMPS -->
                 <div id="netbankingPaymentView" class="hidden space-y-4">
                     <div>
                         <label class="block text-[11px] font-bold uppercase text-slate-600 mb-1.5">Select Your Bank for Net Banking *</label>
@@ -584,7 +613,6 @@
                     </div>
                 </div>
 
-                <!-- Photo Change / Remove inside Edit Modal -->
                 <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-200 flex items-center justify-between gap-3">
                     <div class="flex items-center gap-3">
                         <div class="w-11 h-11 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center overflow-hidden border border-blue-200 shrink-0">
@@ -935,7 +963,7 @@
                         Welcome to <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-300 to-amber-500">MAKDEMY ERP</span> — Track Every Test, Master Every Concept.
                     </h1>
                     <p class="text-blue-100 text-sm sm:text-base mb-8 max-w-xl">
-                        Sign in or create your account using your <strong>10-Digit Mobile Number</strong>. Download Chapter-wise Notes & Worksheet PDFs, pay coaching fees via UPI/NetBanking, and track Saturday test scores.
+                        Sign in or create your account using your <strong>10-Digit Mobile Number</strong>. Attempt Online Saturday MCQ Tests, download Chapter Notes PDFs, and pay coaching fees online.
                     </p>
 
                     <div class="relative flex items-center justify-center my-4 w-full max-w-md mx-auto lg:mx-0">
@@ -956,11 +984,11 @@
 
                         <div class="hidden sm:flex items-center gap-2.5 bg-white text-slate-900 px-3.5 py-2 rounded-2xl shadow-xl absolute -top-4 -left-4 z-20 animate-float">
                             <div class="w-8 h-8 rounded-lg bg-amber-100 text-amber-600 flex items-center justify-center font-bold">
-                                <i class="fas fa-mobile-alt"></i>
+                                <i class="fas fa-tasks"></i>
                             </div>
                             <div class="text-left">
-                                <div class="text-[11px] font-extrabold leading-tight">Mobile OTP Verified</div>
-                                <div class="text-[10px] text-slate-500">Quick Sign-Up & Reset</div>
+                                <div class="text-[11px] font-extrabold leading-tight">Online MCQ OMR Test</div>
+                                <div class="text-[10px] text-slate-500">Live Timer & Auto-Score</div>
                             </div>
                         </div>
 
@@ -1166,8 +1194,8 @@
         <div class="bg-slate-950/90 border-t border-white/10 py-3 overflow-hidden relative z-10">
             <div class="marquee-track text-slate-300 text-xs font-semibold space-x-10 px-4">
                 <span class="flex items-center gap-2"><i class="fas fa-mobile-alt text-amber-400"></i> 100% Mobile Number Based Login & Instant Sign-Up</span>
-                <span class="flex items-center gap-2"><i class="fas fa-key text-emerald-400"></i> Self Password Reset via Mobile OTP for Admin, Candidate & Parents</span>
-                <span class="flex items-center gap-2"><i class="fas fa-receipt text-blue-400"></i> Instant or Admin-Verified Receipt Generation</span>
+                <span class="flex items-center gap-2"><i class="fas fa-tasks text-emerald-400"></i> Online Saturday MCQ / OMR Test with Live Countdown Timer</span>
+                <span class="flex items-center gap-2"><i class="fab fa-whatsapp text-green-400"></i> 1-Click Direct WhatsApp Fee & Result Alerts</span>
                 <span class="flex items-center gap-2"><i class="fas fa-file-pdf text-amber-300"></i> Official Printable Progress Report Cards</span>
             </div>
         </div>
@@ -1175,19 +1203,157 @@
 
     <!-- ================= 2. ADMIN FULL ACCESS DASHBOARD ================= -->
     <section id="adminDashboard" class="hidden flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 no-print">
-        <div class="bg-gradient-to-r from-slate-900 to-blue-900 text-white rounded-2xl p-6 mb-8 shadow-lg flex flex-wrap justify-between items-center gap-4">
+        <div class="bg-gradient-to-r from-slate-900 to-blue-900 text-white rounded-2xl p-6 mb-6 shadow-lg flex flex-wrap justify-between items-center gap-4">
             <div>
                 <span class="bg-amber-400 text-slate-950 text-xs font-extrabold px-3 py-1 rounded-full uppercase">MAKDEMY Full Admin Control</span>
                 <h1 class="text-2xl sm:text-3xl font-extrabold mt-2">MAKDEMY Founder & Admin Panel — Massawar Ali Khan</h1>
-                <p class="text-blue-200 text-xs sm:text-sm">All Candidate & Parent accounts created via Mobile Number automatically sync into the database table below.</p>
+                <p class="text-blue-200 text-xs sm:text-sm">Daily Attendance Register, 1-Click WhatsApp Alerts, Online MCQ Quiz Builder & Live Fee Analytics.</p>
             </div>
             <div class="flex items-center gap-2.5">
                 <a href="#adminStudentDirectorySection" class="bg-amber-400 hover:bg-amber-300 text-slate-950 text-xs font-extrabold px-4 py-2.5 rounded-xl shadow transition">
-                    <i class="fas fa-users mr-1"></i> View Registered Database
+                    <i class="fas fa-users mr-1"></i> Registered Database
                 </a>
                 <button onclick="resetDefaultData()" class="bg-white/10 hover:bg-white/20 border border-white/20 text-xs font-semibold px-4 py-2.5 rounded-xl">
                     <i class="fas fa-sync-alt mr-1"></i> Reset System Data
                 </button>
+            </div>
+        </div>
+
+        <!-- FEATURE 6: ADMIN LIVE ANALYTICS & MONTHLY FEE COLLECTION SUMMARY (4 KPI CARDS) -->
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+            <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm flex items-center gap-4">
+                <div class="w-12 h-12 rounded-2xl bg-blue-100 text-blue-700 flex items-center justify-center text-xl shrink-0">
+                    <i class="fas fa-user-graduate"></i>
+                </div>
+                <div>
+                    <span class="text-[11px] font-bold uppercase text-slate-400 block">Total Students</span>
+                    <strong id="kpiTotalStudents" class="text-2xl font-black text-slate-900">0</strong>
+                    <span class="text-[10px] text-blue-600 font-semibold block">Active Batches 6–10</span>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-2xl p-5 border border-emerald-200 shadow-sm flex items-center gap-4">
+                <div class="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center text-xl shrink-0">
+                    <i class="fas fa-wallet"></i>
+                </div>
+                <div>
+                    <span class="text-[11px] font-bold uppercase text-slate-400 block">Fee Collected</span>
+                    <strong id="kpiFeeCollected" class="text-2xl font-black text-emerald-700">₹0</strong>
+                    <span id="kpiPaidCountSub" class="text-[10px] text-emerald-600 font-semibold block">0 Paid Receipts</span>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-2xl p-5 border border-amber-200 shadow-sm flex items-center gap-4">
+                <div class="w-12 h-12 rounded-2xl bg-amber-100 text-amber-700 flex items-center justify-center text-xl shrink-0">
+                    <i class="fas fa-hourglass-half"></i>
+                </div>
+                <div>
+                    <span class="text-[11px] font-bold uppercase text-slate-400 block">Fee Pending</span>
+                    <strong id="kpiFeePending" class="text-2xl font-black text-amber-600">₹0</strong>
+                    <span id="kpiPendingCountSub" class="text-[10px] text-amber-700 font-semibold block">0 Due Accounts</span>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-2xl p-5 border border-purple-200 shadow-sm flex items-center gap-4">
+                <div class="w-12 h-12 rounded-2xl bg-purple-100 text-purple-700 flex items-center justify-center text-xl shrink-0">
+                    <i class="fas fa-trophy"></i>
+                </div>
+                <div class="min-w-0">
+                    <span class="text-[11px] font-bold uppercase text-slate-400 block">Top Scorer</span>
+                    <strong id="kpiTopScorerName" class="text-base sm:text-lg font-black text-slate-900 truncate block">Aarav Sharma</strong>
+                    <span id="kpiTopScorerPct" class="text-[10px] text-purple-700 font-extrabold block">91% Aggregate</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- FEATURE 1: DAILY LIVE ATTENDANCE REGISTER (BATCH-WISE CHECK-IN) -->
+        <div class="bg-white rounded-2xl shadow-sm border-2 border-emerald-500/30 p-6 mb-8">
+            <div class="flex flex-wrap justify-between items-center gap-3 mb-4 pb-3 border-b border-slate-100">
+                <div>
+                    <h3 class="font-extrabold text-lg text-slate-900 flex items-center gap-2">
+                        <i class="fas fa-clipboard-check text-emerald-600"></i> Daily Live Attendance Register (Batch-wise Check-In)
+                    </h3>
+                    <p class="text-xs text-slate-500">Mark Present (P), Absent (A), or Late (L). Overall attendance % updates automatically and alerts parents if Absent.</p>
+                </div>
+                <div class="flex flex-wrap items-center gap-2 text-xs">
+                    <input type="date" id="dailyAttDate" onchange="renderDailyAttendanceRegister()" class="px-3 py-2 rounded-xl border border-slate-300 font-bold text-slate-800 bg-slate-50">
+                    <select id="dailyAttBatchFilter" onchange="renderDailyAttendanceRegister()" class="px-3 py-2 rounded-xl border border-slate-300 font-bold text-slate-800 bg-white">
+                        <option value="ALL">All Batches (Class 6–10)</option>
+                        <option value="Class 6 & 7">Class 6 & 7 (Shift 1)</option>
+                        <option value="Class 8">Class 8 (Shift 1)</option>
+                        <option value="Class 9">Class 9 (Shift 2)</option>
+                        <option value="Class 10">Class 10 (Shift 2)</option>
+                    </select>
+                    <button type="button" onclick="markAllDailyPresent()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold px-3.5 py-2 rounded-xl shadow transition">
+                        <i class="fas fa-check-double mr-1"></i> Mark All Present
+                    </button>
+                </div>
+            </div>
+            <div id="dailyAttendanceGrid" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-3"></div>
+        </div>
+
+        <!-- FEATURE 3: ONLINE SATURDAY MCQ / OMR QUIZ BUILDER (ADMIN) -->
+        <div class="bg-white rounded-2xl shadow-sm border-2 border-purple-200 p-6 mb-8">
+            <div class="flex flex-wrap justify-between items-center gap-2 mb-4">
+                <h3 class="font-extrabold text-lg text-slate-900 flex items-center gap-2">
+                    <i class="fas fa-tasks text-purple-600"></i> Online Saturday MCQ / OMR Quiz Builder (Auto-Graded Test)
+                </h3>
+                <span class="text-xs bg-purple-100 text-purple-800 font-bold px-3 py-1 rounded-full">Students Attempt Online • Auto-Syncs to Report Card</span>
+            </div>
+            <div class="grid lg:grid-cols-12 gap-6 items-start">
+                <form onsubmit="createOnlineMcqQuiz(event)" class="lg:col-span-7 space-y-3 text-sm">
+                    <div class="grid sm:grid-cols-4 gap-2.5">
+                        <select id="quizClass" required class="px-3 py-2.5 rounded-lg border border-slate-300 bg-white font-semibold">
+                            <option value="All Classes">All Classes</option>
+                            <option value="Class 6 & 7">Class 6 & 7</option>
+                            <option value="Class 8">Class 8</option>
+                            <option value="Class 9">Class 9</option>
+                            <option value="Class 10">Class 10</option>
+                        </select>
+                        <input type="text" id="quizSubject" required placeholder="Subject (e.g. Maths)" class="px-3 py-2.5 rounded-lg border border-slate-300">
+                        <input type="text" id="quizTitle" required placeholder="Quiz Title (e.g. Saturday OMR #4)" class="px-3 py-2.5 rounded-lg border border-slate-300">
+                        <input type="number" id="quizDuration" required min="1" max="120" value="10" placeholder="Mins (10)" class="px-3 py-2.5 rounded-lg border border-slate-300 font-bold">
+                    </div>
+
+                    <!-- Dynamic Question Builder Inputs -->
+                    <div class="bg-purple-50/60 border border-purple-200 rounded-2xl p-3.5 space-y-2.5">
+                        <div class="flex justify-between items-center">
+                            <span class="text-xs font-extrabold uppercase text-purple-900">Add MCQ Questions to This Test:</span>
+                            <span id="draftQuizQCount" class="bg-purple-600 text-white text-[10px] font-extrabold px-2.5 py-0.5 rounded-full">0 Questions Added</span>
+                        </div>
+                        <input type="text" id="draftQText" placeholder="Type Question (e.g. What is the value of sin 30° + cos 60°?)" class="w-full px-3 py-2 rounded-lg border border-slate-300 text-xs bg-white">
+                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
+                            <input type="text" id="draftOptA" placeholder="Option A" class="px-2.5 py-1.5 rounded-lg border border-slate-300 bg-white">
+                            <input type="text" id="draftOptB" placeholder="Option B" class="px-2.5 py-1.5 rounded-lg border border-slate-300 bg-white">
+                            <input type="text" id="draftOptC" placeholder="Option C" class="px-2.5 py-1.5 rounded-lg border border-slate-300 bg-white">
+                            <input type="text" id="draftOptD" placeholder="Option D" class="px-2.5 py-1.5 rounded-lg border border-slate-300 bg-white">
+                        </div>
+                        <div class="flex flex-wrap justify-between items-center gap-2 pt-1">
+                            <div class="flex items-center gap-2 text-xs">
+                                <span class="font-bold text-slate-700">Correct Answer:</span>
+                                <select id="draftCorrectOpt" class="px-2.5 py-1.5 rounded-lg border border-purple-300 bg-white font-extrabold text-purple-800">
+                                    <option value="0">Option A</option>
+                                    <option value="1">Option B</option>
+                                    <option value="2">Option C</option>
+                                    <option value="3">Option D</option>
+                                </select>
+                            </div>
+                            <button type="button" onclick="addQuestionToDraftQuiz()" class="bg-slate-900 hover:bg-purple-700 text-amber-400 hover:text-white font-extrabold text-xs px-3.5 py-1.5 rounded-lg transition">
+                                <i class="fas fa-plus mr-1"></i> Add Question to List
+                            </button>
+                        </div>
+                        <div id="draftQuizQuestionsList" class="space-y-1 max-h-28 overflow-y-auto text-xs"></div>
+                    </div>
+
+                    <button type="submit" class="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-2.5 rounded-xl shadow transition">
+                        <i class="fas fa-rocket mr-1"></i> Publish Online MCQ Test to Candidate Portal
+                    </button>
+                </form>
+
+                <div class="lg:col-span-5 bg-slate-50 p-4 rounded-xl border border-slate-200">
+                    <div class="text-xs font-extrabold uppercase text-slate-500 mb-2.5">Active Online MCQ Quizzes (Delete):</div>
+                    <div id="adminOnlineQuizzesList" class="space-y-2 max-h-60 overflow-y-auto text-xs"></div>
+                </div>
             </div>
         </div>
 
@@ -1439,12 +1605,12 @@
             </div>
         </div>
 
-        <!-- Admin Student Overview Table (Shows Mobile No., Password/PIN & Manual Reset Option) -->
+        <!-- Admin Student Overview Table (Shows Mobile No., 1-Click WhatsApp Alert, Password/PIN & Manual Reset Option) -->
         <div id="adminStudentDirectorySection" class="mt-8 bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
             <div class="px-6 py-4 bg-slate-900 text-white flex flex-wrap justify-between items-center gap-2">
                 <div>
                     <h3 class="font-bold">MAKDEMY Registered Candidates & Parents Database</h3>
-                    <p class="text-[11px] text-slate-400">All self-registered Candidate & Parent Mobile Numbers and Passwords/PINs are synced below</p>
+                    <p class="text-[11px] text-slate-400">1-Click WhatsApp Fee/Result Alerts, Mobile Numbers, Passwords/PINs & Full Profile Controls</p>
                 </div>
                 <span id="totalStudentCount" class="text-xs bg-amber-400 text-slate-950 font-extrabold px-3 py-1 rounded-full"></span>
             </div>
@@ -1455,7 +1621,7 @@
                             <th class="py-3 px-4">Photo & Roll ID</th>
                             <th class="py-3 px-4">Student Name & Source</th>
                             <th class="py-3 px-4">Batch</th>
-                            <th class="py-3 px-4">Registered Mobile No.</th>
+                            <th class="py-3 px-4">Mobile & WhatsApp Alert</th>
                             <th class="py-3 px-4">Password / PIN</th>
                             <th class="py-3 px-4">Fee & Receipt Status</th>
                             <th class="py-3 px-4 text-center">Actions (ID / Receipt / Report / PIN / Edit / Delete)</th>
@@ -1509,6 +1675,20 @@
             </div>
         </div>
 
+        <!-- DAILY ATTENDANCE & ABSENT ALERT STRIP FOR CANDIDATE / PARENT -->
+        <div id="userAttendanceAlertBar" class="mb-6 bg-white border border-slate-200 rounded-2xl p-4 shadow-sm flex flex-wrap justify-between items-center gap-3">
+            <div class="flex items-center gap-3">
+                <div id="userAttIconBox" class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center text-lg shrink-0">
+                    <i class="fas fa-calendar-check"></i>
+                </div>
+                <div>
+                    <div class="text-xs font-extrabold uppercase text-slate-400">Daily Coaching Attendance Log</div>
+                    <div id="userLatestAttStatusText" class="text-sm font-bold text-slate-900">Regular Attendance Active</div>
+                </div>
+            </div>
+            <div id="userRecentAttChips" class="flex flex-wrap gap-1.5 text-[11px] font-bold"></div>
+        </div>
+
         <!-- ONLINE FEE PAYMENT & RECEIPT STATUS BANNER -->
         <div class="mb-8 bg-white border-2 border-blue-600/20 rounded-2xl p-5 shadow-sm flex flex-wrap justify-between items-center gap-4">
             <div class="flex items-center gap-4">
@@ -1534,6 +1714,22 @@
                 <button id="bannerReceiptBtn" onclick="openFeeReceiptForActiveUser()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs sm:text-sm px-4 py-3 rounded-xl shadow transition flex items-center gap-1.5">
                     <i class="fas fa-file-invoice-dollar"></i> View / Print Receipt
                 </button>
+            </div>
+        </div>
+
+        <!-- FEATURE 3: ONLINE SATURDAY MCQ / OMR PRACTICE TEST SECTION (CANDIDATE & PARENT) -->
+        <div class="mb-8 bg-white rounded-2xl shadow-sm border-2 border-purple-200 overflow-hidden">
+            <div class="px-6 py-4 bg-gradient-to-r from-purple-900 via-indigo-900 to-slate-900 text-white flex flex-wrap justify-between items-center gap-3">
+                <div>
+                    <h3 class="font-extrabold text-base sm:text-lg flex items-center gap-2">
+                        <i class="fas fa-tasks text-amber-400"></i> Online Saturday MCQ / OMR Practice Tests
+                    </h3>
+                    <p class="text-[11px] text-purple-200">Attempt live timed tests online • Instant result auto-syncs with your MAKDEMY Report Card</p>
+                </div>
+                <span class="bg-amber-400 text-slate-950 text-[11px] font-black px-3 py-1 rounded-full uppercase">Auto-Graded OMR</span>
+            </div>
+            <div class="p-6">
+                <div id="userOnlineQuizzesGrid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
             </div>
         </div>
 
@@ -1634,7 +1830,7 @@
         let lastActivityResetTime = 0;
         let selectedMaterialSubjectFilter = 'ALL';
 
-        // Temporary holders for compressed Base64 student photos, candidate editing & OTP reset
+        // Temporary holders for compressed Base64 student photos, candidate editing, OTP reset & MCQ Quiz
         let tempAdminRegPhotoData = "";
         let tempSelfSignupPhotoData = "";
         let tempMetaUpdatePhotoData = "";
@@ -1642,6 +1838,10 @@
         let tempEditCandPhotoData = "";
         let adminResetTargetRoll = null;
         let activeOtpSession = { isAdmin: false, roll: null, mobile: null, code: null };
+        let draftQuizQuestions = [];
+        let activeRunningMcqQuiz = null;
+        let mcqExamTimerInterval = null;
+        let mcqRemainingSeconds = 0;
 
         const defaultERPData = {
             adminAuth: {
@@ -1653,6 +1853,39 @@
                 bankAccount: "309876543210",
                 bankIfsc: "SBIN0004567"
             },
+            dailyAttendance: {},
+            onlineQuizzes: [
+                {
+                    id: "QZ101",
+                    targetClass: "All Classes",
+                    subject: "Mathematics & Science",
+                    title: "Saturday Weekly Competency OMR Quiz #1",
+                    durationMins: 5,
+                    date: "16/11/2026",
+                    questions: [
+                        {
+                            q: "What is the value of sin 30° + cos 60°?",
+                            options: ["0", "1/2", "1", "√3"],
+                            correct: 2
+                        },
+                        {
+                            q: "Which mirror is used by dentists to see a magnified image of teeth?",
+                            options: ["Convex Mirror", "Concave Mirror", "Plane Mirror", "Cylindrical Mirror"],
+                            correct: 1
+                        },
+                        {
+                            q: "If 3x + 7 = 22, what is the value of x?",
+                            options: ["3", "4", "5", "6"],
+                            correct: 2
+                        },
+                        {
+                            q: "Which device is used to protect a computer network from unauthorized access?",
+                            options: ["Printer", "Firewall", "Scanner", "Plotter"],
+                            correct: 1
+                        }
+                    ]
+                }
+            ],
             generatedReceipts: [
                 {
                     receiptNo: "MAK-RCP-1001",
@@ -1774,6 +2007,8 @@
         if (!erpData.gatewayConfig) erpData.gatewayConfig = defaultERPData.gatewayConfig;
         if (!erpData.generatedReceipts) erpData.generatedReceipts = defaultERPData.generatedReceipts;
         if (!erpData.studyMaterials) erpData.studyMaterials = defaultERPData.studyMaterials;
+        if (!erpData.dailyAttendance) erpData.dailyAttendance = {};
+        if (!erpData.onlineQuizzes) erpData.onlineQuizzes = defaultERPData.onlineQuizzes;
 
         let currentRole = 'admin';
         let currentAuthMode = 'login';
@@ -1792,8 +2027,392 @@
                 try {
                     erpData = JSON.parse(raw);
                     if (!erpData.adminAuth) erpData.adminAuth = { phone: "9337042839", pass: "apex2026" };
+                    if (!erpData.dailyAttendance) erpData.dailyAttendance = {};
+                    if (!erpData.onlineQuizzes) erpData.onlineQuizzes = defaultERPData.onlineQuizzes;
                 } catch (e) {}
             }
+        }
+
+        // ================= FEATURE 6: ADMIN LIVE ANALYTICS & FEE SUMMARY =================
+        function renderAdminAnalyticsKPIs() {
+            const totalStudents = erpData.students.length;
+            let totalCollected = 0;
+            let paidCount = 0;
+            let totalPending = 0;
+            let pendingCount = 0;
+
+            let topStudentName = "N/A";
+            let highestAvg = -1;
+
+            erpData.students.forEach(s => {
+                const fee = Number(s.feeAmount) || 1200;
+                if (s.feeStatus === 'Paid' && s.receiptGenerated) {
+                    totalCollected += fee;
+                    paidCount++;
+                } else {
+                    totalPending += fee;
+                    pendingCount++;
+                }
+
+                if (s.marks && s.marks.length > 0) {
+                    const sumPct = s.marks.reduce((acc, m) => acc + ((m.score / m.total) * 100), 0);
+                    const avg = Math.round(sumPct / s.marks.length);
+                    if (avg > highestAvg) {
+                        highestAvg = avg;
+                        topStudentName = `${s.name} (${s.roll})`;
+                    }
+                }
+            });
+
+            document.getElementById('kpiTotalStudents').innerText = totalStudents;
+            document.getElementById('kpiFeeCollected').innerText = `₹${totalCollected.toLocaleString('en-IN')}`;
+            document.getElementById('kpiPaidCountSub').innerText = `${paidCount} Paid Receipts`;
+            document.getElementById('kpiFeePending').innerText = `₹${totalPending.toLocaleString('en-IN')}`;
+            document.getElementById('kpiPendingCountSub').innerText = `${pendingCount} Due Accounts`;
+            document.getElementById('kpiTopScorerName').innerText = topStudentName;
+            document.getElementById('kpiTopScorerPct').innerText = highestAvg >= 0 ? `${highestAvg}% Avg Score` : "No tests yet";
+        }
+
+        // ================= FEATURE 1: DAILY LIVE ATTENDANCE REGISTER =================
+        function getTodayIsoDate() {
+            const d = new Date();
+            const yyyy = d.getFullYear();
+            const mm = String(d.getMonth() + 1).padStart(2, '0');
+            const dd = String(d.getDate()).padStart(2, '0');
+            return `${yyyy}-${mm}-${dd}`;
+        }
+
+        function renderDailyAttendanceRegister() {
+            const dateInput = document.getElementById('dailyAttDate');
+            if (!dateInput.value) dateInput.value = getTodayIsoDate();
+            const selectedDate = dateInput.value;
+            const batchFilter = document.getElementById('dailyAttBatchFilter').value;
+
+            if (!erpData.dailyAttendance[selectedDate]) {
+                erpData.dailyAttendance[selectedDate] = {};
+            }
+            const dayRecords = erpData.dailyAttendance[selectedDate];
+
+            const filteredStudents = erpData.students.filter(s => {
+                if (batchFilter === 'ALL') return true;
+                return s.classBatch.includes(batchFilter);
+            });
+
+            const grid = document.getElementById('dailyAttendanceGrid');
+            if (!filteredStudents.length) {
+                grid.innerHTML = `<div class="col-span-3 text-center py-4 text-xs text-slate-400">No students found in this batch.</div>`;
+                return;
+            }
+
+            grid.innerHTML = filteredStudents.map(s => {
+                const status = dayRecords[s.roll] || 'Unmarked';
+                return `
+                    <div class="p-3 rounded-xl border ${status === 'Absent' ? 'bg-red-50/70 border-red-200' : status === 'Present' ? 'bg-emerald-50/60 border-emerald-200' : 'bg-slate-50 border-slate-200'} flex items-center justify-between gap-2">
+                        <div class="min-w-0">
+                            <div class="font-extrabold text-xs text-slate-900 truncate">${s.name} <span class="text-blue-700">(${s.roll})</span></div>
+                            <div class="text-[10px] text-slate-500">${s.classBatch.split('(')[0].trim()} • Overall: <strong>${s.attendance}%</strong></div>
+                        </div>
+                        <div class="flex items-center gap-1 shrink-0 text-[11px] font-extrabold">
+                            <button type="button" onclick="markStudentDailyAtt('${s.roll}', 'Present')" class="px-2.5 py-1.5 rounded-lg transition ${status === 'Present' ? 'bg-emerald-600 text-white shadow' : 'bg-white border border-slate-300 text-slate-600 hover:bg-emerald-50'}">P</button>
+                            <button type="button" onclick="markStudentDailyAtt('${s.roll}', 'Absent')" class="px-2.5 py-1.5 rounded-lg transition ${status === 'Absent' ? 'bg-red-600 text-white shadow' : 'bg-white border border-slate-300 text-slate-600 hover:bg-red-50'}">A</button>
+                            <button type="button" onclick="markStudentDailyAtt('${s.roll}', 'Late')" class="px-2.5 py-1.5 rounded-lg transition ${status === 'Late' ? 'bg-amber-500 text-slate-950 shadow' : 'bg-white border border-slate-300 text-slate-600 hover:bg-amber-50'}">L</button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function markStudentDailyAtt(rollId, status) {
+            const selectedDate = document.getElementById('dailyAttDate').value || getTodayIsoDate();
+            if (!erpData.dailyAttendance[selectedDate]) erpData.dailyAttendance[selectedDate] = {};
+            erpData.dailyAttendance[selectedDate][rollId] = status;
+
+            recalculateStudentAttendancePct(rollId);
+            saveERP();
+            renderDailyAttendanceRegister();
+            renderAdminDashboard();
+        }
+
+        function markAllDailyPresent() {
+            const selectedDate = document.getElementById('dailyAttDate').value || getTodayIsoDate();
+            const batchFilter = document.getElementById('dailyAttBatchFilter').value;
+            if (!erpData.dailyAttendance[selectedDate]) erpData.dailyAttendance[selectedDate] = {};
+
+            erpData.students.forEach(s => {
+                if (batchFilter === 'ALL' || s.classBatch.includes(batchFilter)) {
+                    erpData.dailyAttendance[selectedDate][s.roll] = 'Present';
+                    recalculateStudentAttendancePct(s.roll);
+                }
+            });
+            saveERP();
+            renderDailyAttendanceRegister();
+            renderAdminDashboard();
+        }
+
+        function recalculateStudentAttendancePct(rollId) {
+            const student = erpData.students.find(s => s.roll === rollId);
+            if (!student) return;
+
+            let totalDays = 0;
+            let presentPoints = 0;
+            Object.keys(erpData.dailyAttendance).forEach(dateKey => {
+                const st = erpData.dailyAttendance[dateKey][rollId];
+                if (st) {
+                    totalDays++;
+                    if (st === 'Present') presentPoints += 1;
+                    else if (st === 'Late') presentPoints += 0.75;
+                }
+            });
+
+            if (totalDays > 0) {
+                student.attendance = Math.round((presentPoints / totalDays) * 100);
+            }
+        }
+
+        // ================= FEATURE 2: 1-CLICK DIRECT WHATSAPP FEE & RESULT ALERT =================
+        function sendWhatsAppStudentAlert(rollId) {
+            const s = erpData.students.find(st => st.roll === rollId);
+            if (!s) return;
+
+            const feeVal = s.feeAmount || 1200;
+            const latestTest = (s.marks && s.marks.length > 0)
+                ? `${s.marks[0].subject} (${s.marks[0].score}/${s.marks[0].total})`
+                : "Upcoming Saturday Test";
+
+            const feeLine = (s.feeStatus === 'Paid' && s.receiptGenerated)
+                ? `Fee Status: PAID (${s.receiptNo})`
+                : `Monthly Fee Due: Rs.${feeVal} (Kindly pay via MAKDEMY Portal)`;
+
+            const msg = `Namaste! Message from *MAKDEMY* (Massawar Sir):\n` +
+                `Student: *${s.name}* (Roll ID: *${s.roll}*)\n` +
+                `Batch: ${s.classBatch.split('(')[0].trim()}\n` +
+                `Attendance: *${s.attendance}%*\n` +
+                `Latest Test: *${latestTest}*\n` +
+                `${feeLine}\n` +
+                `Portal Login Mobile: ${s.parentPhone} | PIN: ${s.pass}`;
+
+            const waUrl = `https://wa.me/91${s.parentPhone}?text=${encodeURIComponent(msg)}`;
+            window.open(waUrl, '_blank');
+        }
+
+        // ================= FEATURE 3: ONLINE SATURDAY MCQ / OMR QUIZ ENGINE =================
+        function addQuestionToDraftQuiz() {
+            const qText = document.getElementById('draftQText').value.trim();
+            const optA = document.getElementById('draftOptA').value.trim();
+            const optB = document.getElementById('draftOptB').value.trim();
+            const optC = document.getElementById('draftOptC').value.trim();
+            const optD = document.getElementById('draftOptD').value.trim();
+            const correctIdx = Number(document.getElementById('draftCorrectOpt').value);
+
+            if (!qText || !optA || !optB || !optC || !optD) {
+                alert("⚠️ Please fill Question text and all 4 Options (A, B, C, D) first!");
+                return;
+            }
+
+            draftQuizQuestions.push({
+                q: qText,
+                options: [optA, optB, optC, optD],
+                correct: correctIdx
+            });
+
+            document.getElementById('draftQText').value = '';
+            document.getElementById('draftOptA').value = '';
+            document.getElementById('draftOptB').value = '';
+            document.getElementById('draftOptC').value = '';
+            document.getElementById('draftOptD').value = '';
+            renderDraftQuizQuestionsList();
+        }
+
+        function renderDraftQuizQuestionsList() {
+            document.getElementById('draftQuizQCount').innerText = `${draftQuizQuestions.length} Questions Added`;
+            const listEl = document.getElementById('draftQuizQuestionsList');
+            listEl.innerHTML = draftQuizQuestions.map((item, idx) => `
+                <div class="bg-white px-2.5 py-1.5 rounded border border-purple-200 flex justify-between items-center">
+                    <span class="truncate pr-2"><strong>Q${idx + 1}:</strong> ${item.q} <span class="text-emerald-700 font-bold">[Ans: ${['A','B','C','D'][item.correct]}]</span></span>
+                    <button type="button" onclick="removeDraftQuestion(${idx})" class="text-red-500 hover:text-red-700 font-bold"><i class="fas fa-times"></i></button>
+                </div>
+            `).join('');
+        }
+
+        function removeDraftQuestion(idx) {
+            draftQuizQuestions.splice(idx, 1);
+            renderDraftQuizQuestionsList();
+        }
+
+        function createOnlineMcqQuiz(e) {
+            e.preventDefault();
+            if (draftQuizQuestions.length === 0) {
+                alert("⚠️ Please add at least 1 MCQ question using 'Add Question to List' before publishing!");
+                return;
+            }
+
+            const newQuiz = {
+                id: "QZ" + (101 + erpData.onlineQuizzes.length + Math.floor(Math.random() * 900)),
+                targetClass: document.getElementById('quizClass').value,
+                subject: document.getElementById('quizSubject').value.trim(),
+                title: document.getElementById('quizTitle').value.trim(),
+                durationMins: Number(document.getElementById('quizDuration').value) || 10,
+                date: new Date().toLocaleDateString('en-IN'),
+                questions: [...draftQuizQuestions]
+            };
+
+            erpData.onlineQuizzes.unshift(newQuiz);
+            draftQuizQuestions = [];
+            saveERP();
+            renderDraftQuizQuestionsList();
+            renderAdminDashboard();
+            e.target.reset();
+            alert(`🚀 Online MCQ Quiz "${newQuiz.title}" (${newQuiz.questions.length} Questions) published to Candidate Portal!`);
+        }
+
+        function deleteOnlineQuiz(idx) {
+            const qz = erpData.onlineQuizzes[idx];
+            if (!qz) return;
+            openConfirmModal(
+                "Delete Online MCQ Quiz?",
+                `Are you sure you want to remove "${qz.title}" from MAKDEMY Portal?`,
+                function () {
+                    erpData.onlineQuizzes.splice(idx, 1);
+                    saveERP();
+                    renderAdminDashboard();
+                }
+            );
+        }
+
+        function renderUserOnlineQuizzes(student) {
+            const grid = document.getElementById('userOnlineQuizzesGrid');
+            if (!grid) return;
+
+            if (!erpData.onlineQuizzes || !erpData.onlineQuizzes.length) {
+                grid.innerHTML = `<div class="col-span-3 text-center py-6 text-slate-400 text-sm">No online MCQ tests active right now. Check back on Saturday!</div>`;
+                return;
+            }
+
+            grid.innerHTML = erpData.onlineQuizzes.map(qz => {
+                const alreadyAttempted = student.marks.find(m => m.topic.includes(qz.title));
+                return `
+                    <div class="bg-purple-50/50 hover:bg-white border border-purple-200 hover:border-purple-500 rounded-2xl p-4 shadow-sm transition flex flex-col justify-between">
+                        <div>
+                            <div class="flex justify-between items-center gap-2 mb-2">
+                                <span class="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase bg-purple-100 text-purple-800">
+                                    ${qz.questions.length} MCQs • ${qz.durationMins} Mins
+                                </span>
+                                <span class="text-[11px] font-bold text-slate-500">${qz.targetClass}</span>
+                            </div>
+                            <div class="text-xs font-extrabold uppercase text-indigo-700">${qz.subject}</div>
+                            <h4 class="font-bold text-slate-900 text-sm mt-0.5">${qz.title}</h4>
+                            ${alreadyAttempted ? `
+                                <div class="mt-2 inline-block bg-emerald-100 text-emerald-800 text-[11px] font-extrabold px-2.5 py-0.5 rounded-lg">
+                                    ✅ Scored: ${alreadyAttempted.score}/${alreadyAttempted.total}
+                                </div>
+                            ` : `
+                                <p class="text-xs text-slate-500 mt-1.5">Click Start Test to attempt with live timer.</p>
+                            `}
+                        </div>
+                        <div class="mt-4 pt-3 border-t border-purple-100 flex justify-between items-center">
+                            <span class="text-[10px] text-slate-400">${qz.date}</span>
+                            <button type="button" onclick="startLiveMcqExam('${qz.id}')" class="bg-purple-600 hover:bg-purple-700 text-white font-extrabold text-xs px-4 py-2 rounded-xl shadow transition flex items-center gap-1.5">
+                                <i class="fas fa-play-circle"></i> ${alreadyAttempted ? 'Re-Attempt Quiz' : 'Start Online Test'}
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function startLiveMcqExam(quizId) {
+            const quiz = erpData.onlineQuizzes.find(q => q.id === quizId);
+            if (!quiz) return;
+
+            activeRunningMcqQuiz = quiz;
+            mcqRemainingSeconds = (quiz.durationMins || 10) * 60;
+
+            document.getElementById('mcqExamBadge').innerText = `${quiz.targetClass} • ${quiz.subject}`;
+            document.getElementById('mcqExamTitle').innerText = quiz.title;
+
+            const area = document.getElementById('mcqQuestionsRenderArea');
+            area.innerHTML = quiz.questions.map((item, qIdx) => `
+                <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200">
+                    <div class="font-bold text-sm text-slate-900 mb-3">
+                        <span class="text-purple-700 font-black mr-1">Q${qIdx + 1}.</span> ${item.q}
+                    </div>
+                    <div class="grid sm:grid-cols-2 gap-2 text-xs">
+                        ${item.options.map((opt, optIdx) => `
+                            <label class="flex items-center gap-2.5 p-2.5 rounded-xl bg-white border border-slate-200 hover:border-purple-500 cursor-pointer transition">
+                                <input type="radio" name="mcq_ans_${qIdx}" value="${optIdx}" class="accent-purple-600 w-4 h-4">
+                                <span class="font-semibold text-slate-800"><strong>(${['A','B','C','D'][optIdx]})</strong> ${opt}</span>
+                            </label>
+                        `).join('')}
+                    </div>
+                </div>
+            `).join('');
+
+            updateMcqTimerDisplay();
+            if (mcqExamTimerInterval) clearInterval(mcqExamTimerInterval);
+            mcqExamTimerInterval = setInterval(() => {
+                mcqRemainingSeconds--;
+                updateMcqTimerDisplay();
+                if (mcqRemainingSeconds <= 0) {
+                    clearInterval(mcqExamTimerInterval);
+                    alert("⏰ Time's up! Auto-submitting your OMR answers...");
+                    gradeAndSaveMcqSubmission();
+                }
+            }, 1000);
+
+            document.getElementById('liveMcqExamModal').classList.remove('hidden');
+        }
+
+        function updateMcqTimerDisplay() {
+            const m = String(Math.floor(Math.max(0, mcqRemainingSeconds) / 60)).padStart(2, '0');
+            const s = String(Math.max(0, mcqRemainingSeconds) % 60).padStart(2, '0');
+            document.getElementById('mcqTimerDisplay').innerText = `${m}:${s}`;
+        }
+
+        function closeLiveMcqExamModal(askConfirm) {
+            if (askConfirm && !confirm("Are you sure you want to quit this test without submitting?")) return;
+            if (mcqExamTimerInterval) clearInterval(mcqExamTimerInterval);
+            document.getElementById('liveMcqExamModal').classList.add('hidden');
+            activeRunningMcqQuiz = null;
+        }
+
+        function submitLiveMcqExam(e) {
+            e.preventDefault();
+            gradeAndSaveMcqSubmission();
+        }
+
+        function gradeAndSaveMcqSubmission() {
+            if (!activeRunningMcqQuiz || !activeLoggedInStudent) return;
+            if (mcqExamTimerInterval) clearInterval(mcqExamTimerInterval);
+
+            const quiz = activeRunningMcqQuiz;
+            let correctCount = 0;
+            quiz.questions.forEach((item, qIdx) => {
+                const selected = document.querySelector(`input[name="mcq_ans_${qIdx}"]:checked`);
+                if (selected && Number(selected.value) === item.correct) {
+                    correctCount++;
+                }
+            });
+
+            const marksPerQ = 5;
+            const totalMarks = quiz.questions.length * marksPerQ;
+            const scoredMarks = correctCount * marksPerQ;
+
+            const targetStudent = erpData.students.find(s => s.roll === activeLoggedInStudent.roll);
+            if (targetStudent) {
+                targetStudent.marks.unshift({
+                    subject: quiz.subject,
+                    topic: `${quiz.title} (Online OMR)`,
+                    score: scoredMarks,
+                    total: totalMarks,
+                    date: getTodayIsoDate()
+                });
+                activeLoggedInStudent = targetStudent;
+                saveERP();
+                renderUserDashboard(currentRole, targetStudent);
+            }
+
+            closeLiveMcqExamModal(false);
+            alert(`🎉 OMR Submitted!\nYou got ${correctCount} out of ${quiz.questions.length} correct (${scoredMarks}/${totalMarks} Marks).\nYour score has been synced to your MAKDEMY Report Card!`);
         }
 
         // ================= SHOW/HIDE PASSWORD EYE TOGGLE & LIVE PASSWORD MATCH CHECK =================
@@ -1907,7 +2526,6 @@
             const mobile = document.getElementById('resetMobileInput').value.trim();
             const errEl = document.getElementById('otpStep1Error');
 
-            // Case A: Admin Password Reset via OTP
             if (currentRole === 'admin') {
                 const adminPhone = (erpData.adminAuth && erpData.adminAuth.phone) ? erpData.adminAuth.phone : "9337042839";
                 if (mobile !== adminPhone) {
@@ -1928,7 +2546,6 @@
                 return;
             }
 
-            // Case B: Candidate / Parent Password Reset via OTP
             const student = erpData.students.find(s => s.parentPhone === mobile);
             if (!student) {
                 errEl.innerText = "⚠️ This mobile number is not registered in MAKDEMY database! Please check the number or Create Account.";
@@ -2738,7 +3355,7 @@
         function resetDefaultData() {
             openConfirmModal(
                 "Reset Entire Database?",
-                "Are you sure you want to reset all students, exams, study notes, and receipts back to default MAKDEMY settings?",
+                "Are you sure you want to reset all students, attendance, quizzes, study notes, and receipts back to default MAKDEMY settings?",
                 function () {
                     localStorage.removeItem('makdemyERP_v1');
                     erpData = JSON.parse(JSON.stringify(defaultERPData));
@@ -2835,7 +3452,6 @@
             const confirmPin = document.getElementById('selfConfirmPin').value.trim();
             const notice = document.getElementById('signupNotice');
 
-            // Ensure both passwords match before creating account
             if (pin !== confirmPin) {
                 notice.className = "block p-3 rounded-xl text-xs font-semibold text-center bg-red-50 text-red-700 border border-red-200";
                 notice.innerHTML = `❌ Password and Confirm Password do not match! Please enter the exact same PIN in both boxes.`;
@@ -2943,6 +3559,7 @@
 
         function logout(skipStorageClear) {
             if (sessionIntervalId) clearInterval(sessionIntervalId);
+            if (mcqExamTimerInterval) clearInterval(mcqExamTimerInterval);
             localStorage.removeItem(SESSION_STORAGE_KEY);
 
             document.getElementById('adminDashboard').classList.add('hidden');
@@ -2959,6 +3576,10 @@
 
         function renderAdminDashboard() {
             reloadLatestERPData();
+
+            // Render Feature 6 Live Analytics KPIs & Feature 1 Daily Attendance Register
+            renderAdminAnalyticsKPIs();
+            renderDailyAttendanceRegister();
 
             const currentSelectedRoll = document.getElementById('markRoll').value;
             const rollOptions = erpData.students.map(s => `<option value="${s.roll}">${s.roll} - ${s.name} (${s.parentPhone})</option>`).join('');
@@ -2982,7 +3603,23 @@
                 document.getElementById('adminConfigPass').value = erpData.adminAuth.pass || "apex2026";
             }
 
-            // 1. Render Pending Payments / Un-generated Receipts Queue
+            // Render Active Online MCQ Quizzes List in Admin
+            const quizListEl = document.getElementById('adminOnlineQuizzesList');
+            if (quizListEl) {
+                quizListEl.innerHTML = erpData.onlineQuizzes.length ? erpData.onlineQuizzes.map((qz, idx) => `
+                    <div class="flex justify-between items-center bg-white px-3 py-2 rounded-lg border border-purple-200">
+                        <div class="pr-2">
+                            <span class="font-bold text-purple-700">[${qz.targetClass} • ${qz.subject}]</span>
+                            <div class="font-semibold text-slate-800">${qz.title} (${qz.questions.length} MCQs • ${qz.durationMins}m)</div>
+                        </div>
+                        <button type="button" onclick="deleteOnlineQuiz(${idx})" class="bg-red-50 hover:bg-red-600 text-red-600 hover:text-white px-2 py-1 rounded font-bold shrink-0">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+                    </div>
+                `).join('') : `<div class="text-slate-400 italic">No online quizzes published yet.</div>`;
+            }
+
+            // Render Pending Payments / Un-generated Receipts Queue
             const pendingStudents = erpData.students.filter(s => s.feeStatus !== 'Paid' || !s.receiptGenerated);
             document.getElementById('pendingReceiptCount').innerText = `${pendingStudents.length} Pending`;
             const pendingContainer = document.getElementById('adminPendingQueueList');
@@ -3009,7 +3646,7 @@
                 }).join('');
             }
 
-            // 2. Render Generated Receipts Log with View/Print AND Remove Button
+            // Render Generated Receipts Log
             document.getElementById('generatedReceiptCount').innerText = `${erpData.generatedReceipts.length} Generated`;
             const logContainer = document.getElementById('adminGeneratedReceiptsLog');
             if (!erpData.generatedReceipts.length) {
@@ -3034,7 +3671,7 @@
                 `).join('');
             }
 
-            // 3. Render Admin Study Materials List
+            // Render Admin Study Materials List
             const matListEl = document.getElementById('adminStudyMaterialsList');
             if (matListEl) {
                 matListEl.innerHTML = erpData.studyMaterials.map((m, idx) => `
@@ -3082,9 +3719,14 @@
                         </span>
                     </td>
                     <td class="py-3 px-4 text-xs text-slate-600">${s.classBatch.split('(')[0]}</td>
-                    <td class="py-3 px-4">
-                        <div class="inline-flex items-center gap-1.5 bg-blue-50 border border-blue-200 px-2.5 py-1 rounded-lg font-mono font-extrabold text-xs text-blue-900">
-                            <i class="fas fa-phone-alt text-blue-600 text-[10px]"></i> ${s.parentPhone}
+                    <td class="py-3 px-4 whitespace-nowrap">
+                        <div class="inline-flex items-center gap-1.5">
+                            <span class="bg-blue-50 border border-blue-200 px-2.5 py-1 rounded-lg font-mono font-extrabold text-xs text-blue-900">
+                                <i class="fas fa-phone-alt text-blue-600 text-[10px]"></i> ${s.parentPhone}
+                            </span>
+                            <button type="button" onclick="sendWhatsAppStudentAlert('${s.roll}')" title="Send 1-Click WhatsApp Fee & Result Alert" class="bg-green-500 hover:bg-green-600 text-white px-2.5 py-1 rounded-lg text-xs font-extrabold shadow-sm transition flex items-center gap-1">
+                                <i class="fab fa-whatsapp"></i> Alert
+                            </button>
                         </div>
                     </td>
                     <td class="py-3 px-4">
@@ -3451,6 +4093,36 @@
             document.getElementById('userBatchSub').innerText = `Roll ID: ${student.roll} • ${student.classBatch} • Registered Mob: +91 ${student.parentPhone}`;
             document.getElementById('userAttStat').innerText = `${student.attendance}%`;
 
+            // Render Feature 1 Daily Attendance Status & Absent Alert Banner on User Dashboard
+            const attBar = document.getElementById('userAttendanceAlertBar');
+            const attIcon = document.getElementById('userAttIconBox');
+            const attText = document.getElementById('userLatestAttStatusText');
+            const attChips = document.getElementById('userRecentAttChips');
+
+            const dates = Object.keys(erpData.dailyAttendance || {}).sort().reverse().slice(0, 5);
+            const studentHistory = dates.map(dt => ({ date: dt, status: erpData.dailyAttendance[dt][student.roll] })).filter(x => x.status);
+
+            if (studentHistory.length > 0) {
+                const latest = studentHistory[0];
+                if (latest.status === 'Absent') {
+                    attBar.className = "mb-6 bg-red-50 border-2 border-red-300 rounded-2xl p-4 shadow-sm flex flex-wrap justify-between items-center gap-3";
+                    attIcon.className = "w-10 h-10 rounded-xl bg-red-600 text-white flex items-center justify-center text-lg shrink-0 animate-pulse";
+                    attText.innerHTML = `<span class="text-red-700 font-extrabold">⚠️ Absent Alert on ${latest.date}!</span> Please contact Massawar Sir (+91 9337042839) if unplanned.`;
+                } else {
+                    attBar.className = "mb-6 bg-white border border-slate-200 rounded-2xl p-4 shadow-sm flex flex-wrap justify-between items-center gap-3";
+                    attIcon.className = "w-10 h-10 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center text-lg shrink-0";
+                    attText.innerHTML = `Latest Check-In (${latest.date}): <span class="text-emerald-700 font-extrabold">${latest.status}</span> • Overall Attendance: ${student.attendance}%`;
+                }
+                attChips.innerHTML = studentHistory.map(h => {
+                    const cls = h.status === 'Present' ? 'bg-emerald-100 text-emerald-800' : h.status === 'Absent' ? 'bg-red-100 text-red-800' : 'bg-amber-100 text-amber-800';
+                    return `<span class="px-2.5 py-1 rounded-lg ${cls}">${h.date.slice(5)}: ${h.status}</span>`;
+                }).join('');
+            } else {
+                attBar.className = "mb-6 bg-white border border-slate-200 rounded-2xl p-4 shadow-sm flex flex-wrap justify-between items-center gap-3";
+                attText.innerText = `Overall Attendance: ${student.attendance}% (Daily batch check-in active)`;
+                attChips.innerHTML = `<span class="px-2.5 py-1 rounded-lg bg-slate-100 text-slate-600">No recent absent flags</span>`;
+            }
+
             const dashPhoto = document.getElementById('userDashboardPhoto');
             const dashInit = document.getElementById('userDashboardInitials');
             const initials = student.name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
@@ -3532,6 +4204,8 @@
                 parentBox.classList.add('hidden');
             }
 
+            // Render Online MCQ Quizzes & Chapter Notes
+            renderUserOnlineQuizzes(student);
             renderUserStudyMaterials(student);
 
             const marksHTML = student.marks.length ? student.marks.map(m => {
